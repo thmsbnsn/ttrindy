@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Phone, ArrowRight } from "lucide-react";
-import heroImage from "@/assets/hero.webp";
+import heroImage from "@/assets/pagesImages/index/hero.webp";
 
 const Hero = () => {
   return (
@@ -33,7 +33,7 @@ const Hero = () => {
             </h1>
 
             <p className="text-lg md:text-xl text-gray-200 max-w-2xl">
-              Professional restoration services for water damage, fire damage, storm damage, 
+              Professional restoration services for water damage, fire damage, storm damage,
               and complete remodeling. We bring your home back to life.
             </p>
 
