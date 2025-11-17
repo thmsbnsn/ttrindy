@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
 All colors MUST be HSL.
 */
 
@@ -19,7 +19,7 @@ All colors MUST be HSL.
 
     --primary: 197 100% 47%;
     --primary-foreground: 0 0% 100%;
-    
+
     --primary-dark: 197 100% 36%;
 
     --secondary: 0 0% 97%;
@@ -39,7 +39,7 @@ All colors MUST be HSL.
     --ring: 197 100% 47%;
 
     --radius: 0.5rem;
-    
+
     /* Custom gradients */
     --gradient-primary: linear-gradient(135deg, hsl(197 100% 47%), hsl(197 100% 36%));
     --gradient-hero: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 174, 239, 0.3));
@@ -73,7 +73,7 @@ All colors MUST be HSL.
 
     --primary: 197 100% 47%;
     --primary-foreground: 0 0% 100%;
-    
+
     --primary-dark: 197 100% 36%;
 
     --secondary: 0 0% 20%;
@@ -107,8 +107,15 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
-  body {
+  html, body {
     @apply bg-background text-foreground;
+    height: 100%;
+  }
+
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 }
 

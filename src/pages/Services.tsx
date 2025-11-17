@@ -62,9 +62,9 @@ const services = [
 
 const Services = () => {
   return (
-    <div className="min-h-screen">
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      
+
       <section className="pt-24 pb-16 bg-gradient-to-b from-background to-muted/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
@@ -78,9 +78,9 @@ const Services = () => {
             {services.map((service, index) => {
               const Icon = service.icon;
               const isEven = index % 2 === 0;
-              
+
               return (
-                <div 
+                <div
                   key={index}
                   className={`grid md:grid-cols-2 gap-8 items-center animate-fade-in`}
                   style={{ animationDelay: `${index * 0.1}s` }}
@@ -92,7 +92,7 @@ const Services = () => {
                       className="rounded-lg shadow-xl w-full h-[400px] object-cover"
                     />
                   </div>
-                  
+
                   <Card className={`${isEven ? "md:order-2" : "md:order-1"} border-2`}>
                     <CardHeader>
                       <div className="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-4">

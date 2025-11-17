@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Phone, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/pagesImages/index/hero.webp";
 
 const Hero = () => {
@@ -41,17 +42,23 @@ const Hero = () => {
               <Button
                 size="lg"
                 className="gap-2 text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
+                asChild
               >
-                <Phone className="w-5 h-5" />
-                Call for Emergency Service
+                <Link to="/about#contact">
+                  <Phone className="w-5 h-5" />
+                  Call for Emergency Service
+                </Link>
               </Button>
               <Button
                 size="lg"
                 variant="outline"
                 className="gap-2 text-base font-semibold bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20"
+                asChild
               >
-                Learn More
-                <ArrowRight className="w-5 h-5" />
+                <Link to="/services">
+                  Learn More
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
               </Button>
             </div>
 

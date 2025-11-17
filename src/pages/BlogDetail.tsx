@@ -43,7 +43,7 @@ const BlogDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen">
+      <div className="flex flex-col min-h-screen">
         <Navbar />
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
@@ -58,7 +58,7 @@ const BlogDetail = () => {
 
   if (error || !post) {
     return (
-      <div className="min-h-screen">
+      <div className="flex flex-col min-h-screen">
         <Navbar />
         <div className="flex items-center justify-center min-h-[60vh]">
           <Card className="max-w-md">
@@ -77,7 +77,7 @@ const BlogDetail = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="flex flex-col min-h-screen">
       <Navbar />
 
       <section className="pt-24 pb-16 bg-gradient-to-b from-background to-muted/20">
