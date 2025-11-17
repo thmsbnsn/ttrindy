@@ -2,6 +2,7 @@ import { Phone, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import topTierIcon from "@/assets/brand/toptiericon.png";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -13,8 +14,12 @@ const Navbar = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xl">TT</span>
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img
+                src={topTierIcon}
+                alt="Top Tier Restoration Logo"
+                className="w-full h-full object-contain"
+              />
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-lg leading-none">Top Tier</span>
@@ -49,6 +54,7 @@ const Navbar = () => {
           <button
             className="md:hidden p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle mobile menu"
           >
             <Menu className="w-6 h-6" />
           </button>
