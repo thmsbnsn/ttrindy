@@ -53,17 +53,21 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="w-10 h-10 flex items-center justify-center">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity group">
+            <div className="w-11 h-11 flex items-center justify-center bg-white rounded-md shadow-sm group-hover:shadow-md transition-shadow p-1.5">
               <img
                 src={topTierIcon}
                 alt="Top Tier Restoration Logo"
                 className="w-full h-full object-contain"
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-heading font-bold text-lg leading-none">Top Tier</span>
-              <span className="text-xs text-muted-foreground">Restoration</span>
+            <div className="flex flex-col leading-tight">
+              <span className="font-heading font-bold text-lg leading-none text-foreground uppercase tracking-tight">
+                TOP TIER
+              </span>
+              <span className="font-heading text-xs text-muted-foreground font-normal mt-0.5">
+                Restoration
+              </span>
             </div>
           </Link>
 

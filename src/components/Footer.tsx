@@ -8,16 +8,20 @@ const Footer = () => {
         <div className="flex flex-col gap-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 flex items-center justify-center bg-white rounded-lg">
+              <div className="w-11 h-11 flex items-center justify-center bg-white rounded-md shadow-sm p-1.5">
                 <img
                   src={topTierIcon}
                   alt="Top Tier Restoration Logo"
                   className="w-full h-full object-contain"
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="font-heading font-bold text-lg leading-none text-white">Top Tier</span>
-                <span className="text-sm text-white/70">Restoration</span>
+              <div className="flex flex-col leading-tight">
+                <span className="font-heading font-bold text-lg leading-none text-white/90 uppercase tracking-tight">
+                  TOP TIER
+                </span>
+                <span className="font-heading text-xs text-white/70 font-normal mt-0.5">
+                  Restoration
+                </span>
               </div>
             </div>
 
