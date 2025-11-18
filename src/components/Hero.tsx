@@ -10,17 +10,19 @@ const Hero = () => {
       <div className="absolute inset-0 z-0">
         <img
           src={heroImage}
-          alt="Before and after home restoration showing transformation from fire damage to beautiful restored room"
+          alt="Home restoration transformation - from fire damage to fully restored room"
           className="w-full h-full object-cover"
+          loading="eager"
+          fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-primary/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-        <div className="max-w-3xl">
+        <div className="max-w-3xl backdrop-blur-sm bg-black/10 rounded-lg p-6 md:p-8">
           <div className="space-y-6 animate-fade-in">
-            <div className="inline-flex items-center gap-2 bg-accent/90 text-accent-foreground px-4 py-2 rounded-full text-sm font-semibold">
+            <div className="inline-flex items-center gap-2 bg-accent/90 text-accent-foreground px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
@@ -28,7 +30,7 @@ const Hero = () => {
               24/7 Emergency Response Available
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight font-hero uppercase drop-shadow-2xl">
               Restore Your Home to{" "}
               <span className="text-primary">Top Tier</span> Condition
             </h1>
@@ -38,16 +40,16 @@ const Hero = () => {
               and complete remodeling. We bring your home back to life.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
               <Button
                 size="lg"
                 className="gap-2 text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
                 asChild
               >
-                <Link to="/about#contact">
+                <a href="tel:5551234567">
                   <Phone className="w-5 h-5" />
                   Call for Emergency Service
-                </Link>
+                </a>
               </Button>
               <Button
                 size="lg"
@@ -62,20 +64,23 @@ const Hero = () => {
               </Button>
             </div>
 
-            <div className="flex flex-wrap gap-8 pt-8 text-white">
-              <div>
-                <div className="text-3xl font-bold text-primary">15+</div>
-                <div className="text-sm text-gray-300">Years Experience</div>
+            <dl className="flex flex-wrap gap-8 pt-8 text-white">
+              <div className="min-w-[120px]">
+                <dt className="sr-only">Years of Experience</dt>
+                <dd className="text-4xl font-bold text-primary drop-shadow-lg">15+</dd>
+                <dd className="text-sm text-gray-200 font-medium mt-1">Years Experience</dd>
               </div>
-              <div>
-                <div className="text-3xl font-bold text-primary">5000+</div>
-                <div className="text-sm text-gray-300">Homes Restored</div>
+              <div className="min-w-[120px]">
+                <dt className="sr-only">Homes Restored</dt>
+                <dd className="text-4xl font-bold text-primary drop-shadow-lg">1000+</dd>
+                <dd className="text-sm text-gray-200 font-medium mt-1">Homes Restored</dd>
               </div>
-              <div>
-                <div className="text-3xl font-bold text-primary">24/7</div>
-                <div className="text-sm text-gray-300">Emergency Service</div>
+              <div className="min-w-[120px]">
+                <dt className="sr-only">Emergency Service Availability</dt>
+                <dd className="text-4xl font-bold text-primary drop-shadow-lg">24/7</dd>
+                <dd className="text-sm text-gray-200 font-medium mt-1">Emergency Service</dd>
               </div>
-            </div>
+            </dl>
           </div>
         </div>
       </div>

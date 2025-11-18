@@ -1,5 +1,10 @@
 import { defineField, defineType } from 'sanity'
 
+/**
+ * Category schema - Used to categorize projects
+ * Examples: Water Damage, Fire Damage, Storm Damage, Remodeling
+ * Categories are referenced by projects for filtering and organization
+ */
 export default defineType({
   name: 'category',
   title: 'Category',

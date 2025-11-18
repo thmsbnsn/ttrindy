@@ -36,7 +36,7 @@ const values = [
 
 const stats = [
   { number: "15+", label: "Years Experience" },
-  { number: "2,500+", label: "Projects Completed" },
+  { number: "1000+", label: "Projects Completed" },
   { number: "100%", label: "Licensed & Insured" },
   { number: "24/7", label: "Emergency Service" },
 ];
@@ -180,7 +180,9 @@ const About = () => {
                       </div>
                       <div>
                         <p className="font-medium mb-1">Phone</p>
-                        <p className="text-muted-foreground">(555) 123-4567</p>
+                        <a href="tel:5551234567" className="text-muted-foreground hover:text-primary transition-colors">
+                          (555) 123-4567
+                        </a>
                         <p className="text-sm text-muted-foreground">24/7 Emergency Line</p>
                       </div>
                     </div>

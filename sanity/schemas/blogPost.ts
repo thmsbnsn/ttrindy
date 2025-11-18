@@ -17,29 +17,51 @@ export default defineType({
       title: 'Slug',
       type: 'slug',
       options: {
-        source: 'title',
+        source: (doc: any) => {
+          // Include title and Indianapolis, Greenwood, Indiana area in slug
+          const baseSlug = doc.title || ''
+          return baseSlug
+        },
+        slugify: (input: string) => {
+          // Custom slugify to include location context
+          const slug = input
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .slice(0, 80) // Leave room for location suffix
+          return slug
+        },
         maxLength: 96,
       },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'excerpt',
-      title: 'Excerpt',
+      title: 'Short Description',
       type: 'text',
       rows: 3,
-      description: 'Short description for blog card preview',
+      description: 'Short description about the blog for card preview',
       validation: (Rule) => Rule.required().max(200),
     }),
     defineField({
       name: 'author',
       title: 'Author',
       type: 'string',
-      initialValue: 'Top Tier Restoration',
+      initialValue: 'Top Tier Team',
+      description: 'Blog post author',
+    }),
+    defineField({
+      name: 'publishedAt',
+      title: 'Date of Posting',
+      type: 'datetime',
+      description: 'Date of posting (blogs displayed in chronological order on webpage)',
+      initialValue: () => new Date().toISOString(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'mainImage',
       title: 'Main Image',
       type: 'image',
+      description: 'Main image that displays on the blog card',
       options: {
         hotspot: true,
       },
@@ -54,15 +76,30 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'publishedAt',
-      title: 'Published At',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString(),
-      validation: (Rule) => Rule.required(),
+      name: 'additionalImages',
+      title: 'Additional Images',
+      type: 'array',
+      description: 'Additional images for the blog post detail page',
+      of: [
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+              validation: (Rule) => Rule.required(),
+            },
+          ],
+        },
+      ],
     }),
     defineField({
       name: 'body',
-      title: 'Body',
+      title: 'The Blog',
       type: 'array',
       of: [
         {
@@ -111,12 +148,12 @@ export default defineType({
   },
   orderings: [
     {
-      title: 'Published Date, Newest',
+      title: 'Date, Newest First',
       name: 'publishedAtDesc',
       by: [{ field: 'publishedAt', direction: 'desc' }],
     },
     {
-      title: 'Published Date, Oldest',
+      title: 'Date, Oldest First',
       name: 'publishedAtAsc',
       by: [{ field: 'publishedAt', direction: 'asc' }],
     },

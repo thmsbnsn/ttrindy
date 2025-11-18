@@ -36,3 +36,6 @@ sanity.json
 # Lovable-specific (legacy)
 .materials
 .snapshots
+
+# Agent documentation
+Agent.md

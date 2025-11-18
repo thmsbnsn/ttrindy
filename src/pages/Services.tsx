@@ -127,9 +127,11 @@ const Services = () => {
               We're available 24/7 for emergency restoration services. Don't wait - contact us now for immediate assistance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="gap-2">
-                <Phone className="w-5 h-5" />
-                Call Now: (555) 123-4567
+              <Button size="lg" className="gap-2" asChild>
+                <a href="tel:5551234567">
+                  <Phone className="w-5 h-5" />
+                  Call Now: (555) 123-4567
+                </a>
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <Link to="/about#contact">Contact Us</Link>

@@ -3,24 +3,51 @@
 ## Project Overview
 This document provides a comprehensive review of the Top Tier Restoration website project, including structure, frameworks, assets, code analysis, and design system details.
 
-## 🆕 Recent Updates - CMS Implementation
+## 🆕 Recent Updates
 
 ### Sanity CMS Integration
 - **Headless CMS**: Sanity CMS integrated for content management
-- **Content Types**: Projects, Blog Posts, and Categories
+- **Content Types**: Site Settings, Projects, Blog Posts, and Categories
+- **Custom Schemas**: Site settings singleton, separated main/additional images
+- **Sidebar Structure**: Custom ordered sidebar (Site Settings → Projects → Blog Posts → Categories)
 - **Live Preview**: Enabled for real-time content preview while editing
 - **Auto-Deploy**: Configured for automatic Vercel deployment on content publish
 
 ### New Features Added
-1. **Project Detail Pages**: Dynamic pages at `/projects/:slug` with image/video carousels
-2. **Blog Section**: Blog listing page and detail pages at `/blog` and `/blog/:slug`
-3. **Contact Form**: Integrated with Resend API for email delivery
-4. **CMS Studio**: Accessible at `/studio` for content management
+1. **Site Settings**: Singleton document for logo, contact info, and brand colors
+2. **Project Detail Pages**: Dynamic pages at `/projects/:slug` with image/video carousels
+3. **Blog Section**: Blog listing page and detail pages at `/blog` and `/blog/:slug`
+4. **Contact Form**: Integrated with Resend API for email delivery
+5. **Legal Pages**: Privacy Policy and Terms of Service for Indiana compliance
+6. **CMS Studio**: Accessible at `/studio` for content management
+
+### Typography System
+- **Custom Fonts**: Self-hosted WOFF2 fonts (Oswald, Coldiac, Inter)
+- **Font Responsibilities**:
+  - Oswald for hero H1 headings only (uppercase, bold, min 32px)
+  - Coldiac for section headings (H2-H6)
+  - Inter for body text and UI elements
+
+### Accessibility & Performance Improvements
+- Visible focus indicators for keyboard navigation
+- Semantic HTML (dl/dt/dd for stats)
+- Clickable phone numbers (tel: links)
+- Reduced motion support
+- Hero image loading optimization (eager, high priority)
+- Improved alt text for images
+
+### Visual Enhancements
+- Enhanced hero overlay (darker, better contrast)
+- Backdrop blur on hero content area
+- Improved stats display with better hierarchy
+- Enhanced service card hover effects
+- CTA section with gradient background
+- Emergency badge with shadow for prominence
 
 ### New Dependencies
 - `@sanity/client` - Sanity API client
 - `@sanity/image-url` - Image URL builder
-- `sanity` - Sanity Studio
+- `sanity` - Sanity Studio v4
 - `@sanity/preview-url-secret` - Live preview support
 - `resend` - Email service
 - `@vercel/node` - Vercel serverless functions
@@ -52,14 +79,16 @@ TTR/
 │   └── contact.ts                  # Contact form API endpoint
 ├── sanity/                         # Sanity CMS configuration
 │   ├── schemas/                    # Content type schemas
+│   │   ├── siteSettings.ts         # Site settings (singleton)
 │   │   ├── project.ts              # Project schema
 │   │   ├── blogPost.ts             # Blog post schema
 │   │   ├── category.ts             # Category schema
 │   │   └── index.ts                # Schema exports
-│   └── lib/                        # Sanity utilities
-│       ├── client.ts               # Sanity client setup
-│       ├── image.ts                 # Image URL builder
-│       └── queries.ts               # GROQ queries
+│   ├── lib/                        # Sanity utilities
+│   │   ├── client.ts               # Sanity client setup
+│   │   ├── image.ts                 # Image URL builder
+│   │   └── queries.ts               # GROQ queries
+│   └── structure.ts                # Sidebar structure configuration
 ├── src/
 │   ├── assets/                     # Image and brand assets
 │   │   ├── brand/                  # Brand logos and icons
@@ -75,12 +104,14 @@ TTR/
 │   ├── lib/                        # Utility functions
 │   ├── pages/                      # Page components
 │   │   ├── About.tsx
-│   │   ├── Gallery.tsx              # Now fetches from Sanity
-│   │   ├── ProjectDetail.tsx        # NEW: Dynamic project pages
-│   │   ├── Blog.tsx                 # NEW: Blog listing page
-│   │   ├── BlogDetail.tsx           # NEW: Blog post detail pages
+│   │   ├── Gallery.tsx              # Fetches from Sanity
+│   │   ├── ProjectDetail.tsx        # Dynamic project pages
+│   │   ├── Blog.tsx                 # Blog listing page
+│   │   ├── BlogDetail.tsx           # Blog post detail pages
 │   │   ├── Index.tsx
 │   │   ├── NotFound.tsx
+│   │   ├── PrivacyPolicy.tsx        # Legal: Privacy Policy
+│   │   ├── TermsOfService.tsx       # Legal: Terms of Service
 │   │   └── Services.tsx
 │   ├── lib/
 │   │   └── sanity.ts               # NEW: Sanity data fetching functions
@@ -92,13 +123,18 @@ TTR/
 │   └── main.tsx                    # Application entry point
 ├── index.html                      # HTML entry point
 ├── package.json                    # Dependencies and scripts
-├── sanity.config.ts                # NEW: Sanity Studio configuration
-├── sanity.cli.ts                   # NEW: Sanity CLI configuration
-├── vercel.json                     # NEW: Vercel deployment configuration
+├── sanity.config.ts                # Sanity Studio configuration
+├── sanity.cli.ts                   # Sanity CLI configuration (with appId)
+├── vercel.json                     # Vercel deployment configuration
 ├── tailwind.config.ts              # Tailwind CSS configuration
 ├── vite.config.ts                  # Vite build configuration
 ├── tsconfig.json                   # TypeScript configuration
-└── components.json                 # shadcn/ui configuration
+├── components.json                 # shadcn/ui configuration
+└── public/
+    └── fonts/                      # Self-hosted fonts (WOFF2)
+        ├── Coldiac.woff2
+        ├── Inter-VariableFont_opsz,wght.woff2
+        └── Oswald-VariableFont_wght.woff2
 ```
 
 ### Application Architecture
@@ -119,14 +155,24 @@ TTR/
 
 ### Routing
 - **react-router-dom 6.30.1** - Client-side routing
-  - Routes: `/`, `/services`, `/gallery`, `/projects/:slug`, `/blog`, `/blog/:slug`, `/about`
+  - Routes:
+    - `/` - Homepage
+    - `/services` - Services page
+    - `/gallery` - Project gallery
+    - `/projects/:slug` - Project detail pages
+    - `/blog` - Blog listing
+    - `/blog/:slug` - Blog post detail pages
+    - `/about` - About page with contact form
+    - `/privacy-policy` - Privacy Policy (legal)
+    - `/terms-of-service` - Terms of Service (legal)
+    - `*` - 404 Not Found catch-all
 
 ### CMS & Content Management
-- **Sanity 3.56.0** - Headless CMS
-- **@sanity/client 6.15.0** - Sanity API client
+- **Sanity 4.15.0** - Headless CMS (v4)
+- **@sanity/client 7.12.1** - Sanity API client
 - **@sanity/image-url 1.0.2** - Image optimization
-- **@sanity/preview-url-secret 1.0.0** - Live preview support
-- **@sanity/vision 3.56.0** - GROQ query tool
+- **@sanity/preview-url-secret** - Live preview support
+- Custom schemas: Site Settings, Projects, Blog Posts, Categories
 
 ### Email & API
 - **resend 3.2.0** - Email delivery service
@@ -168,9 +214,15 @@ TTR/
 
 ### Brand Assets
 Located in `src/assets/brand/`:
-- `toptiericon.png` - Brand icon
+- `toptiericon.png` - Brand icon (used in navbar and footer)
 - `toptierlogo.png` - Brand logo (PNG)
 - `toptierlogo.svg` - Brand logo (SVG)
+
+### Fonts
+Located in `public/fonts/` (self-hosted WOFF2):
+- `Coldiac.woff2` - Section headings font
+- `Inter-VariableFont_opsz,wght.woff2` - Body text font (variable)
+- `Oswald-VariableFont_wght.woff2` - Hero headings font (variable)
 
 ### Page Images
 Located in `src/assets/pagesImages/`:
@@ -216,7 +268,12 @@ The project also uses Unsplash images via URLs in several components:
   - `/` - Index/Home page
   - `/services` - Services page
   - `/gallery` - Gallery page
-  - `/about` - About page
+  - `/projects/:slug` - Project detail pages
+  - `/blog` - Blog listing page
+  - `/blog/:slug` - Blog post detail pages
+  - `/about` - About page with contact form
+  - `/privacy-policy` - Privacy Policy (legal compliance)
+  - `/terms-of-service` - Terms of Service (legal compliance)
   - `*` - 404 Not Found catch-all
 
 ### Page Components
@@ -235,10 +292,10 @@ The project also uses Unsplash images via URLs in several components:
 
 #### About.tsx
 - Company story section
-- Statistics cards (15+ years, 2,500+ projects, etc.)
+- Statistics cards (15+ years, 1000+ projects, etc.) - consistent across site
 - Values section with icon cards
 - Contact form with validation using react-hook-form and zod
-- Contact information display
+- Contact information display (phone number clickable via tel: link)
 
 #### Gallery.tsx
 - Filterable project gallery (now fetches from Sanity CMS)
@@ -274,20 +331,27 @@ The project also uses Unsplash images via URLs in several components:
 #### Navbar.tsx
 - Fixed navigation with backdrop blur
 - Responsive mobile menu
-- Logo with "TT" monogram
+- Logo using toptiericon.png image
 - Active route highlighting
-- 24/7 Emergency button
+- 24/7 Emergency button (clickable via tel: link)
+- All navigation links use Inter font
 
 #### Hero.tsx
 - Full-screen hero section with background image
-- Gradient overlays for text readability
-- Animated badge for "24/7 Emergency Response"
-- Statistics display (15+ years, 5000+ homes, 24/7)
-- Call-to-action buttons
+- Enhanced gradient overlay (darker for better contrast)
+- Backdrop blur on content area
+- Animated badge for "24/7 Emergency Response" (with shadow)
+- Statistics display using semantic HTML (dl/dt/dd) - 15+ years, 1000+ homes, 24/7
+- Call-to-action buttons (phone number clickable via tel: link)
+- Hero H1 uses Oswald font (uppercase, bold, drop-shadow)
+- Performance optimized (loading="eager", fetchPriority="high")
 
 #### Footer.tsx
-- Simple footer with brand, copyright, and license info
+- Footer with brand logo (using toptiericon.png)
+- Copyright and license info
+- Legal page links (Privacy Policy, Terms of Service)
 - Dark background with light text
+- Flexbox layout for proper spacing
 
 #### WhyUs.tsx
 - Benefits section with icon cards
@@ -325,20 +389,32 @@ The project also uses Unsplash images via URLs in several components:
 ### Typography
 
 #### Font Family
-- **Primary Font**: System font stack (default browser fonts)
-  - No custom font imports detected in codebase
-  - No `@font-face` declarations or `@import` statements for fonts
-  - Relies on browser default system fonts: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`
-  - This provides fast loading and native OS integration
+- **Custom Fonts**: Self-hosted WOFF2 fonts for brand consistency
+  - **Oswald** (Variable Font) - Hero H1 headings only
+    - Uppercase transformation
+    - Bold weight (700)
+    - Minimum 32px size
+    - Letter spacing for readability
+  - **Coldiac** - Section headings (H2-H6), card titles, subheadings
+    - Geometric, modern, clean
+    - Bold weight (700)
+  - **Inter** (Variable Font) - Body text and UI elements
+    - All paragraphs, spans, lists
+    - Navigation links
+    - Buttons and forms
+    - Captions and footers
+    - Regular weight (400)
 
 #### Font Sizes
 Based on Tailwind's default scale and usage in components:
-- **Hero Headings**: `text-4xl md:text-6xl lg:text-7xl` (2.25rem - 4.5rem)
-- **Page Titles**: `text-4xl md:text-5xl` (2.25rem - 3rem)
-- **Section Headings**: `text-3xl md:text-4xl` (1.875rem - 2.25rem)
-- **Card Titles**: `text-xl` to `text-2xl` (1.25rem - 1.5rem)
-- **Body Text**: `text-base` (1rem) / `text-lg` (1.125rem)
-- **Small Text**: `text-sm` (0.875rem) / `text-xs` (0.75rem)
+- **Hero Headings**: `text-3xl sm:text-4xl md:text-6xl lg:text-7xl` (1.875rem - 4.5rem)
+  - Uses Oswald font, uppercase, with drop-shadow-2xl
+  - Minimum 32px enforced via CSS clamp
+- **Page Titles**: `text-4xl md:text-5xl` (2.25rem - 3rem) - Uses Coldiac
+- **Section Headings**: `text-3xl md:text-4xl` (1.875rem - 2.25rem) - Uses Coldiac
+- **Card Titles**: `text-xl` to `text-2xl` (1.25rem - 1.5rem) - Uses Coldiac
+- **Body Text**: `text-base` (1rem) / `text-lg` (1.125rem) - Uses Inter
+- **Small Text**: `text-sm` (0.875rem) / `text-xs` (0.75rem) - Uses Inter
 
 #### Font Weights
 - **Bold**: `font-bold` (700) - Used for headings
@@ -473,14 +549,23 @@ Based on Tailwind spacing scale and component usage:
 - Proper section spacing
 - Responsive spacing adjustments
 
+### Recent Improvements Completed
+1. ✅ Custom fonts implemented (Oswald, Coldiac, Inter)
+2. ✅ Legal pages added (Privacy Policy, Terms of Service)
+3. ✅ Accessibility improvements (focus states, semantic HTML, tel: links)
+4. ✅ Performance optimizations (image loading, reduced motion)
+5. ✅ Visual enhancements (hero overlay, stats hierarchy, hover effects)
+6. ✅ SEO improvements (enhanced meta tags, Open Graph)
+7. ✅ Stats consistency (1000+ across all pages)
+8. ✅ Sanity schemas updated (siteSettings, separated images)
+
 ### Recommendations
-1. Replace external Unsplash URLs with local assets
-2. Add custom font (e.g., Inter, Poppins) for brand consistency
-3. Populate empty asset directories (about/, gallery/)
-4. Remove unused App.css styles
-5. Consider adding loading states for images
-6. Add error boundaries for better error handling
-7. Implement proper image optimization (WebP, lazy loading)
+1. Replace external Unsplash URLs with local assets or Sanity images
+2. Populate empty asset directories (about/, gallery/) or remove if unused
+3. Remove unused App.css styles
+4. Consider adding loading states for images
+5. Add error boundaries for better error handling
+6. Update frontend queries to use new mainImage/additionalImages schema structure
 
 ---
 
@@ -508,17 +593,22 @@ Based on Tailwind spacing scale and component usage:
 - **TypeScript**: Relaxed strict mode for faster development
 
 ### SEO & Meta Tags
-- Proper meta tags in `index.html`
-- Open Graph tags for social sharing
-- Twitter card support
-- Descriptive title and meta description
+- Enhanced meta tags in `index.html`
+- Comprehensive Open Graph tags (title, description, image, site_name)
+- Twitter card support with images
+- Descriptive title and meta description with location keywords
+- Keywords meta tag for SEO
 - robots.txt file in public directory
+- Semantic HTML structure for better SEO
 
 ---
 
-*Review completed: November 2024*
+*Review completed: January 2025*
 *Project: Top Tier Restoration Website*
-*Technology Stack: React 18 + TypeScript 5 + Vite 5 + Tailwind CSS 3 + shadcn/ui*
+*Technology Stack: React 18 + TypeScript 5 + Vite 7 + Tailwind CSS 3 + shadcn/ui*
+*Typography: Oswald + Coldiac + Inter (self-hosted WOFF2)*
+*CMS: Sanity v4 with custom schemas*
 *Build Tool: Vite with React SWC*
 *Package Manager: npm*
+*Deployment: Vercel (auto-deploy) + Sanity Studio (sanity.studio)*
 

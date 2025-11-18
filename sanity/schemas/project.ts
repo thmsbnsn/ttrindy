@@ -8,7 +8,7 @@ export default defineType({
   fields: [
     defineField({
       name: 'title',
-      title: 'Project Title',
+      title: 'Title of Project',
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
@@ -31,8 +31,9 @@ export default defineType({
     }),
     defineField({
       name: 'date',
-      title: 'Project Date',
+      title: 'Date',
       type: 'date',
+      description: 'Project date (projects displayed in chronological order on webpage)',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -47,6 +48,7 @@ export default defineType({
       title: 'Short Description',
       type: 'text',
       rows: 3,
+      description: 'Short description for project card preview',
       validation: (Rule) => Rule.required().max(200),
     }),
     defineField({
@@ -56,9 +58,28 @@ export default defineType({
       of: [{ type: 'block' }],
     }),
     defineField({
-      name: 'images',
-      title: 'Project Images',
+      name: 'mainImage',
+      title: 'Main Image',
+      type: 'image',
+      description: 'Main image that displays on the project card',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
+          validation: (Rule) => Rule.required(),
+        },
+      ],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'additionalImages',
+      title: 'Additional Images',
       type: 'array',
+      description: 'Additional images for the project detail page',
       of: [
         {
           type: 'image',
@@ -75,7 +96,6 @@ export default defineType({
           ],
         },
       ],
-      validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
       name: 'videos',
@@ -118,17 +138,17 @@ export default defineType({
     select: {
       title: 'title',
       subtitle: 'location',
-      media: 'images.0',
+      media: 'mainImage',
     },
   },
   orderings: [
     {
-      title: 'Date, Newest',
+      title: 'Date, Newest First',
       name: 'dateDesc',
       by: [{ field: 'date', direction: 'desc' }],
     },
     {
-      title: 'Date, Oldest',
+      title: 'Date, Oldest First',
       name: 'dateAsc',
       by: [{ field: 'date', direction: 'asc' }],
     },
