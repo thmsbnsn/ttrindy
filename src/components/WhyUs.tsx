@@ -4,22 +4,22 @@ const benefits = [
   {
     icon: Clock,
     title: "Rapid Response",
-    description: "24/7 emergency service means we're there when you need us most, minimizing damage and starting restoration immediately."
+    description: "We’re available 24/7 and arrive quickly to stop damage and begin restoration immediately."
   },
   {
     icon: Shield,
     title: "Licensed & Insured",
-    description: "Fully licensed, bonded, and insured professionals you can trust with your most valuable investment—your home."
+    description: "Fully licensed, bonded, and insured technicians you can trust with your home."
   },
   {
     icon: Award,
-    title: "15+ Years Experience",
-    description: "Over a decade of expertise in restoration and remodeling, with thousands of satisfied customers across Indianapolis."
+    title: "15+ Years of Experience",
+    description: "Decades of combined expertise and thousands of successful restorations across Indiana."
   },
   {
     icon: Users,
-    title: "Customer First",
-    description: "We treat every home like our own, providing transparent communication and exceptional service from start to finish."
+    title: "Customer-First Service",
+    description: "We treat every home like our own — with honesty, professionalism, and clear communication from start to finish."
   }
 ];
 
@@ -32,7 +32,7 @@ const WhyUs = () => {
             Why Choose Top Tier?
           </h2>
           <p className="text-lg text-muted-foreground">
-            When disaster strikes, you need a restoration partner you can trust. Here's why homeowners choose us.
+          When your home is damaged, you need a team that responds fast, communicates clearly, and restores your property the right way.
           </p>
         </div>
 

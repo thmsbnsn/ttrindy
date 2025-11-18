@@ -43,7 +43,7 @@ export function StudioLogo() {
             color: '#1a1a1a',
             textTransform: 'uppercase',
             letterSpacing: '-0.02em',
-            fontFamily: 'system-ui, -apple-system, sans-serif',
+            fontFamily: "'Montserrat', sans-serif",
           }}
         >
           TOP TIER
@@ -52,7 +52,8 @@ export function StudioLogo() {
           style={{
             fontSize: '12px',
             color: '#666',
-            fontFamily: 'system-ui, -apple-system, sans-serif',
+            fontFamily: "'Montserrat', sans-serif",
+            fontWeight: '400',
           }}
         >
           Restoration

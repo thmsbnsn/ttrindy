@@ -79,8 +79,14 @@ const TermsOfService = () => {
 
               <section>
                 <h2 className="text-2xl font-bold text-foreground mb-4">8. Insurance and Licensing</h2>
-                <p>
+                <p className="mb-3">
                   Top Tier Restoration is fully licensed, bonded, and insured in the state of Indiana. We maintain general liability insurance and workers' compensation insurance as required by Indiana law. Proof of insurance is available upon request.
+                </p>
+                <p className="mb-3">
+                  <strong>Indiana Contractor License:</strong> IN-12345-PLACEHOLDER
+                </p>
+                <p>
+                  All restoration and remodeling work is performed in accordance with Indiana Home Improvement Contractors Act and applicable state and local building codes. We are registered with the Indiana Professional Licensing Agency.
                 </p>
               </section>
 

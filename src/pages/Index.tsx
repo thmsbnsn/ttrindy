@@ -11,22 +11,34 @@ const services = [
   {
     icon: Droplets,
     title: "Water Damage",
-    description: "24/7 emergency water extraction and restoration services",
+    description: "24/7 rapid water extraction, structural drying, mold prevention, sanitation, and full restoration.",
+    blogSlug: "water-damage-restoration-indianapolis",
+    projectCategory: "Water Damage",
+    faqAnchor: "water-damage-faq",
   },
   {
     icon: Flame,
     title: "Fire Damage",
-    description: "Complete fire and smoke damage restoration",
+    description: "Smoke & soot removal, odor elimination, structural repairs, and full fire damage reconstruction.",
+    blogSlug: "fire-damage-restoration-indianapolis",
+    projectCategory: "Fire Damage",
+    faqAnchor: "fire-damage-faq",
   },
   {
     icon: CloudRain,
     title: "Storm Damage",
-    description: "Expert storm damage repair and reconstruction",
+    description: "Emergency tarping, exterior repairs, debris removal, and complete property restoration.",
+    blogSlug: "storm-damage-repair-indianapolis",
+    projectCategory: "Storm Damage",
+    faqAnchor: "storm-damage-faq",
   },
   {
     icon: Hammer,
     title: "Remodeling",
-    description: "Professional remodeling and renovation services",
+    description: "Professional remodeling services including kitchens, bathrooms, basements, and full-home renovations.",
+    blogSlug: "home-remodeling-indianapolis",
+    projectCategory: "Remodeling",
+    faqAnchor: "remodeling-faq",
   },
 ];
 
@@ -59,7 +71,33 @@ const Index = () => {
                     <CardTitle className="text-xl">{service.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">{service.description}</p>
+                    <p className="text-sm text-muted-foreground mb-4">{service.description}</p>
+                    <div className="flex flex-wrap justify-center gap-2 text-xs">
+                      <Link
+                        to={`/blog/${service.blogSlug}`}
+                        className="text-primary hover:underline font-medium"
+                      >
+                        Learn More
+                      </Link>
+                      <span className="text-muted-foreground">•</span>
+                      <Link
+                        to={`/gallery?category=${encodeURIComponent(service.projectCategory)}`}
+                        className="text-primary hover:underline font-medium"
+                      >
+                        View Projects
+                      </Link>
+                      {service.faqAnchor && (
+                        <>
+                          <span className="text-muted-foreground">•</span>
+                          <Link
+                            to={`/services#${service.faqAnchor}`}
+                            className="text-primary hover:underline font-medium"
+                          >
+                            FAQs
+                          </Link>
+                        </>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               );
@@ -67,7 +105,7 @@ const Index = () => {
           </div>
 
           <div className="text-center">
-            <Button size="lg" asChild>
+            <Button size="lg" className="btn-micro-animate" asChild>
               <Link to="/services" className="gap-2">
                 View All Services
                 <ArrowRight className="w-4 h-4" />
@@ -85,13 +123,14 @@ const Index = () => {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Contact us today for a free consultation and let us help restore your property to its best condition.
+              Let Us Restore Your Property to Its Best Condition<br />
+              Contact us today for a free quote or immediate emergency response.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild>
+              <Button size="lg" className="btn-micro-animate" asChild>
                 <Link to="/about#contact">Get a Free Quote</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild>
+              <Button size="lg" variant="outline" className="btn-micro-animate btn-micro-animate-outline" asChild>
                 <Link to="/gallery">View Our Work</Link>
               </Button>
             </div>

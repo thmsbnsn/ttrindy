@@ -15,12 +15,12 @@ const Hero = () => {
           loading="eager"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/75 to-black/55" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-        <div className="max-w-3xl backdrop-blur-sm bg-black/10 rounded-lg p-6 md:p-8">
+        <div className="max-w-3xl ml-0 md:ml-8 lg:ml-16 backdrop-blur-sm bg-black/10 rounded-lg p-6 md:p-8">
           <div className="space-y-6 animate-fade-in">
             <div className="inline-flex items-center gap-2 bg-accent/90 text-accent-foreground px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
               <span className="relative flex h-2 w-2">
@@ -36,25 +36,24 @@ const Hero = () => {
             </h1>
 
             <p className="text-lg md:text-xl text-gray-200 max-w-2xl">
-              Professional restoration services for water damage, fire damage, storm damage,
-              and complete remodeling. We bring your home back to life.
+            24/7 emergency restoration for water, fire, storm, and structural damage. When disaster strikes, we bring your property back to life with fast response, licensed professionals, and proven results.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
               <Button
                 size="lg"
-                className="gap-2 text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
+                className="btn-micro-animate gap-2 text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
                 asChild
               >
-                <a href="tel:5551234567">
+                <a href="tel:3175551234">
                   <Phone className="w-5 h-5" />
-                  Call for Emergency Service
+                  Call Now for Emergency Service
                 </a>
               </Button>
               <Button
                 size="lg"
                 variant="outline"
-                className="gap-2 text-base font-semibold bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20"
+                className="btn-micro-animate btn-micro-animate-outline gap-2 text-base font-semibold bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20"
                 asChild
               >
                 <Link to="/services">
@@ -62,6 +61,22 @@ const Hero = () => {
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap items-center gap-4 pt-6 border-t border-white/20">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
+                  <span className="text-yellow-400 text-sm">⭐⭐⭐⭐⭐</span>
+                </div>
+                <span className="text-sm text-white/90 font-medium">5.0 Google Rating</span>
+              </div>
+              <span className="text-white/40">•</span>
+              <span className="text-sm text-white/90 font-medium">Licensed • Bonded • Insured</span>
+              <span className="text-white/40">•</span>
+              <span className="text-sm text-white/90 font-medium">IICRC Certified</span>
+              <span className="text-white/40">•</span>
+              <span className="text-sm text-white/90 font-medium">Locally Owned in Indianapolis</span>
             </div>
 
             <dl className="flex flex-wrap gap-8 pt-8 text-white">

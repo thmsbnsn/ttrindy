@@ -62,10 +62,10 @@ const Navbar = () => {
               />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="font-heading font-bold text-lg leading-none text-foreground uppercase tracking-tight">
+              <span className="font-logo text-lg leading-none text-foreground uppercase tracking-tight">
                 TOP TIER
               </span>
-              <span className="font-heading text-xs text-muted-foreground font-normal mt-0.5">
+              <span className="font-logo text-xs text-muted-foreground font-normal mt-0.5">
                 Restoration
               </span>
             </div>
@@ -93,10 +93,10 @@ const Navbar = () => {
                 />
               </Link>
             ))}
-            <Button variant="default" size="sm" className="gap-2 font-semibold" asChild>
-              <a href="tel:5551234567">
+            <Button variant="default" size="sm" className="btn-micro-animate gap-2 font-semibold" asChild>
+              <a href="tel:3175551234">
                 <Phone className="w-4 h-4" />
-                <span>24/7 Emergency</span>
+                <span>📞 (317) XXX-XXXX — 24/7 Emergency Service</span>
               </a>
             </Button>
           </div>
@@ -129,10 +129,10 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
-            <Button variant="default" size="sm" className="w-full gap-2 font-semibold" asChild>
-              <a href="tel:5551234567">
+            <Button variant="default" size="sm" className="btn-micro-animate w-full gap-2 font-semibold" asChild>
+              <a href="tel:3175551234">
                 <Phone className="w-4 h-4" />
-                <span>24/7 Emergency</span>
+                <span>📞 (317) XXX-XXXX — 24/7 Emergency</span>
               </a>
             </Button>
           </div>

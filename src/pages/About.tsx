@@ -15,22 +15,22 @@ const values = [
   {
     icon: Shield,
     title: "Quality First",
-    description: "We never compromise on the quality of our work or materials",
+    description: "We never cut corners — your home’s safety and longevity come first.",
   },
   {
     icon: Clock,
     title: "Timely Response",
-    description: "24/7 emergency services with rapid response times",
+    description: "24/7 emergency service with fast on-site arrival and efficient restoration.",
   },
   {
     icon: Heart,
     title: "Customer Care",
-    description: "Your satisfaction and peace of mind are our top priorities",
+    description: "We communicate clearly, answer questions quickly, and treat every home with respect.",
   },
   {
     icon: Target,
     title: "Precision",
-    description: "Meticulous attention to detail in every project",
+    description: "Meticulous attention to detail ensures durable, lasting results.",
   },
 ];
 
@@ -101,19 +101,16 @@ const About = () => {
             <div className="animate-fade-in">
               <h2 className="text-3xl font-bold mb-6">Our Story</h2>
               <p className="text-muted-foreground mb-4">
-                Founded over 15 years ago, Top Tier Restoration began with a simple mission:
-                to provide homeowners with reliable, professional restoration and remodeling services
-                when they need it most.
+              Founded over 15 years ago, Top Tier Restoration was built on a simple mission:
+              deliver honest, reliable, and professional restoration services that put homeowners first.
               </p>
               <p className="text-muted-foreground mb-4">
-                What started as a small family business has grown into a trusted name in home restoration,
-                serving thousands of satisfied customers throughout the region. Our commitment to excellence
-                and customer satisfaction has remained unwavering.
+              What started as a small family-run business has grown into a full-service restoration team known for quality workmanship, rapid emergency response, and exceptional customer care.
+              We’ve proudly restored thousands of homes across Indiana, helping families recover from fire, water, and storm damage with confidence.
               </p>
               <p className="text-muted-foreground">
-                Today, we're proud to be a fully licensed and insured restoration company, equipped with
-                state-of-the-art technology and a team of certified professionals ready to handle any
-                restoration or remodeling project.
+              We believe your home deserves the highest standard of craftsmanship and care.
+              That’s why every project — big or small — is handled by licensed, insured, and highly trained professionals dedicated to doing the job right.
               </p>
             </div>
             <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
@@ -181,7 +178,7 @@ const About = () => {
                       <div>
                         <p className="font-medium mb-1">Phone</p>
                         <a href="tel:5551234567" className="text-muted-foreground hover:text-primary transition-colors">
-                          (555) 123-4567
+                          (317) 123-4567
                         </a>
                         <p className="text-sm text-muted-foreground">24/7 Emergency Line</p>
                       </div>
@@ -203,7 +200,17 @@ const About = () => {
                       </div>
                       <div>
                         <p className="font-medium mb-1">Service Area</p>
-                        <p className="text-muted-foreground">Serving the Greater Metro Area</p>
+                        <p className="text-muted-foreground">Serving the Greater Indianapolis Metro Area</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Shield className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-medium mb-1">License Information</p>
+                        <p className="text-muted-foreground">Indiana License #: IN-12345-PLACEHOLDER</p>
+                        <p className="text-muted-foreground text-sm mt-1">Fully Licensed & Insured</p>
                       </div>
                     </div>
                   </div>

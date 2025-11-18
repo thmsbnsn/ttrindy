@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import { Studio } from 'sanity'
 import config from '../../sanity.config'
+import '../../sanity/styles/studio.css'
 
 function StudioPage() {
   return <Studio config={config} />

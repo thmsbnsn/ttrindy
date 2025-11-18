@@ -210,13 +210,13 @@ const ProjectDetail = () => {
               Contact us today for a free consultation and let us help restore or remodel your property.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="gap-2" asChild>
+              <Button size="lg" className="btn-micro-animate gap-2" asChild>
                 <Link to="/about#contact">
                   <Phone className="w-5 h-5" />
                   Get a Free Quote
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild>
+              <Button size="lg" variant="outline" className="btn-micro-animate btn-micro-animate-outline" asChild>
                 <Link to="/services">View Our Services</Link>
               </Button>
             </div>

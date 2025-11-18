@@ -110,9 +110,11 @@ const Services = () => {
                           </li>
                         ))}
                       </ul>
-                      <Button className="w-full gap-2">
-                        <Phone className="w-4 h-4" />
-                        Get a Free Quote
+                      <Button className="btn-micro-animate w-full gap-2" asChild>
+                        <a href="tel:3175551234">
+                          <Phone className="w-4 h-4" />
+                          Get a Free Quote
+                        </a>
                       </Button>
                     </CardContent>
                   </Card>
@@ -127,13 +129,13 @@ const Services = () => {
               We're available 24/7 for emergency restoration services. Don't wait - contact us now for immediate assistance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="gap-2" asChild>
-                <a href="tel:5551234567">
+              <Button size="lg" className="btn-micro-animate gap-2" asChild>
+                <a href="tel:3175551234">
                   <Phone className="w-5 h-5" />
-                  Call Now: (555) 123-4567
+                  Call Now: (317) XXX-XXXX
                 </a>
               </Button>
-              <Button size="lg" variant="outline" asChild>
+              <Button size="lg" variant="outline" className="btn-micro-animate btn-micro-animate-outline" asChild>
                 <Link to="/about#contact">Contact Us</Link>
               </Button>
             </div>

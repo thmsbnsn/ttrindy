@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Droplets, Flame, CloudRain, Hammer } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Droplets, Flame, CloudRain, Hammer, ChevronLeft, ChevronRight, Phone, ArrowRight } from "lucide-react";
 import { getProjects, getCategories } from "@/lib/sanity";
 import { urlFor } from "../../sanity/lib/image";
 import type { Project, Category } from "@/types/sanity";
@@ -16,10 +17,14 @@ const iconMap: Record<string, any> = {
   "Remodeling": Hammer,
 };
 
+const ITEMS_PER_PAGE = 9;
+
 const Gallery = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [projects, setProjects] = useState<Project[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,11 +40,36 @@ const Gallery = () => {
       });
   }, []);
 
+  // Handle category from URL params
+  useEffect(() => {
+    const categoryParam = searchParams.get("category");
+    if (categoryParam) {
+      setSelectedCategory(categoryParam);
+      setCurrentPage(1);
+    }
+  }, [searchParams]);
+
   const filteredProjects = selectedCategory === "All"
     ? projects
     : projects.filter(p => p.category === selectedCategory);
 
   const allCategories = ["All", ...categories.map(c => c.title)];
+
+  // Pagination
+  const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedProjects = filteredProjects.slice(startIndex, endIndex);
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+    if (category === "All") {
+      setSearchParams({});
+    } else {
+      setSearchParams({ category });
+    }
+  };
 
   if (loading) {
     return (
@@ -65,21 +95,28 @@ const Gallery = () => {
           <div className="text-center mb-12 animate-fade-in">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Projects</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Explore our portfolio of successful restoration and remodeling projects
+            Explore completed restoration and remodeling projects showcasing our craftsmanship, precision, and commitment to quality.
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
             {allCategories.map((category) => (
               <Badge
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
                 className="cursor-pointer px-4 py-2 text-sm hover:bg-primary hover:text-primary-foreground transition-colors"
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => handleCategoryChange(category)}
               >
                 {category}
               </Badge>
             ))}
+          </div>
+
+          {/* Mobile Swipe Hint */}
+          <div className="md:hidden flex items-center justify-center gap-2 mb-6 text-sm text-muted-foreground">
+            <ChevronLeft className="w-4 h-4" />
+            <span>Swipe to view more projects</span>
+            <ChevronRight className="w-4 h-4" />
           </div>
 
           {filteredProjects.length === 0 ? (
@@ -87,8 +124,9 @@ const Gallery = () => {
               <p className="text-muted-foreground">No projects found in this category.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project, index) => {
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                {paginatedProjects.map((project, index) => {
                 const Icon = project.category ? iconMap[project.category] || Hammer : Hammer;
                 return (
                   <Link key={project._id} to={`/projects/${project.slug}`}>
@@ -125,8 +163,70 @@ const Gallery = () => {
                   </Link>
                 );
               })}
-            </div>
+              </div>
+
+              {/* Desktop Pagination */}
+              {totalPages > 1 && (
+                <div className="hidden md:flex items-center justify-center gap-2 mt-8">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    disabled={currentPage === 1}
+                    className="btn-micro-animate-outline"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous
+                  </Button>
+                  <div className="flex items-center gap-2">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <Button
+                        key={page}
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(page)}
+                        className={currentPage === page ? "btn-micro-animate" : "btn-micro-animate-outline"}
+                      >
+                        {page}
+                      </Button>
+                    ))}
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    disabled={currentPage === totalPages}
+                    className="btn-micro-animate-outline"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </div>
+              )}
+            </>
           )}
+
+          {/* CTA Section */}
+          <div className="mt-16 bg-primary/5 rounded-lg p-8 md:p-12 text-center animate-fade-in">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Start Your Project?</h2>
+            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+              Contact us today for a free consultation and let us help restore or remodel your property.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="btn-micro-animate gap-2" asChild>
+                <a href="tel:3175551234">
+                  <Phone className="w-5 h-5" />
+                  Get a Free Quote
+                </a>
+              </Button>
+              <Button size="lg" variant="outline" className="btn-micro-animate btn-micro-animate-outline gap-2" asChild>
+                <Link to="/services">
+                  View Our Services
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 

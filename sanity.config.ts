@@ -34,19 +34,22 @@ export default defineConfig({
     types: schemaTypes,
   },
 
-  // Branding customization
+  // Branding customization - Sanity v4 API
   studio: {
     components: {
       logo: StudioLogo,
     },
   },
 
-  // Theme customization with brand colors
+  // Theme customization with brand colors using CSS custom properties
+  // These will be applied to the Studio UI
   theme: {
-    '--sanity-color-base-cyan': '#00AEEF', // Primary brand color
-    '--sanity-color-base-orange': '#FF6B35', // Accent color
+    '--sanity-color-base-cyan': '#00AEEF',
+    '--sanity-color-base-orange': '#FF6B35',
     '--sanity-color-base-focus-color': '#00AEEF',
     '--sanity-color-base-selection-color': '#00AEEF',
+    '--sanity-color-base-primary': '#00AEEF',
+    '--sanity-color-base-accent': '#FF6B35',
   },
 })
 

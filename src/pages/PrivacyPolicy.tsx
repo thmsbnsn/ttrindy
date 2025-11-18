@@ -16,7 +16,7 @@ const PrivacyPolicy = () => {
               <section>
                 <h2 className="text-2xl font-bold text-foreground mb-4">1. Introduction</h2>
                 <p>
-                  Top Tier Restoration ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website located at [your website URL] and use our services.
+                  Top Tier Restoration ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website located at https://ttrindy.vercel.app (or https://ttrindy.com) and use our services.
                 </p>
               </section>
 
@@ -27,7 +27,26 @@ const PrivacyPolicy = () => {
                   <li><strong>Personal Data:</strong> Personally identifiable information, such as your name, email address, phone number, and mailing address, that you voluntarily give to us when you contact us or use our services.</li>
                   <li><strong>Derivative Data:</strong> Information our servers automatically collect when you access the Site, such as your IP address, browser type, operating system, access times, and the pages you have viewed.</li>
                   <li><strong>Contact Form Data:</strong> When you use our contact form, we collect your name, email address, phone number, and message content.</li>
+                  <li><strong>Cookies and Tracking Technologies:</strong> We use cookies and similar tracking technologies to track activity on our website and hold certain information. Cookies are files with a small amount of data which may include an anonymous unique identifier.</li>
                 </ul>
+              </section>
+
+              <section>
+                <h2 className="text-2xl font-bold text-foreground mb-4">2a. Cookies and Tracking Technologies</h2>
+                <p className="mb-3">We use the following types of cookies:</p>
+                <ul className="list-disc pl-6 space-y-2 mb-4">
+                  <li><strong>Essential Cookies:</strong> These cookies are necessary for the website to function properly. They enable basic functions like page navigation and access to secure areas of the website.</li>
+                  <li><strong>Analytics Cookies:</strong> We use Google Analytics to help us understand how visitors interact with our website. These cookies collect information about how you use our website, such as which pages you visit most often. This information is used to improve our website and your user experience. You can opt out of analytics cookies through our cookie consent banner.</li>
+                </ul>
+                <p className="mb-3">You can control and manage cookies in various ways:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Through our cookie consent banner when you first visit our website</li>
+                  <li>By adjusting your browser settings to refuse cookies (though this may affect website functionality)</li>
+                  <li>By visiting Google's opt-out page if you wish to opt out of Google Analytics: <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Google Analytics Opt-out</a></li>
+                </ul>
+                <p className="mt-4">
+                  For more information about cookies and how to manage them, visit <a href="https://www.allaboutcookies.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">www.allaboutcookies.org</a>.
+                </p>
               </section>
 
               <section>
