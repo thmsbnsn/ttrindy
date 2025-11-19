@@ -96,7 +96,7 @@ const Navbar = () => {
             <Button variant="default" size="sm" className="btn-micro-animate gap-2 font-semibold" asChild>
               <a href="tel:3175551234">
                 <Phone className="w-4 h-4" />
-                <span>📞 (317) XXX-XXXX — 24/7 Emergency Service</span>
+                <span>(317) XXX-XXXX — 24/7 Emergency Service</span>
               </a>
             </Button>
           </div>
@@ -106,7 +106,7 @@ const Navbar = () => {
             className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle mobile menu"
-            aria-expanded={mobileMenuOpen}
+            aria-expanded={mobileMenuOpen ? "true" : "false"}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -132,7 +132,7 @@ const Navbar = () => {
             <Button variant="default" size="sm" className="btn-micro-animate w-full gap-2 font-semibold" asChild>
               <a href="tel:3175551234">
                 <Phone className="w-4 h-4" />
-                <span>📞 (317) XXX-XXXX — 24/7 Emergency</span>
+                <span>(317) XXX-XXXX — 24/7 Emergency</span>
               </a>
             </Button>
           </div>
