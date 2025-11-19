@@ -15,12 +15,12 @@ const Hero = () => {
           loading="eager"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/75 to-black/55" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/40" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-        <div className="max-w-3xl ml-0 md:ml-8 lg:ml-16 backdrop-blur-sm bg-black/10 rounded-lg p-6 md:p-8">
+      <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+        <div className="max-w-2xl ml-0 md:ml-4 lg:ml-8 xl:ml-12 backdrop-blur-sm bg-black/10 rounded-lg p-6 md:p-8">
           <div className="space-y-6 animate-fade-in">
             <div className="inline-flex items-center gap-2 bg-accent/90 text-accent-foreground px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
               <span className="relative flex h-2 w-2">
