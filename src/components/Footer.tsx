@@ -31,23 +31,23 @@ const Footer = () => {
 
               {/* NAP Information */}
               <div className="space-y-2 text-sm text-white/80">
-                <div className="flex items-start gap-2">
+                <div className="flex items-start justify-center md:justify-start gap-2">
                   <Phone className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                   <a href="tel:3175551234" className="hover:text-white transition-colors">
                     (317) XXX-XXXX
                   </a>
                 </div>
-                <div className="flex items-start gap-2">
+                <div className="flex items-start justify-center md:justify-start gap-2">
                   <Mail className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                   <a href="mailto:info@toptierrestoration.com" className="hover:text-white transition-colors">
                     info@toptierrestoration.com
                   </a>
                 </div>
-                <div className="flex items-start gap-2">
+                <div className="flex items-start justify-center md:justify-start gap-2">
                   <MapPin className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                   <span>Indianapolis, IN</span>
                 </div>
-                <div className="flex items-start gap-2">
+                <div className="flex items-start justify-center md:justify-start gap-2">
                   <Clock className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Hours:</p>
