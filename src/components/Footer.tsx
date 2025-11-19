@@ -61,10 +61,21 @@ const Footer = () => {
             {/* Service Areas */}
             <div className="flex flex-col gap-4 text-center md:text-left">
               <h3 className="font-bold text-white text-lg">Service Areas</h3>
-              <p className="text-sm text-white/80">
-                Serving Indianapolis, Carmel, Noblesville, Greenwood, Mooresville, Avon, Brownsburg, and surrounding Indiana areas.
-              </p>
-              <div className="flex flex-col items-center md:items-start gap-2">
+              <div className="flex flex-col gap-3">
+                <p className="text-sm text-white/80 font-medium">Serving:</p>
+                <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                  {["Indianapolis", "Carmel", "Noblesville", "Greenwood", "Mooresville", "Avon", "Brownsburg"].map((city) => (
+                    <span
+                      key={city}
+                      className="px-3 py-1.5 text-xs font-medium bg-white/10 text-white/90 rounded-md hover:bg-white/15 transition-colors"
+                    >
+                      {city}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-xs text-white/60 italic">and surrounding Indiana areas</p>
+              </div>
+              <div className="flex flex-col items-center md:items-start gap-2 mt-2">
                 <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
                   <div className="w-2 h-2 rounded-full bg-green-400"></div>
                   <span className="text-sm text-white/90 font-medium">Licensed & Insured</span>
