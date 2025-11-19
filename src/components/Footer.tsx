@@ -10,8 +10,8 @@ const Footer = () => {
           {/* Main Footer Content */}
           <div className="grid md:grid-cols-3 gap-8">
             {/* Brand & Contact Info */}
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-4 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-3">
                 <div className="w-11 h-11 flex items-center justify-center bg-white rounded-md shadow-sm p-1.5">
                   <img
                     src={topTierIcon}
@@ -59,7 +59,7 @@ const Footer = () => {
             </div>
 
             {/* Service Areas */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 text-center md:text-left">
               <h3 className="font-bold text-white text-lg">Service Areas</h3>
               <p className="text-sm text-white/80">
                 Serving Indianapolis, Carmel, Noblesville, Greenwood, Mooresville, Avon, Brownsburg, and surrounding Indiana areas.
@@ -74,7 +74,7 @@ const Footer = () => {
             </div>
 
             {/* Quick Links */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 text-center md:text-left">
               <h3 className="font-bold text-white text-lg">Quick Links</h3>
               <nav className="flex flex-col gap-2 text-sm">
                 <Link to="/services" className="text-white/80 hover:text-white transition-colors">
@@ -98,8 +98,8 @@ const Footer = () => {
 
           {/* Legal Links & Copyright */}
           <div className="border-t border-background/20 pt-6">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="text-sm text-center md:text-left text-white/80">
+            <div className="flex flex-col items-center gap-4">
+              <div className="text-sm text-center text-white/80">
                 © {new Date().getFullYear()} Top Tier Restoration. All rights reserved.
               </div>
               <div className="flex flex-wrap justify-center gap-4 text-sm text-white/70">
