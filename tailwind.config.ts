@@ -17,6 +17,7 @@ export default {
         sans: ['Inter', 'sans-serif'],
         heading: ['Coldiac', 'sans-serif'],
         hero: ['Oswald', 'sans-serif'],
+        logo: ['AmicaPro', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

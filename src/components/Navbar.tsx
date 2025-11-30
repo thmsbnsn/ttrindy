@@ -121,11 +121,11 @@ const Navbar = () => {
               />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="font-logo text-lg leading-none text-foreground uppercase tracking-tight">
+              <span className="font-logo text-lg leading-none text-foreground tracking-tight">
                 TOP TIER
               </span>
-              <span className="font-logo text-xs text-muted-foreground font-normal mt-0.5">
-                Restoration
+              <span className="font-logo text-xs text-muted-foreground mt-0.5">
+                RESTORATION
               </span>
             </div>
           </Link>

@@ -21,11 +21,11 @@ const Footer = () => {
                   />
                 </div>
                 <div className="flex flex-col leading-tight">
-                  <span className="font-logo text-lg leading-none text-white/90 uppercase tracking-tight">
+                  <span className="font-logo text-lg leading-none text-white/90 tracking-tight">
                     TOP TIER
                   </span>
-                  <span className="font-logo text-xs text-white/70 font-normal mt-0.5">
-                    Restoration
+                  <span className="font-logo text-xs text-white/70 mt-0.5">
+                    RESTORATION
                   </span>
                 </div>
               </div>
