@@ -22,7 +22,7 @@ export async function getProjects(): Promise<Project[]> {
     description,
     "category": category->title,
     "categorySlug": category->slug.current,
-    "mainImage": mainImage {
+    "mainImage": mainImage{
       asset,
       alt
     },
@@ -44,17 +44,20 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     fullDescription,
     "category": category->title,
     "categorySlug": category->slug.current,
-    "mainImage": mainImage {
+    "mainImage": mainImage{
       asset,
       alt
     },
-    "additionalImages": additionalImages[] {
+    "additionalImages": additionalImages[]{
       asset,
       alt
     },
     videos[] {
       url,
-      "thumbnail": thumbnail.asset
+      "thumbnail": thumbnail{
+        asset,
+        alt
+      }
     }
   }`
 
@@ -89,7 +92,7 @@ export async function getFeaturedProjects(): Promise<Project[]> {
     description,
     "category": category->title,
     "categorySlug": category->slug.current,
-    "mainImage": mainImage {
+    "mainImage": mainImage{
       asset,
       alt
     },

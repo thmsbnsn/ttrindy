@@ -146,7 +146,7 @@ export default async function handler(
     const { data, error } = await resend.emails.send({
       from: 'Top Tier Restoration <noreply@ttrindy.com>',
       to: recipientEmail,
-      replyTo: email, // Allow replies directly to sender
+      reply_to: email, // Allow replies directly to sender
       subject: `New Contact Form Submission from ${sanitizedName}`,
       html: `
         <h2>New Contact Form Submission</h2>
