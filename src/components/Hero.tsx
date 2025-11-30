@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Phone, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/pagesImages/index/hero.webp";
+import { CONTACT_INFO } from "@/config/contact";
 
 const Hero = () => {
   return (
@@ -45,7 +46,7 @@ const Hero = () => {
                 className="btn-micro-animate gap-2 text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
                 asChild
               >
-                <a href="tel:3175551234">
+                <a href={CONTACT_INFO.phone.href}>
                   <Phone className="w-5 h-5" />
                   Call Now for Emergency Service
                 </a>

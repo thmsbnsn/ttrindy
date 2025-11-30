@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Droplets, Flame, CloudRain, Hammer, ChevronLeft, ChevronRight, Phone, ArrowRight } from "lucide-react";
 import { getProjects, getCategories } from "@/lib/sanity";
 import { urlFor } from "../../sanity/lib/image";
+import { CONTACT_INFO } from "@/config/contact";
 import type { Project, Category } from "@/types/sanity";
 
 const iconMap: Record<string, any> = {
@@ -140,6 +141,8 @@ const Gallery = () => {
                             src={urlFor(project.mainImage).width(800).height(450).url()}
                             alt={project.title}
                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            loading={index < 6 ? "eager" : "lazy"}
+                            decoding={index < 6 ? "sync" : "async"}
                           />
                         ) : (
                           <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -214,7 +217,7 @@ const Gallery = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="btn-micro-animate gap-2" asChild>
-                <a href="tel:3175551234">
+                <a href={CONTACT_INFO.phone.href}>
                   <Phone className="w-5 h-5" />
                   Get a Free Quote
                 </a>

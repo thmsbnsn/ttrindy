@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import topTierIcon from "@/assets/brand/toptiericon.png";
+import { CONTACT_INFO } from "@/config/contact";
 
 const Footer = () => {
   return (
@@ -33,26 +34,26 @@ const Footer = () => {
               <div className="space-y-2 text-sm text-white/80">
                 <div className="flex items-start justify-center md:justify-start gap-2">
                   <Phone className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <a href="tel:3175551234" className="hover:text-white transition-colors">
-                    (317) XXX-XXXX
+                  <a href={CONTACT_INFO.phone.href} className="hover:text-white transition-colors">
+                    {CONTACT_INFO.phone.display}
                   </a>
                 </div>
                 <div className="flex items-start justify-center md:justify-start gap-2">
                   <Mail className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <a href="mailto:info@toptierrestoration.com" className="hover:text-white transition-colors">
-                    info@toptierrestoration.com
+                  <a href={CONTACT_INFO.email.href} className="hover:text-white transition-colors">
+                    {CONTACT_INFO.email.display}
                   </a>
                 </div>
                 <div className="flex items-start justify-center md:justify-start gap-2">
                   <MapPin className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Indianapolis, IN</span>
+                  <span>{CONTACT_INFO.address.full}</span>
                 </div>
                 <div className="flex items-start justify-center md:justify-start gap-2">
                   <Clock className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Hours:</p>
-                    <p>Mon - Fri: 8am - 5pm</p>
-                    <p className="text-accent font-semibold">24/7 Emergency Service</p>
+                    <p>{CONTACT_INFO.hours.regular}</p>
+                    <p className="text-accent font-semibold">{CONTACT_INFO.hours.emergency}</p>
                   </div>
                 </div>
               </div>
@@ -64,7 +65,7 @@ const Footer = () => {
               <div className="flex flex-col gap-3">
                 <p className="text-sm text-white/80 font-medium">Serving:</p>
                 <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                  {["Indianapolis", "Carmel", "Noblesville", "Greenwood", "Mooresville", "Avon", "Brownsburg"].map((city) => (
+                  {CONTACT_INFO.serviceAreas.map((city) => (
                     <span
                       key={city}
                       className="px-3 py-1.5 text-xs font-medium bg-white/10 text-white/90 rounded-md hover:bg-white/15 transition-colors"
@@ -80,7 +81,7 @@ const Footer = () => {
                   <div className="w-2 h-2 rounded-full bg-green-400"></div>
                   <span className="text-sm text-white/90 font-medium">Licensed & Insured</span>
                 </div>
-                <p className="text-xs text-white/60">Indiana License #: IN-12345-PLACEHOLDER</p>
+                <p className="text-xs text-white/60">Indiana License #: {CONTACT_INFO.license}</p>
               </div>
             </div>
 

@@ -72,6 +72,8 @@ const Blog = () => {
                           src={urlFor(post.mainImage).width(800).height(450).url()}
                           alt={post.mainImage.alt || post.title}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                          loading={index < 3 ? "eager" : "lazy"}
+                          decoding={index < 3 ? "sync" : "async"}
                         />
                       ) : (
                         <div className="w-full h-full bg-muted flex items-center justify-center">

@@ -1,13 +1,15 @@
 import { Phone, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import topTierIcon from "@/assets/brand/toptiericon.png";
+import { CONTACT_INFO } from "@/config/contact";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   const navLinks = [
     { to: "/", label: "Home" },
@@ -31,26 +33,83 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
+  // Prevent body scroll and focus trap when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
+
+      // Focus trap for accessibility
+      const focusableElements = mobileMenuRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled])'
+      );
+
+      if (focusableElements && focusableElements.length > 0) {
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        // Focus first element
+        firstElement?.focus();
+
+        const handleTab = (e: KeyboardEvent) => {
+          if (e.key !== 'Tab') return;
+
+          if (e.shiftKey) {
+            // Shift + Tab
+            if (document.activeElement === firstElement) {
+              lastElement?.focus();
+              e.preventDefault();
+            }
+          } else {
+            // Tab
+            if (document.activeElement === lastElement) {
+              firstElement?.focus();
+              e.preventDefault();
+            }
+          }
+        };
+
+        const handleEscape = (e: KeyboardEvent) => {
+          if (e.key === 'Escape') {
+            setMobileMenuOpen(false);
+          }
+        };
+
+        document.addEventListener('keydown', handleTab);
+        document.addEventListener('keydown', handleEscape);
+
+        return () => {
+          document.removeEventListener('keydown', handleTab);
+          document.removeEventListener('keydown', handleEscape);
+          document.body.style.overflow = "unset";
+        };
+      }
     } else {
       document.body.style.overflow = "unset";
     }
+
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [mobileMenuOpen]);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-border ${
-        scrolled
-          ? "bg-background/98 backdrop-blur-md shadow-lg"
-          : "bg-background/95 backdrop-blur-sm"
-      }`}
-    >
+    <>
+      {/* Skip to content link for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] bg-primary text-primary-foreground px-4 py-2 rounded-md font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+      >
+        Skip to main content
+      </a>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-border ${
+          scrolled
+            ? "bg-background/98 backdrop-blur-md shadow-lg"
+            : "bg-background/95 backdrop-blur-sm"
+        }`}
+        role="navigation"
+        aria-label="Main navigation"
+      >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity group">
@@ -94,9 +153,9 @@ const Navbar = () => {
               </Link>
             ))}
             <Button variant="default" size="sm" className="btn-micro-animate gap-2 font-semibold" asChild>
-              <a href="tel:3175551234">
+              <a href={CONTACT_INFO.phone.href}>
                 <Phone className="w-4 h-4" />
-                <span>(317) XXX-XXXX — 24/7 Emergency Service</span>
+                <span>{CONTACT_INFO.phone.display} — {CONTACT_INFO.hours.emergency}</span>
               </a>
             </Button>
           </div>
@@ -107,6 +166,7 @@ const Navbar = () => {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle mobile menu"
             aria-expanded={mobileMenuOpen ? "true" : "false"}
+            aria-controls="mobile-menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -114,7 +174,13 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-4 border-t border-border animate-fade-in">
+          <div
+            ref={mobileMenuRef}
+            id="mobile-menu"
+            role="navigation"
+            aria-label="Mobile navigation"
+            className="md:hidden py-4 space-y-4 border-t border-border animate-fade-in"
+          >
             {navLinks.map((link) => (
               <Link
                 key={link.to}
@@ -130,15 +196,16 @@ const Navbar = () => {
               </Link>
             ))}
             <Button variant="default" size="sm" className="btn-micro-animate w-full gap-2 font-semibold" asChild>
-              <a href="tel:3175551234">
+              <a href={CONTACT_INFO.phone.href}>
                 <Phone className="w-4 h-4" />
-                <span>(317) XXX-XXXX — 24/7 Emergency</span>
+                <span>{CONTACT_INFO.phone.display} — 24/7 Emergency</span>
               </a>
             </Button>
           </div>
         )}
       </div>
     </nav>
+    </>
   );
 };
 

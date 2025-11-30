@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { CONTACT_INFO } from "@/config/contact";
 
 const TermsOfService = () => {
   return (
@@ -83,7 +84,7 @@ const TermsOfService = () => {
                   Top Tier Restoration is fully licensed, bonded, and insured in the state of Indiana. We maintain general liability insurance and workers' compensation insurance as required by Indiana law. Proof of insurance is available upon request.
                 </p>
                 <p className="mb-3">
-                  <strong>Indiana Contractor License:</strong> IN-12345-PLACEHOLDER
+                  <strong>Indiana Contractor License:</strong> {CONTACT_INFO.license}
                 </p>
                 <p>
                   All restoration and remodeling work is performed in accordance with Indiana Home Improvement Contractors Act and applicable state and local building codes. We are registered with the Indiana Professional Licensing Agency.
@@ -111,9 +112,9 @@ const TermsOfService = () => {
                 </p>
                 <div className="mt-4 p-4 bg-muted rounded-lg">
                   <p className="mb-2"><strong>Top Tier Restoration</strong></p>
-                  <p className="mb-1">Email: info@toptierrestoration.com</p>
-                  <p className="mb-1">Phone: (555) 123-4567</p>
-                  <p>Service Area: Greater Metro Area, Indiana</p>
+                  <p className="mb-1">Email: {CONTACT_INFO.email.display}</p>
+                  <p className="mb-1">Phone: {CONTACT_INFO.phone.display}</p>
+                  <p>Service Area: Greater {CONTACT_INFO.address.city} Metro Area, {CONTACT_INFO.address.state}</p>
                 </div>
               </section>
             </div>

@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { CONTACT_INFO } from "@/config/contact";
 
 const values = [
   {
@@ -177,10 +178,10 @@ const About = () => {
                       </div>
                       <div>
                         <p className="font-medium mb-1">Phone</p>
-                        <a href="tel:5551234567" className="text-muted-foreground hover:text-primary transition-colors">
-                          (317) 123-4567
+                        <a href={CONTACT_INFO.phone.href} className="text-muted-foreground hover:text-primary transition-colors">
+                          {CONTACT_INFO.phone.display}
                         </a>
-                        <p className="text-sm text-muted-foreground">24/7 Emergency Line</p>
+                        <p className="text-sm text-muted-foreground">{CONTACT_INFO.hours.emergency}</p>
                       </div>
                     </div>
 
@@ -190,7 +191,9 @@ const About = () => {
                       </div>
                       <div>
                         <p className="font-medium mb-1">Email</p>
-                        <p className="text-muted-foreground">info@toptierrestoration.com</p>
+                        <a href={CONTACT_INFO.email.href} className="text-muted-foreground hover:text-primary transition-colors">
+                          {CONTACT_INFO.email.display}
+                        </a>
                       </div>
                     </div>
 
@@ -200,7 +203,7 @@ const About = () => {
                       </div>
                       <div>
                         <p className="font-medium mb-1">Service Area</p>
-                        <p className="text-muted-foreground">Serving the Greater Indianapolis Metro Area</p>
+                        <p className="text-muted-foreground">Serving the Greater {CONTACT_INFO.address.city} Metro Area</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">
@@ -209,7 +212,7 @@ const About = () => {
                       </div>
                       <div>
                         <p className="font-medium mb-1">License Information</p>
-                        <p className="text-muted-foreground">Indiana License #: IN-12345-PLACEHOLDER</p>
+                        <p className="text-muted-foreground">Indiana License #: {CONTACT_INFO.license}</p>
                         <p className="text-muted-foreground text-sm mt-1">Fully Licensed & Insured</p>
                       </div>
                     </div>

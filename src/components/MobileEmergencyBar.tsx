@@ -1,6 +1,7 @@
 import { Phone, ChevronUp, ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { CONTACT_INFO } from "@/config/contact";
 
 const MobileEmergencyBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,9 +60,9 @@ const MobileEmergencyBar = () => {
             size="lg"
             asChild
           >
-            <a href="tel:3175551234" className="flex items-center justify-center gap-2">
+            <a href={CONTACT_INFO.phone.href} className="flex items-center justify-center gap-2">
               <Phone className="w-5 h-5" />
-              <span>Call Now: (317) XXX-XXXX</span>
+              <span>Call Now: {CONTACT_INFO.phone.display}</span>
             </a>
           </Button>
           <p className="text-center text-sm mt-3 text-accent-foreground/80">

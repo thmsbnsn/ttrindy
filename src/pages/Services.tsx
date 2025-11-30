@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Droplets, Flame, CloudRain, Hammer, Phone, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { CONTACT_INFO } from "@/config/contact";
 
 const services = [
   {
@@ -111,7 +112,7 @@ const Services = () => {
                         ))}
                       </ul>
                       <Button className="btn-micro-animate w-full gap-2" asChild>
-                        <a href="tel:3175551234">
+                        <a href={CONTACT_INFO.phone.href}>
                           <Phone className="w-4 h-4" />
                           Get a Free Quote
                         </a>
@@ -130,9 +131,9 @@ const Services = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="btn-micro-animate gap-2" asChild>
-                <a href="tel:3175551234">
+                <a href={CONTACT_INFO.phone.href}>
                   <Phone className="w-5 h-5" />
-                  Call Now: (317) XXX-XXXX
+                  Call Now: {CONTACT_INFO.phone.display}
                 </a>
               </Button>
               <Button size="lg" variant="outline" className="btn-micro-animate btn-micro-animate-outline" asChild>

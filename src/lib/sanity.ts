@@ -22,7 +22,10 @@ export async function getProjects(): Promise<Project[]> {
     description,
     "category": category->title,
     "categorySlug": category->slug.current,
-    "mainImage": images[0],
+    "mainImage": mainImage {
+      asset,
+      alt
+    },
     featured
   }`
 
@@ -41,7 +44,11 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     fullDescription,
     "category": category->title,
     "categorySlug": category->slug.current,
-    images[] {
+    "mainImage": mainImage {
+      asset,
+      alt
+    },
+    "additionalImages": additionalImages[] {
       asset,
       alt
     },
@@ -51,7 +58,24 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     }
   }`
 
-  return await getClient().fetch(query, { slug })
+  const project = await getClient().fetch(query, { slug })
+
+  // Combine mainImage and additionalImages into images array for compatibility
+  if (project) {
+    const images = []
+    if (project.mainImage) {
+      images.push(project.mainImage)
+    }
+    if (project.additionalImages && project.additionalImages.length > 0) {
+      images.push(...project.additionalImages)
+    }
+    return {
+      ...project,
+      images: images.length > 0 ? images : undefined
+    }
+  }
+
+  return project
 }
 
 // Fetch featured projects
@@ -65,7 +89,10 @@ export async function getFeaturedProjects(): Promise<Project[]> {
     description,
     "category": category->title,
     "categorySlug": category->slug.current,
-    "mainImage": images[0],
+    "mainImage": mainImage {
+      asset,
+      alt
+    },
     featured
   }`
 

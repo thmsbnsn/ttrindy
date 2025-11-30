@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { PortableText } from "@portabletext/react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MetaTags } from "@/components/SEO/MetaTags";
+import { StructuredData } from "@/components/SEO/StructuredData";
+import { portableTextComponents } from "@/components/PortableTextComponents";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Calendar, MapPin, Phone } from "lucide-react";
@@ -87,8 +91,27 @@ const ProjectDetail = () => {
     })),
   ];
 
+  const mainImageUrl = project.images?.[0]
+    ? urlFor(project.images[0]).width(1200).height(630).url()
+    : 'https://ttrindy.com/og-image.webp';
+
   return (
     <div className="flex flex-col min-h-screen">
+      <MetaTags
+        title={project.title}
+        description={project.description || `View ${project.title} project by Top Tier Restoration.`}
+        ogImage={mainImageUrl}
+        keywords={project.category ? `${project.category}, restoration project, ${project.location}` : undefined}
+      />
+      <StructuredData
+        type="Article"
+        data={{
+          headline: project.title,
+          description: project.description,
+          image: mainImageUrl,
+          datePublished: project.date ? new Date(project.date).toISOString() : undefined,
+        }}
+      />
       <Navbar />
 
       <section className="pt-24 pb-16 bg-gradient-to-b from-background to-muted/20">
@@ -149,6 +172,8 @@ const ProjectDetail = () => {
                             src={urlFor(item.image).width(1200).height(675).url()}
                             alt={item.image.alt || project.title}
                             className="w-full h-full object-cover"
+                            loading={index === 0 ? "eager" : "lazy"}
+                            decoding={index === 0 ? "sync" : "async"}
                           />
                         ) : item.type === 'video' && item.video ? (
                           <div className="w-full h-full">
@@ -190,13 +215,10 @@ const ProjectDetail = () => {
                 <CardContent className="p-8">
                   <h2 className="text-2xl font-bold mb-4">Project Details</h2>
                   <div className="prose prose-slate max-w-none">
-                    {/* Render portable text - simplified for now */}
-                    <p className="text-muted-foreground whitespace-pre-line">
-                      {project.fullDescription
-                        .filter((block: any) => block._type === 'block')
-                        .map((block: any) => block.children?.map((child: any) => child.text).join(''))
-                        .join('\n\n')}
-                    </p>
+                    <PortableText
+                      value={project.fullDescription}
+                      components={portableTextComponents}
+                    />
                   </div>
                 </CardContent>
               </Card>

@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { PortableText } from "@portabletext/react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MetaTags } from "@/components/SEO/MetaTags";
+import { StructuredData } from "@/components/SEO/StructuredData";
+import { portableTextComponents } from "@/components/PortableTextComponents";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -76,8 +80,35 @@ const BlogDetail = () => {
     );
   }
 
+  const publishedDate = post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined;
+  const ogImage = post.mainImage
+    ? urlFor(post.mainImage).width(1200).height(630).url()
+    : 'https://ttrindy.com/og-image.webp';
+
   return (
     <div className="flex flex-col min-h-screen">
+      <MetaTags
+        title={post.title}
+        description={post.excerpt || `Read about ${post.title} on Top Tier Restoration's blog.`}
+        ogImage={ogImage}
+        ogType="article"
+        publishedDate={publishedDate}
+        author={post.author}
+        keywords={post.tags?.join(', ')}
+      />
+      <StructuredData
+        type="BlogPosting"
+        data={{
+          headline: post.title,
+          description: post.excerpt,
+          image: ogImage,
+          datePublished: publishedDate,
+          author: {
+            '@type': 'Person',
+            name: post.author || 'Top Tier Restoration',
+          },
+        }}
+      />
       <Navbar />
 
       <section className="pt-24 pb-16 bg-gradient-to-b from-background to-muted/20">
@@ -144,36 +175,10 @@ const BlogDetail = () => {
               <Card>
                 <CardContent className="p-8">
                   <div className="prose prose-slate max-w-none">
-                    {/* Render portable text - simplified for now */}
-                    {post.body.map((block: any, index: number) => {
-                      if (block._type === 'block') {
-                        const text = block.children?.map((child: any) => child.text).join('') || '';
-                        const style = block.style || 'normal';
-
-                        if (style === 'h1') {
-                          return <h1 key={index} className="text-3xl font-bold mb-4 mt-8">{text}</h1>;
-                        }
-                        if (style === 'h2') {
-                          return <h2 key={index} className="text-2xl font-bold mb-3 mt-6">{text}</h2>;
-                        }
-                        if (style === 'h3') {
-                          return <h3 key={index} className="text-xl font-semibold mb-2 mt-4">{text}</h3>;
-                        }
-                        return <p key={index} className="mb-4 text-muted-foreground leading-relaxed">{text}</p>;
-                      }
-                      if (block._type === 'image' && block.asset) {
-                        return (
-                          <div key={index} className="my-8">
-                            <img
-                              src={urlFor(block).width(800).url()}
-                              alt={block.alt || ''}
-                              className="rounded-lg w-full"
-                            />
-                          </div>
-                        );
-                      }
-                      return null;
-                    })}
+                    <PortableText
+                      value={post.body}
+                      components={portableTextComponents}
+                    />
                   </div>
                 </CardContent>
               </Card>

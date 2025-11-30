@@ -2,6 +2,8 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import WhyUs from "@/components/WhyUs";
 import Footer from "@/components/Footer";
+import { MetaTags } from "@/components/SEO/MetaTags";
+import { StructuredData } from "@/components/SEO/StructuredData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Droplets, Flame, CloudRain, Hammer, ArrowRight } from "lucide-react";
@@ -45,8 +47,14 @@ const services = [
 const Index = () => {
   return (
     <div className="flex flex-col min-h-screen">
+      <MetaTags
+        title="Home"
+        description="Top Tier Restoration - Professional 24/7 emergency restoration services for water damage, fire damage, and storm damage. Expert remodeling and renovation services in Indianapolis and surrounding Indiana areas."
+        keywords="water damage restoration, fire damage restoration, storm damage repair, home remodeling, Indianapolis restoration, emergency restoration services"
+      />
+      <StructuredData type="LocalBusiness" />
       <Navbar />
-      <div className="flex-1">
+      <main id="main-content" className="flex-1">
         <Hero />
 
         {/* Services Preview Section */}
@@ -137,7 +145,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-      </div>
+      </main>
 
       <Footer />
     </div>
