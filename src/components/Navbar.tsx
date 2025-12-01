@@ -64,6 +64,9 @@ const Navbar = () => {
     : topTierIcon;
   const logoAlt = siteSettings?.branding?.logo?.alt || "Top Tier Restoration Logo";
 
+  // ARIA attribute value for mobile menu button
+  const mobileMenuExpanded = mobileMenuOpen;
+
   // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -252,7 +255,7 @@ const Navbar = () => {
             className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle mobile menu"
-            aria-expanded={mobileMenuOpen ? "true" : "false"}
+            {...{ "aria-expanded": mobileMenuOpen }}
             aria-controls="mobile-menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
