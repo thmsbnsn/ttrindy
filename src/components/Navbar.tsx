@@ -121,10 +121,10 @@ const Navbar = () => {
               />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="font-logo text-lg leading-none text-foreground tracking-tight">
+              <span className="font-logo text-xs leading-none text-primary tracking-tight">
                 TOP TIER
               </span>
-              <span className="font-logo text-xs text-muted-foreground mt-0.5">
+              <span className="font-logo text-xs text-primary mt-0.5">
                 RESTORATION
               </span>
             </div>
@@ -165,7 +165,7 @@ const Navbar = () => {
             className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle mobile menu"
-            aria-expanded={mobileMenuOpen ? "true" : "false"}
+            aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
