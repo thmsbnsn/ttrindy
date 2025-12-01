@@ -1,12 +1,16 @@
+// sanity/structure.ts
 import { StructureBuilder } from 'sanity/structure'
+import { Cog, Home, FileText, Wrench, FolderOpen, Tag, BookOpen } from 'lucide-react'
 
-import { Cog, FileText, FolderOpen, Tag } from 'lucide-react'
-
+/**
+ * Custom desk structure for Sanity Studio
+ * Organizes content into logical groups with singleton pages
+ */
 export default (S: StructureBuilder) =>
   S.list()
     .title('Content')
     .items([
-      // Site Settings (singleton)
+      // ==================== SITE SETTINGS (Singleton) ====================
       S.listItem()
         .title('Site Settings')
         .icon(Cog)
@@ -20,7 +24,55 @@ export default (S: StructureBuilder) =>
 
       S.divider(),
 
-      // Projects
+      // ==================== PAGE MANAGEMENT ====================
+      S.listItem()
+        .title('Pages')
+        .icon(FileText)
+        .child(
+          S.list()
+            .title('Pages')
+            .items([
+              // Home Page (Singleton)
+              S.listItem()
+                .title('Home Page')
+                .icon(Home)
+                .id('homePage')
+                .child(
+                  S.document()
+                    .schemaType('homePage')
+                    .documentId('homePage')
+                    .title('Home Page')
+                ),
+
+              // About Page (Singleton)
+              S.listItem()
+                .title('About Page')
+                .icon(FileText)
+                .id('aboutPage')
+                .child(
+                  S.document()
+                    .schemaType('aboutPage')
+                    .documentId('aboutPage')
+                    .title('About Page')
+                ),
+
+              // Services Page (Singleton)
+              S.listItem()
+                .title('Services Page')
+                .icon(Wrench)
+                .id('servicesPage')
+                .child(
+                  S.document()
+                    .schemaType('servicesPage')
+                    .documentId('servicesPage')
+                    .title('Services Page')
+                ),
+            ])
+        ),
+
+      S.divider(),
+
+      // ==================== PROJECTS ====================
       S.listItem()
         .title('Projects')
         .icon(FolderOpen)
@@ -30,21 +82,40 @@ export default (S: StructureBuilder) =>
             .title('Projects')
             .defaultOrdering([{ field: 'date', direction: 'desc' }])
             .filter('_type == "project"')
+            .child((documentId) =>
+              S.document()
+                .documentId(documentId)
+                .schemaType('project')
+                .views([
+                  S.view.form(),
+                  // Could add preview view here in future
+                ])
+            )
         ),
 
-      // Blog Posts
+      // ==================== BLOG POSTS ====================
       S.listItem()
         .title('Blog Posts')
-        .icon(FileText)
+        .icon(BookOpen)
         .schemaType('blogPost')
         .child(
           S.documentTypeList('blogPost')
             .title('Blog Posts')
             .defaultOrdering([{ field: 'publishedAt', direction: 'desc' }])
             .filter('_type == "blogPost"')
+            .child((documentId) =>
+              S.document()
+                .documentId(documentId)
+                .schemaType('blogPost')
+                .views([
+                  S.view.form(),
+                ])
+            )
         ),
 
-      // Categories
+      S.divider(),
+
+      // ==================== CATEGORIES ====================
       S.listItem()
         .title('Categories')
         .icon(Tag)
@@ -54,5 +125,13 @@ export default (S: StructureBuilder) =>
             .title('Categories')
             .defaultOrdering([{ field: 'title', direction: 'asc' }])
         ),
-    ])
 
+      // Hide singleton documents from the default list
+      // This prevents editors from creating multiple instances
+      ...S.documentTypeListItems().filter(
+        (listItem) =>
+          !['siteSettings', 'homePage', 'aboutPage', 'servicesPage'].includes(
+            listItem.getId() || ''
+          )
+      ),
+    ])

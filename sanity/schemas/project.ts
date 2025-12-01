@@ -53,39 +53,27 @@ export default defineType({
     }),
     defineField({
       name: 'fullDescription',
-      title: 'Full Description',
+      title: 'Full Project Description',
       type: 'array',
-      of: [{ type: 'block' }],
-    }),
-    defineField({
-      name: 'mainImage',
-      title: 'Main Image',
-      type: 'image',
-      description: 'Main image that displays on the project card',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          validation: (Rule) => Rule.required(),
-        },
-      ],
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'additionalImages',
-      title: 'Additional Images',
-      type: 'array',
-      description: 'Additional images for the project detail page',
       of: [
         {
-          type: 'image',
-          options: {
-            hotspot: true,
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'H2', value: 'h2' },
+            { title: 'H3', value: 'h3' },
+            { title: 'Quote', value: 'blockquote' },
+          ],
+          marks: {
+            decorators: [
+              { title: 'Strong', value: 'strong' },
+              { title: 'Emphasis', value: 'em' },
+            ],
           },
+        },
+        {
+          type: 'image',
+          options: { hotspot: true },
           fields: [
             {
               name: 'alt',
@@ -93,9 +81,40 @@ export default defineType({
               title: 'Alternative Text',
               validation: (Rule) => Rule.required(),
             },
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+            },
           ],
         },
       ],
+    }),
+    defineField({
+      name: 'images',
+      title: 'Project Images',
+      type: 'array',
+      description: 'All project images (first image is the main/featured image)',
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+            },
+          ],
+        },
+      ],
+      validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
       name: 'videos',
@@ -110,11 +129,18 @@ export default defineType({
               type: 'url',
               title: 'Video URL',
               description: 'YouTube, Vimeo, or direct video URL',
+              validation: (Rule) => Rule.required(),
             },
             {
               name: 'thumbnail',
               type: 'image',
               title: 'Video Thumbnail',
+              description: 'Custom thumbnail (optional)',
+            },
+            {
+              name: 'title',
+              type: 'string',
+              title: 'Video Title',
             },
           ],
         },
@@ -124,7 +150,7 @@ export default defineType({
       name: 'featured',
       title: 'Featured Project',
       type: 'boolean',
-      description: 'Show this project on the homepage gallery',
+      description: 'Show this project on the homepage',
       initialValue: false,
     }),
     defineField({
@@ -133,12 +159,28 @@ export default defineType({
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
     }),
+
+    // ==================== SEO ====================
+    defineField({
+      name: 'seo',
+      title: 'SEO Settings',
+      type: 'seoFields',
+      description: 'SEO settings for this project page',
+    }),
   ],
   preview: {
     select: {
       title: 'title',
       subtitle: 'location',
-      media: 'mainImage',
+      media: 'images.0',
+      category: 'category.title',
+    },
+    prepare({ title, subtitle, media, category }) {
+      return {
+        title: title,
+        subtitle: `${category || 'Uncategorized'} • ${subtitle}`,
+        media: media,
+      }
     },
   },
   orderings: [
@@ -151,6 +193,14 @@ export default defineType({
       title: 'Date, Oldest First',
       name: 'dateAsc',
       by: [{ field: 'date', direction: 'asc' }],
+    },
+    {
+      title: 'Featured First',
+      name: 'featuredFirst',
+      by: [
+        { field: 'featured', direction: 'desc' },
+        { field: 'date', direction: 'desc' },
+      ],
     },
   ],
 })

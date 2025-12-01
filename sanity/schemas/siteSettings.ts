@@ -1,178 +1,289 @@
+// sanity/schemas/singletons/siteSettings.ts
 import { defineField, defineType } from 'sanity'
-
 import { Cog } from 'lucide-react'
 
+/**
+ * SINGLETON: Site Settings
+ * Global configuration and branding that appears across all pages
+ * This is the single source of truth for company info, contact details, and brand colors
+ */
 export default defineType({
   name: 'siteSettings',
   title: 'Site Settings',
   type: 'document',
   icon: Cog,
+  // Singleton pattern - only one document allowed
+  __experimental_actions: ['update', 'publish'],
   fields: [
-    // Branding
+    // ==================== BRANDING ====================
     defineField({
-      name: 'logo',
-      title: 'Logo',
-      type: 'image',
-      description: 'Site logo (used in navbar and footer)',
-      options: {
-        hotspot: true,
-      },
+      name: 'branding',
+      title: 'Branding',
+      type: 'object',
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description: 'Description of the logo for accessibility',
+          name: 'logo',
+          title: 'Logo',
+          type: 'image',
+          description: 'Main logo (used in navbar and footer)',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+              validation: (Rule) => Rule.required(),
+            },
+          ],
           validation: (Rule) => Rule.required(),
         },
-      ],
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'siteName',
-      title: 'Site Name',
-      type: 'string',
-      description: 'Full business name',
-      initialValue: 'Top Tier Restoration',
-      validation: (Rule) => Rule.required(),
-    }),
-    // Contact Information
-    defineField({
-      name: 'phoneNumber',
-      title: 'Phone Number',
-      type: 'string',
-      description: 'Primary phone number for CTAs (format: (555) 123-4567)',
-      validation: (Rule) =>
-        Rule.required()
-          .regex(/^\(\d{3}\) \d{3}-\d{4}$/, {
-            name: 'phone',
-            invert: false,
-          })
-          .error('Please use format: (555) 123-4567'),
-      placeholder: '(555) 123-4567',
-    }),
-    defineField({
-      name: 'email',
-      title: 'Email',
-      type: 'string',
-      description: 'Primary email address for contact form',
-      validation: (Rule) => Rule.required().email(),
-      placeholder: 'info@toptierrestoration.com',
-    }),
-    defineField({
-      name: 'address',
-      title: 'Business Address',
-      type: 'object',
-      fields: [
-        { name: 'street', type: 'string', title: 'Street Address' },
-        { name: 'city', type: 'string', title: 'City' },
-        { name: 'state', type: 'string', title: 'State' },
-        { name: 'zip', type: 'string', title: 'ZIP Code' },
+        {
+          name: 'siteName',
+          title: 'Site Name',
+          type: 'string',
+          description: 'Full business name',
+          initialValue: 'Top Tier Restoration',
+          validation: (Rule) => Rule.required(),
+        },
+        {
+          name: 'tagline',
+          title: 'Tagline',
+          type: 'string',
+          description: 'Short tagline (e.g., "Professional Restoration Services")',
+          validation: (Rule) => Rule.max(100),
+        },
+        {
+          name: 'primaryColor',
+          title: 'Primary Color (Cyan Blue)',
+          type: 'color',
+          description: 'Main brand color - used for links, primary buttons',
+          options: { disableAlpha: true },
+          validation: (Rule) => Rule.required(),
+          initialValue: { hex: '#00AEEF' },
+        },
+        {
+          name: 'accentColor',
+          title: 'Accent Color (Orange)',
+          type: 'color',
+          description: 'Emergency/urgent action color - used for CTAs',
+          options: { disableAlpha: true },
+          initialValue: { hex: '#FF6B35' },
+        },
       ],
     }),
-    // Brand Colors
+
+    // ==================== CONTACT INFORMATION ====================
     defineField({
-      name: 'primaryColor',
-      title: 'Primary Color (Cyan Blue)',
-      type: 'color',
-      description: 'Main brand color - used for links, primary buttons',
-      options: {
-        disableAlpha: true,
-      },
-      validation: (Rule) => Rule.required(),
-      initialValue: { hex: '#00AEEF' },
-    }),
-    defineField({
-      name: 'accentColor',
-      title: 'Accent Color (Orange)',
-      type: 'color',
-      description: 'Emergency/urgent action color - used for CTAs',
-      options: {
-        disableAlpha: true,
-      },
-      initialValue: { hex: '#FF5C33' },
-    }),
-    // SEO
-    defineField({
-      name: 'seo',
-      title: 'SEO Settings',
+      name: 'contact',
+      title: 'Contact Information',
       type: 'object',
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
-          name: 'metaDescription',
-          type: 'text',
-          title: 'Meta Description',
-          description: 'Default meta description for the site',
-          validation: (Rule) => Rule.max(160),
-          rows: 3,
+          name: 'phoneNumber',
+          title: 'Phone Number',
+          type: 'string',
+          description: 'Primary phone number for CTAs (format: (555) 123-4567)',
+          validation: (Rule) =>
+            Rule.required()
+              .regex(/^\(\d{3}\) \d{3}-\d{4}$/, {
+                name: 'phone',
+                invert: false,
+              })
+              .error('Please use format: (555) 123-4567'),
+          placeholder: '(555) 123-4567',
         },
         {
-          name: 'keywords',
-          type: 'array',
-          title: 'Keywords',
-          of: [{ type: 'string' }],
-          options: {
-            layout: 'tags',
-          },
+          name: 'email',
+          title: 'Email',
+          type: 'string',
+          description: 'Primary email address',
+          validation: (Rule) => Rule.required().email(),
+          placeholder: 'info@toptierrestoration.com',
         },
         {
-          name: 'ogImage',
-          type: 'image',
-          title: 'Open Graph Image',
-          description: 'Default image for social media sharing',
+          name: 'address',
+          title: 'Business Address',
+          type: 'object',
+          fields: [
+            { name: 'street', type: 'string', title: 'Street Address' },
+            { name: 'city', type: 'string', title: 'City', validation: (Rule) => Rule.required() },
+            { name: 'state', type: 'string', title: 'State', validation: (Rule) => Rule.required() },
+            { name: 'zip', type: 'string', title: 'ZIP Code' },
+          ],
+        },
+        {
+          name: 'serviceArea',
+          title: 'Service Area Description',
+          type: 'string',
+          description: 'e.g., "Greater Indianapolis Metro Area"',
+          initialValue: 'Greater Indianapolis Metro Area',
         },
       ],
     }),
-    // Business Information
+
+    // ==================== BUSINESS INFORMATION ====================
     defineField({
       name: 'businessInfo',
       title: 'Business Information',
       type: 'object',
+      options: { collapsible: true, collapsed: true },
       fields: [
         {
           name: 'yearsInBusiness',
           type: 'number',
           title: 'Years in Business',
           validation: (Rule) => Rule.required().positive().integer(),
+          initialValue: 15,
         },
         {
           name: 'projectsCompleted',
           type: 'number',
           title: 'Projects Completed',
           validation: (Rule) => Rule.required().positive().integer(),
+          initialValue: 1000,
         },
         {
           name: 'licenseNumber',
           type: 'string',
           title: 'License Number',
+          description: 'State license number',
+          validation: (Rule) => Rule.required(),
         },
         {
           name: 'insuranceProvider',
           type: 'string',
           title: 'Insurance Provider',
         },
+        {
+          name: 'emergencyAvailability',
+          type: 'string',
+          title: 'Emergency Availability',
+          initialValue: '24/7 Emergency Service',
+        },
       ],
     }),
-    // Social Media
+
+    // ==================== SOCIAL MEDIA ====================
     defineField({
       name: 'socialMedia',
       title: 'Social Media',
       type: 'object',
+      options: { collapsible: true, collapsed: true },
       fields: [
         { name: 'facebook', type: 'url', title: 'Facebook URL' },
         { name: 'instagram', type: 'url', title: 'Instagram URL' },
         { name: 'twitter', type: 'url', title: 'Twitter/X URL' },
         { name: 'linkedin', type: 'url', title: 'LinkedIn URL' },
+        { name: 'youtube', type: 'url', title: 'YouTube URL' },
+      ],
+    }),
+
+    // ==================== NAVIGATION ====================
+    defineField({
+      name: 'navigation',
+      title: 'Navigation Menu',
+      type: 'object',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        {
+          name: 'mainMenu',
+          title: 'Main Menu Items',
+          type: 'array',
+          of: [{ type: 'navigationItem' }],
+          validation: (Rule) => Rule.max(8).warning('Consider limiting menu items for better UX'),
+        },
+        {
+          name: 'ctaButton',
+          title: 'Call-to-Action Button',
+          type: 'object',
+          fields: [
+            { name: 'text', type: 'string', title: 'Button Text', initialValue: 'Get a Free Quote' },
+            { name: 'url', type: 'string', title: 'URL', initialValue: '/about#contact' },
+          ],
+        },
+      ],
+    }),
+
+    // ==================== FOOTER ====================
+    defineField({
+      name: 'footer',
+      title: 'Footer',
+      type: 'object',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        {
+          name: 'aboutText',
+          title: 'About Text',
+          type: 'text',
+          rows: 3,
+          description: 'Brief description that appears in footer',
+          validation: (Rule) => Rule.max(200),
+        },
+        {
+          name: 'quickLinks',
+          title: 'Quick Links',
+          type: 'array',
+          of: [{ type: 'navigationItem' }],
+          validation: (Rule) => Rule.max(6),
+        },
+        {
+          name: 'copyrightText',
+          title: 'Copyright Text',
+          type: 'string',
+          initialValue: '© {year} Top Tier Restoration. All rights reserved.',
+          description: 'Use {year} for current year',
+        },
+      ],
+    }),
+
+    // ==================== SEO DEFAULTS ====================
+    defineField({
+      name: 'seo',
+      title: 'Default SEO Settings',
+      type: 'object',
+      description: 'Default SEO settings used when page-specific SEO is not set',
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        {
+          name: 'metaTitle',
+          type: 'string',
+          title: 'Default Meta Title',
+          description: 'Default title for pages without specific title',
+          validation: (Rule) => Rule.max(60),
+        },
+        {
+          name: 'metaDescription',
+          type: 'text',
+          title: 'Default Meta Description',
+          description: 'Default description for the site',
+          validation: (Rule) => Rule.max(160),
+          rows: 3,
+        },
+        {
+          name: 'keywords',
+          type: 'array',
+          title: 'Default Keywords',
+          of: [{ type: 'string' }],
+          options: { layout: 'tags' },
+        },
+        {
+          name: 'ogImage',
+          type: 'image',
+          title: 'Default Open Graph Image',
+          description: 'Default image for social media sharing (1200x630px)',
+        },
       ],
     }),
   ],
+
   preview: {
     prepare() {
       return {
         title: 'Site Settings',
-        subtitle: 'Configure global site settings',
+        subtitle: 'Global site configuration',
       }
     },
   },
 })
-

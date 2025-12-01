@@ -4,20 +4,65 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import topTierIcon from "@/assets/brand/toptiericon.png";
 import { CONTACT_INFO } from "@/config/contact";
+import { getSiteSettings } from "@/lib/sanity";
+import { urlFor } from "../../sanity/lib/image";
+import type { SiteSettings } from "@/types/sanity";
+
+// Fallback navigation links if CMS data is not available
+const fallbackNavLinks = [
+  { to: "/", label: "Home" },
+  { to: "/services", label: "Services" },
+  { to: "/gallery", label: "Gallery" },
+  { to: "/blog", label: "Blog" },
+  { to: "/about", label: "About" },
+];
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const location = useLocation();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  const navLinks = [
-    { to: "/", label: "Home" },
-    { to: "/services", label: "Services" },
-    { to: "/gallery", label: "Gallery" },
-    { to: "/blog", label: "Blog" },
-    { to: "/about", label: "About" },
-  ];
+  // Fetch site settings from CMS
+  useEffect(() => {
+    getSiteSettings()
+      .then((settings) => {
+        if (settings) {
+          setSiteSettings(settings);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching site settings:", error);
+      });
+  }, []);
+
+  // Get navigation links from CMS or fallback
+  const navLinks = siteSettings?.navigation?.mainMenu?.length
+    ? siteSettings.navigation.mainMenu.map((item) => ({
+        to: item.url,
+        label: item.title,
+        openInNewTab: item.openInNewTab,
+      }))
+    : fallbackNavLinks;
+
+  // Get phone number from CMS or fallback
+  const phoneNumber = siteSettings?.contact?.phoneNumber || CONTACT_INFO.phone.display;
+  const phoneHref = siteSettings?.contact?.phoneNumber
+    ? `tel:${siteSettings.contact.phoneNumber.replace(/\D/g, "")}`
+    : CONTACT_INFO.phone.href;
+
+  // Get CTA button from CMS or fallback
+  const ctaButton = siteSettings?.navigation?.ctaButton || {
+    text: "Get a Free Quote",
+    url: "/about#contact",
+  };
+
+  // Get logo from CMS or fallback
+  const logoUrl = siteSettings?.branding?.logo
+    ? urlFor(siteSettings.branding.logo).width(44).height(44).url()
+    : topTierIcon;
+  const logoAlt = siteSettings?.branding?.logo?.alt || "Top Tier Restoration Logo";
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -115,49 +160,81 @@ const Navbar = () => {
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity group">
             <div className="w-11 h-11 flex items-center justify-center bg-white rounded-md shadow-sm group-hover:shadow-md transition-shadow p-1.5">
               <img
-                src={topTierIcon}
-                alt="Top Tier Restoration Logo"
+                src={logoUrl}
+                alt={logoAlt}
                 className="w-full h-full object-contain"
               />
             </div>
             <div className="flex flex-col leading-tight">
               <span className="font-logo text-xs leading-none text-primary tracking-tight">
-                TOP TIER
+                {siteSettings?.branding?.siteName?.split(" ").slice(0, 2).join(" ").toUpperCase() || "TOP TIER"}
               </span>
               <span className="font-logo text-xs text-primary mt-0.5">
-                RESTORATION
+                {siteSettings?.branding?.siteName?.split(" ").slice(2).join(" ").toUpperCase() || "RESTORATION"}
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`text-sm font-medium transition-colors relative group ${
-                  location.pathname === link.to
-                    ? "text-primary"
-                    : "text-foreground hover:text-primary"
-                }`}
-              >
-                {link.label}
-                <span
-                  className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform origin-left ${
-                    location.pathname === link.to
-                      ? "scale-x-100"
-                      : "scale-x-0 group-hover:scale-x-100"
+            {navLinks.map((link, index) => {
+              const isActive = location.pathname === link.to || 
+                (link.to !== "/" && location.pathname.startsWith(link.to));
+              
+              // Handle external links
+              if (link.openInNewTab || link.to.startsWith("http")) {
+                return (
+                  <a
+                    key={index}
+                    href={link.to}
+                    target={link.openInNewTab ? "_blank" : undefined}
+                    rel={link.openInNewTab ? "noopener noreferrer" : undefined}
+                    className="text-sm font-medium transition-colors relative group text-foreground hover:text-primary"
+                  >
+                    {link.label}
+                    <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform origin-left scale-x-0 group-hover:scale-x-100" />
+                  </a>
+                );
+              }
+              
+              return (
+                <Link
+                  key={index}
+                  to={link.to}
+                  className={`text-sm font-medium transition-colors relative group ${
+                    isActive
+                      ? "text-primary"
+                      : "text-foreground hover:text-primary"
                   }`}
-                />
-              </Link>
-            ))}
+                >
+                  {link.label}
+                  <span
+                    className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform origin-left ${
+                      isActive
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover:scale-x-100"
+                    }`}
+                  />
+                </Link>
+              );
+            })}
             <Button variant="default" size="sm" className="btn-micro-animate gap-2 font-semibold" asChild>
-              <a href={CONTACT_INFO.phone.href}>
+              <a href={phoneHref}>
                 <Phone className="w-4 h-4" />
-                <span>{CONTACT_INFO.phone.display} — {CONTACT_INFO.hours.emergency}</span>
+                <span>{phoneNumber} — {siteSettings?.businessInfo?.emergencyAvailability || "24/7 Emergency"}</span>
               </a>
             </Button>
+            {ctaButton && (
+              <Button variant="outline" size="sm" className="btn-micro-animate gap-2 font-semibold" asChild>
+                {ctaButton.url.startsWith("http") ? (
+                  <a href={ctaButton.url} target="_blank" rel="noopener noreferrer">
+                    {ctaButton.text}
+                  </a>
+                ) : (
+                  <Link to={ctaButton.url}>{ctaButton.text}</Link>
+                )}
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -181,26 +258,64 @@ const Navbar = () => {
             aria-label="Mobile navigation"
             className="md:hidden py-4 space-y-4 border-t border-border animate-fade-in"
           >
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`block text-sm font-medium transition-colors py-2 ${
-                  location.pathname === link.to
-                    ? "text-primary"
-                    : "text-foreground hover:text-primary"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link, index) => {
+              const isActive = location.pathname === link.to || 
+                (link.to !== "/" && location.pathname.startsWith(link.to));
+              
+              // Handle external links
+              if (link.openInNewTab || link.to.startsWith("http")) {
+                return (
+                  <a
+                    key={index}
+                    href={link.to}
+                    target={link.openInNewTab ? "_blank" : undefined}
+                    rel={link.openInNewTab ? "noopener noreferrer" : undefined}
+                    className={`block text-sm font-medium transition-colors py-2 ${
+                      isActive
+                        ? "text-primary"
+                        : "text-foreground hover:text-primary"
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                );
+              }
+              
+              return (
+                <Link
+                  key={index}
+                  to={link.to}
+                  className={`block text-sm font-medium transition-colors py-2 ${
+                    isActive
+                      ? "text-primary"
+                      : "text-foreground hover:text-primary"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
             <Button variant="default" size="sm" className="btn-micro-animate w-full gap-2 font-semibold" asChild>
-              <a href={CONTACT_INFO.phone.href}>
+              <a href={phoneHref}>
                 <Phone className="w-4 h-4" />
-                <span>{CONTACT_INFO.phone.display} — 24/7 Emergency</span>
+                <span>{phoneNumber} — {siteSettings?.businessInfo?.emergencyAvailability || "24/7 Emergency"}</span>
               </a>
             </Button>
+            {ctaButton && (
+              <Button variant="outline" size="sm" className="btn-micro-animate w-full gap-2 font-semibold" asChild>
+                {ctaButton.url.startsWith("http") ? (
+                  <a href={ctaButton.url} target="_blank" rel="noopener noreferrer" onClick={() => setMobileMenuOpen(false)}>
+                    {ctaButton.text}
+                  </a>
+                ) : (
+                  <Link to={ctaButton.url} onClick={() => setMobileMenuOpen(false)}>
+                    {ctaButton.text}
+                  </Link>
+                )}
+              </Button>
+            )}
           </div>
         )}
       </div>
@@ -210,3 +325,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
