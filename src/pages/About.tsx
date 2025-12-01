@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -5,42 +6,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Shield, Award, Clock, Users, Heart, Target, Phone, Mail, MapPin } from "lucide-react";
+import { MetaTags } from "@/components/SEO/MetaTags";
+import { Phone, Mail, MapPin, Shield, Users } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { CONTACT_INFO } from "@/config/contact";
+import { getAboutPage, getSiteSettings } from "@/lib/sanity";
+import { urlFor } from "../../sanity/lib/image";
+import { PortableText } from "@portabletext/react";
+import { portableTextComponents } from "@/components/PortableTextComponents";
+import * as LucideIcons from "lucide-react";
+import type { AboutPage, SiteSettings, FeatureCard, StatCard } from "@/types/sanity";
 
-const values = [
-  {
-    icon: Shield,
-    title: "Quality First",
-    description: "We never cut corners — your home’s safety and longevity come first.",
-  },
-  {
-    icon: Clock,
-    title: "Timely Response",
-    description: "24/7 emergency service with fast on-site arrival and efficient restoration.",
-  },
-  {
-    icon: Heart,
-    title: "Customer Care",
-    description: "We communicate clearly, answer questions quickly, and treat every home with respect.",
-  },
-  {
-    icon: Target,
-    title: "Precision",
-    description: "Meticulous attention to detail ensures durable, lasting results.",
-  },
-];
+// Icon mapping
+const iconMap: Record<string, any> = {
+  Shield: LucideIcons.Shield,
+  Award: LucideIcons.Award,
+  Clock: LucideIcons.Clock,
+  Users: LucideIcons.Users,
+  Heart: LucideIcons.Heart,
+  Target: LucideIcons.Target,
+  CheckCircle2: LucideIcons.CheckCircle2,
+  Star: LucideIcons.Star,
+};
 
-const stats = [
-  { number: "15+", label: "Years Experience" },
-  { number: "1000+", label: "Projects Completed" },
-  { number: "100%", label: "Licensed & Insured" },
-  { number: "24/7", label: "Emergency Service" },
-];
+const getIcon = (iconName: string) => {
+  return iconMap[iconName] || LucideIcons.Shield;
+};
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, { message: "Name is required" }).max(100, { message: "Name must be less than 100 characters" }),
@@ -52,10 +46,33 @@ const contactSchema = z.object({
 type ContactFormData = z.infer<typeof contactSchema>;
 
 const About = () => {
+  const [aboutPage, setAboutPage] = useState<AboutPage | null>(null);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema)
   });
+
+  useEffect(() => {
+    Promise.all([
+      getAboutPage(),
+      getSiteSettings()
+    ])
+      .then(([pageData, settings]) => {
+        if (pageData) {
+          setAboutPage(pageData);
+        }
+        if (settings) {
+          setSiteSettings(settings);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
 
   const onSubmit = async (data: ContactFormData) => {
     try {
@@ -85,87 +102,125 @@ const About = () => {
       });
     }
   };
+  // Get data from CMS or use fallbacks
+  const storySection = aboutPage?.storySection;
+  const stats = aboutPage?.statsSection?.stats || [];
+  const values = aboutPage?.valuesSection?.values || [];
+  const contactSection = aboutPage?.contactSection;
+  const showContactForm = contactSection?.showContactForm !== false;
+
+  // Get contact info from site settings
+  const phoneNumber = siteSettings?.contact?.phoneNumber || CONTACT_INFO.phone.display;
+  const phoneHref = siteSettings?.contact?.phoneNumber
+    ? `tel:${siteSettings.contact.phoneNumber.replace(/\D/g, "")}`
+    : CONTACT_INFO.phone.href;
+  const email = siteSettings?.contact?.email || CONTACT_INFO.email.display;
+  const emailHref = siteSettings?.contact?.email
+    ? `mailto:${siteSettings.contact.email}`
+    : CONTACT_INFO.email.href;
+  const serviceArea = siteSettings?.contact?.serviceArea || `Greater ${CONTACT_INFO.address.city} Metro Area`;
+  const licenseNumber = siteSettings?.businessInfo?.licenseNumber || CONTACT_INFO.license;
+  const emergencyAvailability = siteSettings?.businessInfo?.emergencyAvailability || CONTACT_INFO.hours.emergency;
+
   return (
     <div className="flex flex-col min-h-screen">
+      <MetaTags
+        title={aboutPage?.seo?.metaTitle || aboutPage?.pageTitle || "About Top Tier Restoration"}
+        description={aboutPage?.seo?.metaDescription || aboutPage?.subtitle || "Your trusted partner in home restoration and remodeling"}
+        keywords={aboutPage?.seo?.keywords?.join(", ")}
+      />
       <Navbar />
 
       <section className="pt-24 pb-16 bg-gradient-to-b from-background to-muted/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">About Top Tier Restoration</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Your trusted partner in home restoration and remodeling
-            </p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              {aboutPage?.pageTitle || "About Top Tier Restoration"}
+            </h1>
+            {aboutPage?.subtitle && (
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {aboutPage.subtitle}
+              </p>
+            )}
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 mb-20 items-center">
-            <div className="animate-fade-in">
-              <h2 className="text-3xl font-bold mb-6">Our Story</h2>
-              <p className="text-muted-foreground mb-4">
-              Founded over 15 years ago, Top Tier Restoration was built on a simple mission:
-              deliver honest, reliable, and professional restoration services that put homeowners first.
-              </p>
-              <p className="text-muted-foreground mb-4">
-              What started as a small family-run business has grown into a full-service restoration team known for quality workmanship, rapid emergency response, and exceptional customer care.
-              We’ve proudly restored thousands of homes across Indiana, helping families recover from fire, water, and storm damage with confidence.
-              </p>
-              <p className="text-muted-foreground">
-              We believe your home deserves the highest standard of craftsmanship and care.
-              That’s why every project — big or small — is handled by licensed, insured, and highly trained professionals dedicated to doing the job right.
-              </p>
-            </div>
-            <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
-              <img
-                src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=800&auto=format&fit=crop"
-                alt="Our team"
-                className="rounded-lg shadow-xl w-full h-auto"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
-            {stats.map((stat, index) => (
-              <Card
-                key={index}
-                className="text-center animate-fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <CardContent className="p-6">
-                  <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
-                    {stat.number}
+          {/* Story Section */}
+          {storySection && (
+            <div className="grid md:grid-cols-2 gap-12 mb-20 items-center">
+              <div className="animate-fade-in">
+                <h2 className="text-3xl font-bold mb-6">{storySection.title}</h2>
+                {storySection.content && (
+                  <div className="prose prose-slate max-w-none text-muted-foreground">
+                    <PortableText value={storySection.content} components={portableTextComponents} />
                   </div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="mb-20">
-            <h2 className="text-3xl font-bold mb-10 text-center">Our Values</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {values.map((value, index) => {
-                const Icon = value.icon;
-                return (
-                  <Card
-                    key={index}
-                    className="text-center hover:shadow-lg transition-all duration-300 animate-fade-in"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    <CardContent className="p-6">
-                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <Icon className="w-6 h-6 text-primary" />
-                      </div>
-                      <h3 className="font-semibold text-lg mb-2">{value.title}</h3>
-                      <p className="text-sm text-muted-foreground">{value.description}</p>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+                )}
+              </div>
+              {storySection.image?.asset && (
+                <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+                  <img
+                    src={urlFor(storySection.image).width(800).height(600).url()}
+                    alt={storySection.image.alt || "Our team"}
+                    className="rounded-lg shadow-xl w-full h-auto"
+                  />
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
+          {/* Stats Section */}
+          {stats.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
+              {stats.map((stat: StatCard, index) => (
+                <Card
+                  key={index}
+                  className="text-center animate-fade-in"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <CardContent className="p-6">
+                    <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                      {stat.number}
+                    </div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          {/* Values Section */}
+          {values.length > 0 && (
+            <div className="mb-20">
+              <h2 className="text-3xl font-bold mb-10 text-center">
+                {aboutPage?.valuesSection?.title || "Our Values"}
+              </h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {values.map((value: FeatureCard, index) => {
+                  const Icon = getIcon(value.icon);
+                  return (
+                    <Card
+                      key={index}
+                      className="text-center hover:shadow-lg transition-all duration-300 animate-fade-in"
+                      style={{ animationDelay: `${index * 0.1}s` }}
+                    >
+                      <CardContent className="p-6">
+                        <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                          <Icon className="w-6 h-6 text-primary" />
+                        </div>
+                        <h3 className="font-semibold text-lg mb-2">{value.title}</h3>
+                        <p className="text-sm text-muted-foreground">{value.description}</p>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Contact Section */}
           <div id="contact" className="scroll-mt-24">
-            <h2 className="text-3xl font-bold mb-10 text-center">Get In Touch</h2>
+            <h2 className="text-3xl font-bold mb-10 text-center">
+              {contactSection?.title || "Get In Touch"}
+            </h2>
 
             <div className="grid md:grid-cols-2 gap-12 mb-12">
               <div className="space-y-6">
@@ -178,10 +233,10 @@ const About = () => {
                       </div>
                       <div>
                         <p className="font-medium mb-1">Phone</p>
-                        <a href={CONTACT_INFO.phone.href} className="text-muted-foreground hover:text-primary transition-colors">
-                          {CONTACT_INFO.phone.display}
+                        <a href={phoneHref} className="text-muted-foreground hover:text-primary transition-colors">
+                          {phoneNumber}
                         </a>
-                        <p className="text-sm text-muted-foreground">{CONTACT_INFO.hours.emergency}</p>
+                        <p className="text-sm text-muted-foreground">{emergencyAvailability}</p>
                       </div>
                     </div>
 
@@ -191,8 +246,8 @@ const About = () => {
                       </div>
                       <div>
                         <p className="font-medium mb-1">Email</p>
-                        <a href={CONTACT_INFO.email.href} className="text-muted-foreground hover:text-primary transition-colors">
-                          {CONTACT_INFO.email.display}
+                        <a href={emailHref} className="text-muted-foreground hover:text-primary transition-colors">
+                          {email}
                         </a>
                       </div>
                     </div>
@@ -203,19 +258,21 @@ const About = () => {
                       </div>
                       <div>
                         <p className="font-medium mb-1">Service Area</p>
-                        <p className="text-muted-foreground">Serving the Greater {CONTACT_INFO.address.city} Metro Area</p>
+                        <p className="text-muted-foreground">{serviceArea}</p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Shield className="w-5 h-5 text-primary" />
+                    {licenseNumber && (
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <Shield className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-medium mb-1">License Information</p>
+                          <p className="text-muted-foreground">Indiana License #: {licenseNumber}</p>
+                          <p className="text-muted-foreground text-sm mt-1">Fully Licensed & Insured</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium mb-1">License Information</p>
-                        <p className="text-muted-foreground">Indiana License #: {CONTACT_INFO.license}</p>
-                        <p className="text-muted-foreground text-sm mt-1">Fully Licensed & Insured</p>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
@@ -224,16 +281,19 @@ const About = () => {
                     <Users className="w-8 h-8 text-primary mb-3" />
                     <h4 className="font-semibold mb-2">Emergency Services</h4>
                     <p className="text-sm text-muted-foreground">
-                      Available 24/7 for water damage, fire damage, and storm emergencies.
+                      {emergencyAvailability} for water damage, fire damage, and storm emergencies.
                       Call now for immediate assistance.
                     </p>
                   </CardContent>
                 </Card>
               </div>
 
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-6">Send Us a Message</h3>
+              {showContactForm && (
+                <Card>
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-semibold mb-6">
+                      {contactSection?.formTitle || "Send Us a Message"}
+                    </h3>
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div>
                       <Label htmlFor="name">Name *</Label>
@@ -296,6 +356,7 @@ const About = () => {
                   </form>
                 </CardContent>
               </Card>
+              )}
             </div>
           </div>
         </div>

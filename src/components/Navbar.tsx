@@ -10,11 +10,11 @@ import type { SiteSettings } from "@/types/sanity";
 
 // Fallback navigation links if CMS data is not available
 const fallbackNavLinks = [
-  { to: "/", label: "Home" },
-  { to: "/services", label: "Services" },
-  { to: "/gallery", label: "Gallery" },
-  { to: "/blog", label: "Blog" },
-  { to: "/about", label: "About" },
+  { to: "/", label: "Home", openInNewTab: false },
+  { to: "/services", label: "Services", openInNewTab: false },
+  { to: "/gallery", label: "Gallery", openInNewTab: false },
+  { to: "/blog", label: "Blog", openInNewTab: false },
+  { to: "/about", label: "About", openInNewTab: false },
 ];
 
 const Navbar = () => {
@@ -42,7 +42,7 @@ const Navbar = () => {
     ? siteSettings.navigation.mainMenu.map((item) => ({
         to: item.url,
         label: item.title,
-        openInNewTab: item.openInNewTab,
+        openInNewTab: item.openInNewTab || false,
       }))
     : fallbackNavLinks;
 
@@ -59,7 +59,7 @@ const Navbar = () => {
   };
 
   // Get logo from CMS or fallback
-  const logoUrl = siteSettings?.branding?.logo
+  const logoUrl = siteSettings?.branding?.logo?.asset
     ? urlFor(siteSettings.branding.logo).width(44).height(44).url()
     : topTierIcon;
   const logoAlt = siteSettings?.branding?.logo?.alt || "Top Tier Restoration Logo";
@@ -167,10 +167,20 @@ const Navbar = () => {
             </div>
             <div className="flex flex-col leading-tight">
               <span className="font-logo text-xs leading-none text-primary tracking-tight">
-                {siteSettings?.branding?.siteName?.split(" ").slice(0, 2).join(" ").toUpperCase() || "TOP TIER"}
+                {(() => {
+                  const siteName = siteSettings?.branding?.siteName;
+                  if (!siteName) return "TOP TIER";
+                  const words = siteName.split(" ");
+                  return words.slice(0, 2).join(" ").toUpperCase();
+                })()}
               </span>
               <span className="font-logo text-xs text-primary mt-0.5">
-                {siteSettings?.branding?.siteName?.split(" ").slice(2).join(" ").toUpperCase() || "RESTORATION"}
+                {(() => {
+                  const siteName = siteSettings?.branding?.siteName;
+                  if (!siteName) return "RESTORATION";
+                  const words = siteName.split(" ");
+                  return words.slice(2).join(" ").toUpperCase() || "RESTORATION";
+                })()}
               </span>
             </div>
           </Link>
@@ -178,9 +188,9 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link, index) => {
-              const isActive = location.pathname === link.to || 
+              const isActive = location.pathname === link.to ||
                 (link.to !== "/" && location.pathname.startsWith(link.to));
-              
+
               // Handle external links
               if (link.openInNewTab || link.to.startsWith("http")) {
                 return (
@@ -196,7 +206,7 @@ const Navbar = () => {
                   </a>
                 );
               }
-              
+
               return (
                 <Link
                   key={index}
@@ -242,7 +252,7 @@ const Navbar = () => {
             className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle mobile menu"
-            aria-expanded={mobileMenuOpen}
+            aria-expanded={mobileMenuOpen ? "true" : "false"}
             aria-controls="mobile-menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -259,9 +269,9 @@ const Navbar = () => {
             className="md:hidden py-4 space-y-4 border-t border-border animate-fade-in"
           >
             {navLinks.map((link, index) => {
-              const isActive = location.pathname === link.to || 
+              const isActive = location.pathname === link.to ||
                 (link.to !== "/" && location.pathname.startsWith(link.to));
-              
+
               // Handle external links
               if (link.openInNewTab || link.to.startsWith("http")) {
                 return (
@@ -281,7 +291,7 @@ const Navbar = () => {
                   </a>
                 );
               }
-              
+
               return (
                 <Link
                   key={index}

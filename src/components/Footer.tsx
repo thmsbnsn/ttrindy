@@ -23,7 +23,7 @@ const Footer = () => {
   }, []);
 
   // Get logo from CMS or fallback
-  const logoUrl = siteSettings?.branding?.logo
+  const logoUrl = siteSettings?.branding?.logo?.asset
     ? urlFor(siteSettings.branding.logo).width(44).height(44).url()
     : topTierIcon;
   const logoAlt = siteSettings?.branding?.logo?.alt || "Top Tier Restoration Logo";
@@ -86,10 +86,20 @@ const Footer = () => {
                 </div>
                 <div className="flex flex-col leading-tight">
                   <span className="font-logo text-xs leading-none text-primary tracking-tight">
-                    {siteSettings?.branding?.siteName?.split(" ").slice(0, 2).join(" ").toUpperCase() || "TOP TIER"}
+                    {(() => {
+                      const siteName = siteSettings?.branding?.siteName;
+                      if (!siteName) return "TOP TIER";
+                      const words = siteName.split(" ");
+                      return words.slice(0, 2).join(" ").toUpperCase();
+                    })()}
                   </span>
                   <span className="font-logo text-xs text-primary mt-0.5">
-                    {siteSettings?.branding?.siteName?.split(" ").slice(2).join(" ").toUpperCase() || "RESTORATION"}
+                    {(() => {
+                      const siteName = siteSettings?.branding?.siteName;
+                      if (!siteName) return "RESTORATION";
+                      const words = siteName.split(" ");
+                      return words.slice(2).join(" ").toUpperCase() || "RESTORATION";
+                    })()}
                   </span>
                 </div>
               </div>
@@ -199,21 +209,30 @@ const Footer = () => {
             <div className="flex flex-col gap-4 text-center md:text-left">
               <h3 className="font-bold text-white text-lg">Quick Links</h3>
               <nav className="flex flex-col gap-2 text-sm">
-                <Link to="/services" className="text-white/80 hover:text-white transition-colors">
-                  Services
-                </Link>
-                <Link to="/gallery" className="text-white/80 hover:text-white transition-colors">
-                  Gallery
-                </Link>
-                <Link to="/blog" className="text-white/80 hover:text-white transition-colors">
-                  Blog
-                </Link>
-                <Link to="/about" className="text-white/80 hover:text-white transition-colors">
-                  About Us
-                </Link>
-                <Link to="/about#contact" className="text-white/80 hover:text-white transition-colors">
-                  Contact
-                </Link>
+                {quickLinks.map((link, index) => {
+                  if (link.url.startsWith("http")) {
+                    return (
+                      <a
+                        key={index}
+                        href={link.url}
+                        target={link.openInNewTab ? "_blank" : undefined}
+                        rel={link.openInNewTab ? "noopener noreferrer" : undefined}
+                        className="text-white/80 hover:text-white transition-colors"
+                      >
+                        {link.title}
+                      </a>
+                    );
+                  }
+                  return (
+                    <Link
+                      key={index}
+                      to={link.url}
+                      className="text-white/80 hover:text-white transition-colors"
+                    >
+                      {link.title}
+                    </Link>
+                  );
+                })}
               </nav>
             </div>
           </div>
@@ -222,7 +241,7 @@ const Footer = () => {
           <div className="border-t border-background/20 pt-6">
             <div className="flex flex-col items-center gap-4">
               <div className="text-sm text-center text-white/80">
-                © {new Date().getFullYear()} Top Tier Restoration. All rights reserved.
+                {copyrightText}
               </div>
               <div className="flex flex-wrap justify-center gap-4 text-sm text-white/70">
                 <Link to="/privacy-policy" className="hover:text-white transition-colors font-medium">

@@ -1,17 +1,49 @@
 import { Button } from "@/components/ui/button";
 import { Phone, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import heroImage from "@/assets/pagesImages/index/hero.webp";
 import { CONTACT_INFO } from "@/config/contact";
+import { getHomePage } from "@/lib/sanity";
+import { urlFor } from "../../sanity/lib/image";
+import type { HomePage } from "@/types/sanity";
 
 const Hero = () => {
+  const [homePage, setHomePage] = useState<HomePage | null>(null);
+
+  useEffect(() => {
+    getHomePage()
+      .then((page) => {
+        if (page) {
+          setHomePage(page);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching home page:", error);
+      });
+  }, []);
+
+  // Get hero data from CMS or use fallback
+  const hero = homePage?.hero;
+  const headline = hero?.headline || "Restore Your Home to Top Tier Condition";
+  const subheadline = hero?.subheadline || "24/7 emergency restoration for water, fire, storm, and structural damage. When disaster strikes, we bring your property back to life with fast response, licensed professionals, and proven results.";
+  const backgroundImage = hero?.backgroundImage?.asset
+    ? urlFor(hero.backgroundImage).width(1920).height(1080).url()
+    : heroImage;
+  const backgroundImageAlt = hero?.backgroundImage?.alt || "Home restoration transformation - from fire damage to fully restored room";
+  const primaryCta = hero?.primaryCta || { text: "Call Now for Emergency Service", url: CONTACT_INFO.phone.href };
+  const secondaryCta = hero?.secondaryCta || { text: "Learn More", url: "/services" };
+
+  // Get phone number for emergency badge
+  const phoneNumber = hero?.primaryCta?.url?.replace("tel:", "").replace(/\D/g, "") || CONTACT_INFO.phone.raw;
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src={heroImage}
-          alt="Home restoration transformation - from fire damage to fully restored room"
+          src={backgroundImage}
+          alt={backgroundImageAlt}
           className="w-full h-full object-cover"
           loading="eager"
           fetchPriority="high"
@@ -32,13 +64,32 @@ const Hero = () => {
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight font-hero uppercase drop-shadow-2xl">
-              Restore Your Home to{" "}
-              <span className="text-primary">Top Tier</span> Condition
+              {headline ? (
+                headline.split(" ").map((word, i, arr) => {
+                  const isPrimary = word.toLowerCase().includes("tier");
+                  return (
+                    <span key={i}>
+                      {isPrimary ? (
+                        <span className="text-primary">{word}</span>
+                      ) : (
+                        word
+                      )}
+                      {i < arr.length - 1 && " "}
+                    </span>
+                  );
+                })
+              ) : (
+                <>
+                  Restore Your Home to <span className="text-primary">Top Tier</span> Condition
+                </>
+              )}
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-200 max-w-2xl">
-            24/7 emergency restoration for water, fire, storm, and structural damage. When disaster strikes, we bring your property back to life with fast response, licensed professionals, and proven results.
-            </p>
+            {subheadline && (
+              <p className="text-lg md:text-xl text-gray-200 max-w-2xl">
+                {subheadline}
+              </p>
+            )}
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
               <Button
@@ -46,22 +97,38 @@ const Hero = () => {
                 className="btn-micro-animate gap-2 text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
                 asChild
               >
-                <a href={CONTACT_INFO.phone.href}>
-                  <Phone className="w-5 h-5" />
-                  Call Now for Emergency Service
-                </a>
+                {primaryCta.url.startsWith("http") || primaryCta.url.startsWith("tel:") ? (
+                  <a href={primaryCta.url}>
+                    <Phone className="w-5 h-5" />
+                    {primaryCta.text}
+                  </a>
+                ) : (
+                  <Link to={primaryCta.url}>
+                    <Phone className="w-5 h-5" />
+                    {primaryCta.text}
+                  </Link>
+                )}
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="btn-micro-animate btn-micro-animate-outline gap-2 text-base font-semibold bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20"
-                asChild
-              >
-                <Link to="/services">
-                  Learn More
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-              </Button>
+              {secondaryCta && (
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="btn-micro-animate btn-micro-animate-outline gap-2 text-base font-semibold bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20"
+                  asChild
+                >
+                  {secondaryCta.url.startsWith("http") ? (
+                    <a href={secondaryCta.url} target="_blank" rel="noopener noreferrer">
+                      {secondaryCta.text}
+                      <ArrowRight className="w-5 h-5" />
+                    </a>
+                  ) : (
+                    <Link to={secondaryCta.url}>
+                      {secondaryCta.text}
+                      <ArrowRight className="w-5 h-5" />
+                    </Link>
+                  )}
+                </Button>
+              )}
             </div>
 
             {/* Trust Indicators */}

@@ -1,146 +1,169 @@
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Droplets, Flame, CloudRain, Hammer, Phone, CheckCircle2 } from "lucide-react";
+import { MetaTags } from "@/components/SEO/MetaTags";
+import { Phone, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CONTACT_INFO } from "@/config/contact";
+import { getServicesPage, getSiteSettings } from "@/lib/sanity";
+import { urlFor } from "../../sanity/lib/image";
+import * as LucideIcons from "lucide-react";
+import type { ServicesPage, SiteSettings, ServiceDetail } from "@/types/sanity";
 
-const services = [
-  {
-    icon: Droplets,
-    title: "Water Damage Restoration",
-    description: "Expert water damage restoration services available 24/7 for emergencies.",
-    features: [
-      "Emergency water extraction",
-      "Structural drying & dehumidification",
-      "Mold prevention & remediation",
-      "Insurance claim assistance",
-      "Complete restoration services"
-    ],
-    image: "https://images.unsplash.com/photo-1581578949510-fa7315c4c350?w=800&auto=format&fit=crop"
-  },
-  {
-    icon: Flame,
-    title: "Fire Damage Restoration",
-    description: "Comprehensive fire and smoke damage restoration to bring your property back to life.",
-    features: [
-      "Smoke & soot removal",
-      "Odor elimination",
-      "Structural repairs",
-      "Content cleaning & restoration",
-      "Board-up & security services"
-    ],
-    image: "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&auto=format&fit=crop"
-  },
-  {
-    icon: CloudRain,
-    title: "Storm Damage Repair",
-    description: "Fast response to storm damage including roof repairs and structural restoration.",
-    features: [
-      "Emergency tarping services",
-      "Roof & structural repairs",
-      "Window & door replacement",
-      "Debris removal",
-      "Full property restoration"
-    ],
-    image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&auto=format&fit=crop"
-  },
-  {
-    icon: Hammer,
-    title: "Complete Remodeling",
-    description: "Transform your space with our professional remodeling services.",
-    features: [
-      "Kitchen & bathroom remodels",
-      "Basement finishing",
-      "Custom carpentry",
-      "Flooring installation",
-      "Complete home renovations"
-    ],
-    image: "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=800&auto=format&fit=crop"
-  }
-];
+// Icon mapping
+const iconMap: Record<string, any> = {
+  Droplets: LucideIcons.Droplets,
+  Flame: LucideIcons.Flame,
+  CloudRain: LucideIcons.CloudRain,
+  Hammer: LucideIcons.Hammer,
+};
+
+const getIcon = (iconName: string) => {
+  return iconMap[iconName] || LucideIcons.Hammer;
+};
 
 const Services = () => {
+  const [servicesPage, setServicesPage] = useState<ServicesPage | null>(null);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      getServicesPage(),
+      getSiteSettings()
+    ])
+      .then(([pageData, settings]) => {
+        if (pageData) {
+          setServicesPage(pageData);
+        }
+        if (settings) {
+          setSiteSettings(settings);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  // Get data from CMS
+  const services = servicesPage?.services || [];
+  const emergencyCta = servicesPage?.emergencyCta;
+
+  // Get contact info from site settings
+  const phoneNumber = siteSettings?.contact?.phoneNumber || CONTACT_INFO.phone.display;
+  const phoneHref = siteSettings?.contact?.phoneNumber
+    ? `tel:${siteSettings.contact.phoneNumber.replace(/\D/g, "")}`
+    : CONTACT_INFO.phone.href;
+
   return (
     <div className="flex flex-col min-h-screen">
+      <MetaTags
+        title={servicesPage?.seo?.metaTitle || servicesPage?.pageTitle || "Our Services"}
+        description={servicesPage?.seo?.metaDescription || servicesPage?.subtitle || "Professional restoration and remodeling services to restore and enhance your property"}
+        keywords={servicesPage?.seo?.keywords?.join(", ")}
+      />
       <Navbar />
 
       <section className="pt-24 pb-16 bg-gradient-to-b from-background to-muted/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Services</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Professional restoration and remodeling services to restore and enhance your property
-            </p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              {servicesPage?.pageTitle || "Our Services"}
+            </h1>
+            {servicesPage?.subtitle && (
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {servicesPage.subtitle}
+              </p>
+            )}
           </div>
 
-          <div className="space-y-16">
-            {services.map((service, index) => {
-              const Icon = service.icon;
-              const isEven = index % 2 === 0;
+          {services.length > 0 && (
+            <div className="space-y-16">
+              {services.map((service: ServiceDetail, index) => {
+                const Icon = getIcon(service.icon);
+                const isEven = index % 2 === 0;
 
-              return (
-                <div
-                  key={index}
-                  className={`grid md:grid-cols-2 gap-8 items-center animate-fade-in`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className={isEven ? "md:order-1" : "md:order-2"}>
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="rounded-lg shadow-xl w-full h-[400px] object-cover"
-                    />
+                return (
+                  <div
+                    key={index}
+                    id={service.faqId}
+                    className={`grid md:grid-cols-2 gap-8 items-center animate-fade-in scroll-mt-24`}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className={isEven ? "md:order-1" : "md:order-2"}>
+                      {service.image?.asset ? (
+                        <img
+                          src={urlFor(service.image).width(800).height(400).url()}
+                          alt={service.image.alt || service.title}
+                          className="rounded-lg shadow-xl w-full h-[400px] object-cover"
+                        />
+                      ) : (
+                        <div className="rounded-lg shadow-xl w-full h-[400px] bg-muted flex items-center justify-center">
+                          <Icon className="w-24 h-24 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+
+                    <Card className={`${isEven ? "md:order-2" : "md:order-1"} border-2`}>
+                      <CardHeader>
+                        <div className="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                          <Icon className="w-8 h-8 text-primary" />
+                        </div>
+                        <CardTitle className="text-2xl mb-2">{service.title}</CardTitle>
+                        <p className="text-muted-foreground">{service.description}</p>
+                      </CardHeader>
+                      <CardContent>
+                        {service.features && service.features.length > 0 && (
+                          <ul className="space-y-3 mb-6">
+                            {service.features.map((feature, idx) => (
+                              <li key={idx} className="flex items-start gap-2">
+                                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                                <span className="text-sm">{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                        <Button className="btn-micro-animate w-full gap-2" asChild>
+                          <a href={phoneHref}>
+                            <Phone className="w-4 h-4" />
+                            Get a Free Quote
+                          </a>
+                        </Button>
+                      </CardContent>
+                    </Card>
                   </div>
-
-                  <Card className={`${isEven ? "md:order-2" : "md:order-1"} border-2`}>
-                    <CardHeader>
-                      <div className="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                        <Icon className="w-8 h-8 text-primary" />
-                      </div>
-                      <CardTitle className="text-2xl mb-2">{service.title}</CardTitle>
-                      <p className="text-muted-foreground">{service.description}</p>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-3 mb-6">
-                        {service.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                            <span className="text-sm">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <Button className="btn-micro-animate w-full gap-2" asChild>
-                        <a href={CONTACT_INFO.phone.href}>
-                          <Phone className="w-4 h-4" />
-                          Get a Free Quote
-                        </a>
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-16 bg-primary/5 rounded-lg p-8 md:p-12 text-center animate-fade-in">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">Need Emergency Service?</h2>
-            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              We're available 24/7 for emergency restoration services. Don't wait - contact us now for immediate assistance.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="btn-micro-animate gap-2" asChild>
-                <a href={CONTACT_INFO.phone.href}>
-                  <Phone className="w-5 h-5" />
-                  Call Now: {CONTACT_INFO.phone.display}
-                </a>
-              </Button>
-              <Button size="lg" variant="outline" className="btn-micro-animate btn-micro-animate-outline" asChild>
-                <Link to="/about#contact">Contact Us</Link>
-              </Button>
+                );
+              })}
             </div>
-          </div>
+          )}
+
+          {emergencyCta && (
+            <div className="mt-16 bg-primary/5 rounded-lg p-8 md:p-12 text-center animate-fade-in">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">{emergencyCta.title}</h2>
+              {emergencyCta.description && (
+                <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                  {emergencyCta.description}
+                </p>
+              )}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="btn-micro-animate gap-2" asChild>
+                  <a href={phoneHref}>
+                    <Phone className="w-5 h-5" />
+                    {emergencyCta.primaryButtonText || `Call Now: ${phoneNumber}`}
+                  </a>
+                </Button>
+                <Button size="lg" variant="outline" className="btn-micro-animate btn-micro-animate-outline" asChild>
+                  <Link to="/about#contact">
+                    {emergencyCta.secondaryButtonText || "Contact Us"}
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
