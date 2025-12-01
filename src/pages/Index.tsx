@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import WhyUs from "@/components/WhyUs";
@@ -6,8 +7,12 @@ import { MetaTags } from "@/components/SEO/MetaTags";
 import { StructuredData } from "@/components/SEO/StructuredData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Droplets, Flame, CloudRain, Hammer, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { getFeaturedProjects } from "@/lib/sanity";
+import { urlFor } from "../../sanity/lib/image";
+import type { Project } from "@/types/sanity";
 
 const services = [
   {
@@ -44,7 +49,29 @@ const services = [
   },
 ];
 
+const iconMap: Record<string, any> = {
+  "Water Damage": Droplets,
+  "Fire Damage": Flame,
+  "Storm Damage": CloudRain,
+  "Remodeling": Hammer,
+};
+
 const Index = () => {
+  const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
+  const [loadingProjects, setLoadingProjects] = useState(true);
+
+  useEffect(() => {
+    getFeaturedProjects()
+      .then((projects) => {
+        setFeaturedProjects(projects);
+        setLoadingProjects(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching featured projects:", error);
+        setLoadingProjects(false);
+      });
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <MetaTags
@@ -56,6 +83,68 @@ const Index = () => {
       <Navbar />
       <main id="main-content" className="flex-1">
         <Hero />
+
+        {/* Featured Projects Section */}
+        {!loadingProjects && featuredProjects.length > 0 && (
+          <section className="py-16 md:py-24 bg-background">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-12 animate-fade-in">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Projects</h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Explore some of our recent restoration and remodeling projects
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                {featuredProjects.map((project, index) => {
+                  const Icon = project.category ? iconMap[project.category] || Hammer : Hammer;
+                  return (
+                    <Link key={project._id} to={`/projects/${project.slug}`}>
+                      <Card className="group overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-in h-full cursor-pointer">
+                        <div className="relative overflow-hidden aspect-video">
+                          {project.mainImage ? (
+                            <img
+                              src={urlFor(project.mainImage).width(800).height(450).url()}
+                              alt={project.mainImage.alt || project.title}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                              loading={index < 3 ? "eager" : "lazy"}
+                              decoding={index < 3 ? "sync" : "async"}
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-muted flex items-center justify-center">
+                              <Icon className="w-16 h-16 text-muted-foreground" />
+                            </div>
+                          )}
+                          <div className="absolute top-3 right-3 bg-background/90 backdrop-blur-sm rounded-full p-2">
+                            <Icon className="w-5 h-5 text-primary" />
+                          </div>
+                        </div>
+                        <CardContent className="p-5">
+                          {project.category && (
+                            <Badge variant="secondary" className="mb-2">
+                              {project.category}
+                            </Badge>
+                          )}
+                          <h3 className="font-semibold text-lg mb-2">{project.title}</h3>
+                          <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              <div className="text-center">
+                <Button size="lg" className="btn-micro-animate" asChild>
+                  <Link to="/gallery" className="gap-2">
+                    View All Projects
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Services Preview Section */}
       <section className="py-16 md:py-24 bg-muted/30">

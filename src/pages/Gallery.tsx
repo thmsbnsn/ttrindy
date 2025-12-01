@@ -139,10 +139,15 @@ const Gallery = () => {
                         {project.mainImage ? (
                           <img
                             src={urlFor(project.mainImage).width(800).height(450).url()}
-                            alt={project.title}
+                            alt={project.mainImage.alt || project.title}
                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                             loading={index < 6 ? "eager" : "lazy"}
                             decoding={index < 6 ? "sync" : "async"}
+                            onError={(e) => {
+                              console.error("Image failed to load:", project.title);
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                            }}
                           />
                         ) : (
                           <div className="w-full h-full bg-muted flex items-center justify-center">
