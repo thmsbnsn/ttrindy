@@ -1,6 +1,5 @@
 // sanity/schemas/singletons/homePage.ts
 import { defineField, defineType } from 'sanity'
-import { Home } from 'lucide-react'
 
 /**
  * SINGLETON: Home Page
@@ -10,7 +9,7 @@ export default defineType({
   name: 'homePage',
   title: 'Home Page',
   type: 'document',
-  icon: Home,
+  icon: () => '🏠',
   __experimental_actions: ['update', 'publish'],
   fields: [
     // ==================== HERO SECTION ====================

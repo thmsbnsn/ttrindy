@@ -1,6 +1,5 @@
 // sanity/schemas/singletons/aboutPage.ts
 import { defineField, defineType } from 'sanity'
-import { FileText } from 'lucide-react'
 
 /**
  * SINGLETON: About Page
@@ -10,7 +9,7 @@ export default defineType({
   name: 'aboutPage',
   title: 'About Page',
   type: 'document',
-  icon: FileText,
+  icon: () => '📄',
   __experimental_actions: ['update', 'publish'],
   fields: [
     defineField({

@@ -1,6 +1,5 @@
-// sanity/schemas/singletons/siteSettings.ts
+// sanity/schemas/siteSettings.ts
 import { defineField, defineType } from 'sanity'
-import { Cog } from 'lucide-react'
 
 /**
  * SINGLETON: Site Settings
@@ -11,7 +10,7 @@ export default defineType({
   name: 'siteSettings',
   title: 'Site Settings',
   type: 'document',
-  icon: Cog,
+  icon: () => '⚙️',
   // Singleton pattern - only one document allowed
   __experimental_actions: ['update', 'publish'],
   fields: [

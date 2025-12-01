@@ -1,6 +1,5 @@
 // sanity/schemas/singletons/servicesPage.ts
 import { defineField, defineType } from 'sanity'
-import { Wrench } from 'lucide-react'
 
 /**
  * SINGLETON: Services Page
@@ -10,7 +9,7 @@ export default defineType({
   name: 'servicesPage',
   title: 'Services Page',
   type: 'document',
-  icon: Wrench,
+  icon: () => '🔧',
   __experimental_actions: ['update', 'publish'],
   fields: [
     defineField({
