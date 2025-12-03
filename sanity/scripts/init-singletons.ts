@@ -438,6 +438,37 @@ async function initServicesPage() {
   }
 }
 
+async function initConstructionPage() {
+  console.log('📝 Creating Construction Page...')
+
+  const constructionPage = {
+    _id: 'constructionPage',
+    _type: 'constructionPage',
+    isActive: false,
+    heading: "We're Under Construction",
+    password: 'changeme', // User should change this
+    subheading: "We're working hard to bring you an amazing experience. Check back soon!",
+  }
+
+  try {
+    const existing = await client.getDocument('constructionPage')
+    if (existing) {
+      console.log('   ⚠️  Construction Page already exists. Skipping...')
+      return
+    }
+
+    await client.createOrReplace(constructionPage)
+    console.log('   ✅ Construction Page created successfully!')
+  } catch (error: any) {
+    if (error.statusCode === 409) {
+      console.log('   ⚠️  Construction Page already exists. Skipping...')
+    } else {
+      console.error('   ❌ Error creating Construction Page:', error.message)
+      throw error
+    }
+  }
+}
+
 async function main() {
   console.log('🚀 Initializing Singleton Documents...\n')
 
@@ -446,6 +477,7 @@ async function main() {
     await initHomePage()
     await initAboutPage()
     await initServicesPage()
+    await initConstructionPage()
 
     console.log('\n✅ All singleton documents initialized successfully!')
     console.log('\n📝 Next Steps:')
@@ -453,7 +485,8 @@ async function main() {
     console.log('   2. Upload images (logos, hero images, etc.)')
     console.log('   3. Update contact information (phone numbers, addresses)')
     console.log('   4. Customize content to match your brand')
-    console.log('   5. Publish all documents')
+    console.log('   5. Update the construction page password (currently: changeme)')
+    console.log('   6. Publish all documents')
   } catch (error: any) {
     console.error('\n❌ Error initializing documents:', error.message)
     process.exit(1)

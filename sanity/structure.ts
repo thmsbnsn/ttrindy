@@ -1,6 +1,6 @@
 // sanity/structure.ts
 import { StructureBuilder } from 'sanity/structure'
-import { Cog, Home, FileText, Wrench, FolderOpen, Tag, BookOpen, Construction } from 'lucide-react'
+import { Cog, Home, FileText, Wrench, FolderOpen, Tag, BookOpen, Hammer } from 'lucide-react'
 
 /**
  * Custom desk structure for Sanity Studio
@@ -25,7 +25,7 @@ export default (S: StructureBuilder) =>
       // ==================== CONSTRUCTION PAGE (Singleton) ====================
       S.listItem()
         .title('Site Under Construction')
-        .icon(Construction)
+        .icon(Hammer)
         .id('constructionPage')
         .child(
           S.document()

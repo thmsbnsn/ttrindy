@@ -1,26 +1,20 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
+// import { colorInput } from '@sanity/color-input'
 import { schemaTypes } from './sanity/schemas'
 import structure from './sanity/structure'
 import { StudioLogo } from './sanity/components/StudioLogo'
 
-// Get environment variables - works in both Vite and Node.js contexts
-const getEnvVar = (key: string, fallback: string) => {
-  if (typeof process !== 'undefined' && process.env) {
-    return process.env[key] || fallback
-  }
-  if (typeof import.meta !== 'undefined' && import.meta.env) {
-    return import.meta.env[key] || fallback
-  }
-  return fallback
-}
+// Get environment variables - use process.env for Node.js build context
+const projectId = process.env.VITE_SANITY_PROJECT_ID || process.env.SANITY_STUDIO_PROJECT_ID || 'o2ba67uq'
+const dataset = process.env.VITE_SANITY_DATASET || process.env.SANITY_STUDIO_DATASET || 'production'
 
-export default defineConfig({
+const config = defineConfig({
   name: 'default',
   title: 'Top Tier Restoration CMS',
 
-  projectId: getEnvVar('VITE_SANITY_PROJECT_ID', 'o2ba67uq'),
-  dataset: getEnvVar('VITE_SANITY_DATASET', 'production'),
+  projectId,
+  dataset,
 
   basePath: '/studio',
 
@@ -28,6 +22,7 @@ export default defineConfig({
     structureTool({
       structure,
     }),
+    // colorInput(), // Temporarily disabled to test
   ],
 
   schema: {
@@ -52,4 +47,6 @@ export default defineConfig({
     '--sanity-color-base-accent': '#FF6B35',
   },
 })
+
+export default config
 
