@@ -340,6 +340,15 @@ export const categoriesQuery = `*[_type == "category"] | order(title asc) {
   icon
 }`
 
+// ==================== CONSTRUCTION PAGE ====================
+export const constructionPageQuery = `*[_type == "constructionPage"][0] {
+  _id,
+  isActive,
+  heading,
+  password,
+  subheading
+}`
+
 // ==================== HELPER: GET PAGE SEO DATA ====================
 export const getPageSeoQuery = (pageType: string) => `
   *[_type == "${pageType}"][0].seo {

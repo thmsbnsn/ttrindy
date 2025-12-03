@@ -15,6 +15,7 @@ import {
   blogPostsQuery,
   blogPostBySlugQuery,
   categoriesQuery,
+  constructionPageQuery,
 } from '../../sanity/lib/queries'
 import type {
   SiteSettings,
@@ -23,7 +24,8 @@ import type {
   ServicesPage,
   Project,
   BlogPost,
-  Category
+  Category,
+  ConstructionPage
 } from '@/types/sanity'
 
 // Helper to determine if we're in preview mode
@@ -249,6 +251,16 @@ export async function getCategories(): Promise<Category[]> {
   } catch (error) {
     console.error('Error fetching categories:', error)
     return []
+  }
+}
+
+// ==================== CONSTRUCTION PAGE ====================
+export async function getConstructionPage(): Promise<ConstructionPage | null> {
+  try {
+    return await getSanityClient().fetch(constructionPageQuery)
+  } catch (error) {
+    console.error('Error fetching construction page:', error)
+    return null
   }
 }
 

@@ -1,6 +1,6 @@
 // sanity/structure.ts
 import { StructureBuilder } from 'sanity/structure'
-import { Cog, Home, FileText, Wrench, FolderOpen, Tag, BookOpen } from 'lucide-react'
+import { Cog, Home, FileText, Wrench, FolderOpen, Tag, BookOpen, Construction } from 'lucide-react'
 
 /**
  * Custom desk structure for Sanity Studio
@@ -20,6 +20,18 @@ export default (S: StructureBuilder) =>
             .schemaType('siteSettings')
             .documentId('siteSettings')
             .title('Site Settings')
+        ),
+
+      // ==================== CONSTRUCTION PAGE (Singleton) ====================
+      S.listItem()
+        .title('Site Under Construction')
+        .icon(Construction)
+        .id('constructionPage')
+        .child(
+          S.document()
+            .schemaType('constructionPage')
+            .documentId('constructionPage')
+            .title('Site Under Construction')
         ),
 
       S.divider(),
@@ -130,7 +142,7 @@ export default (S: StructureBuilder) =>
       // This prevents editors from creating multiple instances
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !['siteSettings', 'homePage', 'aboutPage', 'servicesPage'].includes(
+          !['siteSettings', 'constructionPage', 'homePage', 'aboutPage', 'servicesPage'].includes(
             listItem.getId() || ''
           )
       ),

@@ -16,7 +16,8 @@
     "sanity": "sanity",
     "sanity:dev": "sanity dev",
     "sanity:deploy": "sanity deploy",
-    "sanity:build": "sanity build"
+    "sanity:build": "sanity build",
+    "sanity:init": "tsx sanity/scripts/init-singletons.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
