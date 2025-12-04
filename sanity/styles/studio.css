@@ -1,0 +1,22 @@
+/* Custom Sanity Studio Branding */
+
+/* Brand Colors */
+:root {
+  --sanity-color-base-cyan: #00AEEF;
+  --sanity-color-base-orange: #FF6B35;
+  --sanity-color-base-focus-color: #00AEEF;
+  --sanity-color-base-selection-color: #00AEEF;
+  --sanity-color-base-primary: #00AEEF;
+  --sanity-color-base-accent: #FF6B35;
+}
+
+/* Override Sanity Studio primary colors */
+[data-ui="Navbar"] {
+  --sanity-color-base-primary: #00AEEF;
+}
+
+/* Custom logo styling if needed */
+[data-testid="studio-logo"] {
+  /* Logo container styles */
+}
+
