@@ -11,17 +11,22 @@ const dataset = process.env.VITE_SANITY_DATASET || process.env.SANITY_STUDIO_DAT
 const config = defineConfig({
   name: 'default',
   title: 'Top Tier Restoration CMS',
+
   projectId,
   dataset,
+
   basePath: '/studio',
+
   plugins: [
     structureTool({
       structure,
     }),
   ],
+
   schema: {
     types: schemaTypes,
   },
+
   // Branding customization - Sanity v4 API
   studio: {
     components: {
@@ -31,4 +36,3 @@ const config = defineConfig({
 })
 
 export default config
-
