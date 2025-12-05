@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import CookieConsent from "@/components/CookieConsent";
 import MobileEmergencyBar from "@/components/MobileEmergencyBar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -181,6 +182,7 @@ const App = () => {
               <MobileEmergencyBar />
             </ConstructionGuard>
           </BrowserRouter>
+          <Analytics />
         </TooltipProvider>
       </QueryClientProvider>
     </ErrorBoundary>
