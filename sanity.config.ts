@@ -34,17 +34,8 @@ const config = defineConfig({
     },
   },
 
-  // Vite configuration for path aliases
-  vite: (config: any) => ({
-    ...config,
-    resolve: {
-      ...config.resolve,
-      alias: {
-        ...config.resolve?.alias,
-        '@': './src',
-      },
-    },
-  }),
+  // Vite configuration - no need for React app aliases in Sanity Studio
+  // Sanity Studio only needs files from the sanity/ directory
 })
 
 export default config

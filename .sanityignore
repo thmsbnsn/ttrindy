@@ -1,0 +1,19 @@
+# Ignore React app source code - Sanity Studio doesn't need it
+src/
+public/
+dist/
+*.tsx
+*.ts
+!sanity/**/*.ts
+!sanity/**/*.tsx
+
+# Ignore build artifacts
+node_modules/
+.vite/
+.sanity/
+
+# Ignore config files that are for the React app
+vite.config.ts
+tsconfig.json
+tsconfig.node.json
+
