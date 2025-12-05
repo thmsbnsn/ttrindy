@@ -1,5 +1,5 @@
 // src/pages/Construction.tsx
-import { useState, useEffect, useMemo, memo } from "react";
+import { useState, useEffect, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Construction, Users } from "lucide-react";
 import { getConstructionPage, getSiteSettings } from "@/lib/sanity";
@@ -16,9 +16,40 @@ const Construction = ({ initialData }: ConstructionProps) => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [backgroundLoaded, setBackgroundLoaded] = useState(false);
 
   // Use initialData directly - don't store in state to avoid re-renders
   const constructionPage = initialData;
+
+  // Preload background image with timeout
+  useEffect(() => {
+    const img = new Image();
+    let timeoutId: NodeJS.Timeout;
+
+    const handleLoad = () => {
+      clearTimeout(timeoutId);
+      setBackgroundLoaded(true);
+    };
+
+    const handleError = () => {
+      clearTimeout(timeoutId);
+      // If image fails to load, still show the page with fallback
+      setBackgroundLoaded(true);
+    };
+
+    // Timeout after 3 seconds - show page even if image is still loading
+    timeoutId = setTimeout(() => {
+      setBackgroundLoaded(true);
+    }, 3000);
+
+    img.onload = handleLoad;
+    img.onerror = handleError;
+    img.src = '/Construction.png';
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   useEffect(() => {
     // Check if user is already authenticated
@@ -63,6 +94,18 @@ const Construction = ({ initialData }: ConstructionProps) => {
     return null;
   }
 
+  // Safety check - if no initialData, show minimal fallback
+  if (!constructionPage) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   const heading = constructionPage?.heading || "We're Under Construction";
   const subheading = constructionPage?.subheading || "We're working hard to bring you an amazing experience. Check back soon!";
   const password = constructionPage?.password || "";
@@ -75,15 +118,26 @@ const Construction = ({ initialData }: ConstructionProps) => {
   const siteName = siteSettings?.branding?.siteName || "Top Tier Restoration";
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-4 py-12 relative"
-      style={{
-        backgroundImage: 'url(/Construction.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
+    <div className="min-h-screen flex items-center justify-center p-4 py-12 relative overflow-hidden">
+      {/* Background Image - use img tag for better performance */}
+      <img
+        src="/Construction.png"
+        alt=""
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+          backgroundLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{ willChange: 'opacity' }}
+        loading="eager"
+        fetchPriority="high"
+        onLoad={() => setBackgroundLoaded(true)}
+        onError={() => setBackgroundLoaded(true)}
+      />
+
+      {/* Fallback background while image loads */}
+      {!backgroundLoaded && (
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted" />
+      )}
+
       {/* Overlay for better text readability */}
       <div className="absolute inset-0 bg-black/40" />
 
@@ -102,10 +156,7 @@ const Construction = ({ initialData }: ConstructionProps) => {
         {/* Construction Icon */}
         <div className="flex justify-center">
           <div className="relative">
-            <Construction className="w-24 h-24 md:w-32 md:h-32 text-primary animate-pulse" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-primary/20 rounded-full animate-ping" />
-            </div>
+            <Construction className="w-24 h-24 md:w-32 md:h-32 text-primary" />
           </div>
         </div>
 
@@ -146,8 +197,7 @@ const Construction = ({ initialData }: ConstructionProps) => {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="w-2 h-2 rounded-full bg-primary/30 animate-pulse"
-              style={{ animationDelay: `${i * 0.2}s` }}
+              className="w-2 h-2 rounded-full bg-primary/30"
             />
           ))}
         </div>

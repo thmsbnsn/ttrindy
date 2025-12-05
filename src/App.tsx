@@ -123,8 +123,15 @@ const ConstructionGuard = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  // If loading, show loading spinner
-  if (isLoading && !hasError) {
+  // If construction mode is active and user is not authenticated, show construction page
+  // Check this FIRST, even if still loading, to avoid showing spinner when we have the data
+  const isConstructionActive = constructionPage?.isActive === true || String(constructionPage?.isActive) === "true";
+  if (constructionPage && isConstructionActive && !isAuthenticated) {
+    return <Construction key="construction-page" initialData={constructionPage} />;
+  }
+
+  // If loading and we don't have construction page data yet, show loading spinner
+  if (isLoading && !hasError && !constructionPage) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
@@ -133,11 +140,6 @@ const ConstructionGuard = ({ children }: { children: React.ReactNode }) => {
         </div>
       </div>
     );
-  }
-
-  // If construction mode is active and user is not authenticated, show construction page
-  if (constructionPage && constructionPage.isActive === true && !isAuthenticated) {
-    return <Construction key="construction-page" initialData={constructionPage} />;
   }
 
   // If construction mode is active but user is authenticated, allow access
