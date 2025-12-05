@@ -1,5 +1,5 @@
 // src/pages/Construction.tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Construction, Users } from "lucide-react";
 import { getConstructionPage, getSiteSettings } from "@/lib/sanity";
@@ -8,11 +8,29 @@ import PasswordModal from "@/components/PasswordModal";
 import type { ConstructionPage, SiteSettings } from "@/types/sanity";
 import topTierIcon from "@/assets/brand/toptiericon.png";
 
-const Construction = () => {
-  const [constructionPage, setConstructionPage] = useState<ConstructionPage | null>(null);
+interface ConstructionProps {
+  initialData?: ConstructionPage | null;
+}
+
+const Construction = ({ initialData }: ConstructionProps) => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Use initialData directly - don't store in state to avoid re-renders
+  const constructionPage = initialData;
+
+  // Don't render if we don't have construction page data
+  if (!constructionPage) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading construction page...</p>
+        </div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     // Check if user is already authenticated
@@ -33,17 +51,6 @@ const Construction = () => {
       }
     }
 
-    // Fetch construction page settings
-    getConstructionPage()
-      .then((page) => {
-        if (page) {
-          setConstructionPage(page);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching construction page:", error);
-      });
-
     // Fetch site settings for branding
     getSiteSettings()
       .then((settings) => {
@@ -54,7 +61,7 @@ const Construction = () => {
       .catch((error) => {
         console.error("Error fetching site settings:", error);
       });
-  }, []);
+  }, []); // Empty dependency array - only run once
 
   const handlePasswordSuccess = () => {
     setIsAuthenticated(true);
@@ -160,5 +167,5 @@ const Construction = () => {
   );
 };
 
-export default Construction;
+export default memo(Construction);
 
