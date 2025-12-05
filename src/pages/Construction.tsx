@@ -94,16 +94,9 @@ const Construction = ({ initialData }: ConstructionProps) => {
     return null;
   }
 
-  // Safety check - if no initialData, show minimal fallback
+  // If no initialData, return null (App.tsx should handle loading state)
   if (!constructionPage) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   const heading = constructionPage?.heading || "We're Under Construction";
@@ -118,33 +111,31 @@ const Construction = ({ initialData }: ConstructionProps) => {
   const siteName = siteSettings?.branding?.siteName || "Top Tier Restoration";
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 py-12 relative overflow-hidden">
+    <div className="h-screen flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
       {/* Background Image - use img tag for better performance */}
       <img
         src="/Construction.png"
         alt=""
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-          backgroundLoaded ? 'opacity-100' : 'opacity-0'
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+          backgroundLoaded ? 'opacity-100' : 'opacity-30'
         }`}
         style={{ willChange: 'opacity' }}
         loading="eager"
-        fetchPriority="high"
+        fetchpriority="high"
         onLoad={() => setBackgroundLoaded(true)}
         onError={() => setBackgroundLoaded(true)}
       />
 
-      {/* Fallback background while image loads */}
-      {!backgroundLoaded && (
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted" />
-      )}
+      {/* Fallback background - always show for seamless transition */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted" />
 
       {/* Overlay for better text readability */}
       <div className="absolute inset-0 bg-black/40" />
 
-      <div className="max-w-2xl w-full text-center space-y-12 animate-fade-in relative z-10">
+      <div className="max-w-2xl w-full text-center space-y-4 sm:space-y-6 md:space-y-8 px-4 animate-fade-in relative z-10 overflow-y-auto max-h-full">
         {/* Logo */}
         <div className="flex justify-center">
-          <div className="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center bg-white rounded-lg shadow-lg p-4">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center bg-white rounded-lg shadow-lg p-2 sm:p-3 md:p-4">
             <img
               src={logoUrl}
               alt={logoAlt}
@@ -156,18 +147,18 @@ const Construction = ({ initialData }: ConstructionProps) => {
         {/* Construction Icon */}
         <div className="flex justify-center">
           <div className="relative">
-            <Construction className="w-24 h-24 md:w-32 md:h-32 text-primary" />
+            <Construction className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-primary" />
           </div>
         </div>
 
         {/* Heading */}
-        <div className="space-y-6">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-hero font-bold text-foreground uppercase tracking-tight">
+        <div className="space-y-2 sm:space-y-3 md:space-y-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-hero font-bold text-foreground uppercase tracking-tight leading-tight">
             {heading}
           </h1>
 
           {subheading && (
-            <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed px-2">
               {subheading}
             </p>
           )}
@@ -175,7 +166,7 @@ const Construction = ({ initialData }: ConstructionProps) => {
 
         {/* Site Name */}
         <div>
-          <p className="text-sm md:text-base text-muted-foreground font-logo uppercase tracking-wider">
+          <p className="text-xs sm:text-sm md:text-base text-muted-foreground font-logo uppercase tracking-wider">
             {siteName}
           </p>
         </div>
@@ -184,10 +175,10 @@ const Construction = ({ initialData }: ConstructionProps) => {
         <div>
           <Button
             size="lg"
-            className="btn-micro-animate gap-2 font-semibold text-lg px-8 py-6"
+            className="btn-micro-animate gap-2 font-semibold text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-6"
             onClick={() => setIsPasswordModalOpen(true)}
           >
-            <Users className="w-5 h-5" />
+            <Users className="w-4 h-4 sm:w-5 sm:h-5" />
             Part of the team?
           </Button>
         </div>

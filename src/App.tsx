@@ -98,7 +98,8 @@ const ConstructionGuard = ({ children }: { children: React.ReactNode }) => {
       .then((page) => {
         clearTimeout(timeoutId);
         if (isMounted) {
-          console.log("Construction page fetched:", page);
+          // Don't log the full page object as it contains sensitive data (password)
+          console.log("Construction page fetched");
           setConstructionPage(page);
           setIsLoading(false);
         }

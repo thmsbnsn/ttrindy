@@ -33,6 +33,7 @@ export async function getUserIP(): Promise<string> {
     const response = await fetch('https://api.ipify.org?format=json', {
       method: 'GET',
       cache: 'no-cache',
+      signal: AbortSignal.timeout(3000), // 3 second timeout
     })
 
     if (response.ok) {
@@ -40,7 +41,8 @@ export async function getUserIP(): Promise<string> {
       return data.ip || getBrowserFingerprint()
     }
   } catch (error) {
-    console.warn('Failed to fetch IP address:', error)
+    // Silently fall back to browser fingerprint - don't log errors
+    // This is expected behavior if the service is unavailable
   }
 
   // Fallback to browser fingerprint
