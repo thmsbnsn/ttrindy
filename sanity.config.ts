@@ -33,6 +33,18 @@ const config = defineConfig({
       logo: StudioLogo,
     },
   },
+
+  // Vite configuration for path aliases
+  vite: (config: any) => ({
+    ...config,
+    resolve: {
+      ...config.resolve,
+      alias: {
+        ...config.resolve?.alias,
+        '@': './src',
+      },
+    },
+  }),
 })
 
 export default config

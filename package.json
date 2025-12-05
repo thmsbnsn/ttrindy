@@ -14,7 +14,7 @@
     "clean": "rm -rf node_modules/.vite .sanity dist",
     "clean:cache": "npm cache clean --force",
     "sanity": "sanity",
-    "sanity:dev": "sanity dev --no-minify",
+    "sanity:dev": "sanity dev",
     "sanity:deploy": "sanity deploy",
     "sanity:build": "sanity build",
     "sanity:init": "tsx sanity/scripts/init-singletons.ts"

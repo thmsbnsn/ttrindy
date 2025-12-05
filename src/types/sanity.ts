@@ -56,8 +56,8 @@ export interface SiteSettings {
     logo: SanityImage
     siteName: string
     tagline?: string
-    primaryColor: { hex: string }
-    accentColor: { hex: string }
+    primaryColor: string
+    accentColor: string
   }
   contact: {
     phoneNumber: string
