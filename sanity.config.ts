@@ -34,8 +34,29 @@ const config = defineConfig({
     },
   },
 
-  // Vite configuration - no need for React app aliases in Sanity Studio
-  // Sanity Studio only needs files from the sanity/ directory
+  // Vite configuration - exclude React app from dependency scanning
+  vite: (config: any) => ({
+    ...config,
+    server: {
+      ...config.server,
+      fs: {
+        ...config.server?.fs,
+        deny: ['**/src/**', '**/public/**', '**/dist/**', '**/vite.config.ts'],
+      },
+    },
+    resolve: {
+      ...config.resolve,
+      alias: {
+        ...config.resolve?.alias,
+        // Don't resolve @/ paths - they're for the React app, not Sanity Studio
+        '@': false,
+      },
+    },
+    optimizeDeps: {
+      ...config.optimizeDeps,
+      exclude: ['@/*'],
+    },
+  }),
 })
 
 export default config
