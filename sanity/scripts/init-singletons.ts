@@ -49,8 +49,8 @@ async function initSiteSettings() {
       accentColor: '#FF6B35',
     },
     contact: {
-      phoneNumber: '(317) XXX-XXXX', // User should update
-      email: 'info@toptierrestoration.com',
+      phoneNumber: '(317) 469-6504',
+      email: 'Ben@ttrindy.com',
       address: {
         street: '',
         city: 'Indianapolis',
@@ -226,7 +226,7 @@ async function initHomePage() {
       },
       secondaryCta: {
         text: 'Call Now',
-        url: 'tel:+1317XXXXXXXX',
+        url: 'tel:+13174696504',
       },
     },
     seo: {
@@ -408,7 +408,7 @@ async function initServicesPage() {
     emergencyCta: {
       title: 'Need Emergency Service?',
       description: 'We\'re available 24/7 for emergency restoration needs. Call us now!',
-      phoneNumber: '(317) XXX-XXXX', // User should update
+      phoneNumber: '(317) 469-6504',
     },
     seo: {
       metaTitle: 'Our Services - Top Tier Restoration | Water, Fire, Storm Damage & Remodeling',

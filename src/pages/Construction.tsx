@@ -20,18 +20,6 @@ const Construction = ({ initialData }: ConstructionProps) => {
   // Use initialData directly - don't store in state to avoid re-renders
   const constructionPage = initialData;
 
-  // Don't render if we don't have construction page data
-  if (!constructionPage) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading construction page...</p>
-        </div>
-      </div>
-    );
-  }
-
   useEffect(() => {
     // Check if user is already authenticated
     const token = localStorage.getItem("ttr_auth_token");
@@ -87,10 +75,21 @@ const Construction = ({ initialData }: ConstructionProps) => {
   const siteName = siteSettings?.branding?.siteName || "Top Tier Restoration";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full text-center space-y-8 animate-fade-in">
+    <div
+      className="min-h-screen flex items-center justify-center p-4 py-12 relative"
+      style={{
+        backgroundImage: 'url(/Construction.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      {/* Overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/40" />
+
+      <div className="max-w-2xl w-full text-center space-y-12 animate-fade-in relative z-10">
         {/* Logo */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center">
           <div className="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center bg-white rounded-lg shadow-lg p-4">
             <img
               src={logoUrl}
@@ -111,7 +110,7 @@ const Construction = ({ initialData }: ConstructionProps) => {
         </div>
 
         {/* Heading */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-hero font-bold text-foreground uppercase tracking-tight">
             {heading}
           </h1>
@@ -124,14 +123,14 @@ const Construction = ({ initialData }: ConstructionProps) => {
         </div>
 
         {/* Site Name */}
-        <div className="pt-4">
+        <div>
           <p className="text-sm md:text-base text-muted-foreground font-logo uppercase tracking-wider">
             {siteName}
           </p>
         </div>
 
         {/* CTA Button */}
-        <div className="pt-8">
+        <div>
           <Button
             size="lg"
             className="btn-micro-animate gap-2 font-semibold text-lg px-8 py-6"
@@ -143,7 +142,7 @@ const Construction = ({ initialData }: ConstructionProps) => {
         </div>
 
         {/* Decorative Elements */}
-        <div className="pt-12 flex justify-center gap-2">
+        <div className="flex justify-center gap-2">
           {[1, 2, 3].map((i) => (
             <div
               key={i}

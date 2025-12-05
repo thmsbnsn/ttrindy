@@ -55,7 +55,7 @@ export default defineType({
           type: 'object',
           fields: [
             { name: 'text', type: 'string', title: 'Button Text', initialValue: 'Get Emergency Service' },
-            { name: 'url', type: 'string', title: 'URL', initialValue: 'tel:(555)123-4567' },
+            { name: 'url', type: 'string', title: 'URL', initialValue: 'tel:+13174696504' },
           ],
         },
         {

@@ -140,7 +140,7 @@ export default async function handler(
     }
 
     // Get recipient email from environment variable with fallback
-    const recipientEmail = process.env.CONTACT_EMAIL || 'thmsbnsn@bnsnsolutions.com'
+    const recipientEmail = process.env.CONTACT_EMAIL || 'Ben@ttrindy.com'
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({

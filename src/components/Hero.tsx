@@ -149,9 +149,9 @@ const Hero = () => {
 
             <dl className="flex flex-wrap gap-8 pt-8 text-white">
               <div className="min-w-[120px]">
-                <dt className="sr-only">Years of Experience</dt>
-                <dd className="text-4xl font-bold text-primary drop-shadow-lg">15+</dd>
-                <dd className="text-sm text-gray-200 font-medium mt-1">Years Experience</dd>
+                <dt className="sr-only">Response Time</dt>
+                <dd className="text-4xl font-bold text-primary drop-shadow-lg">30 Min</dd>
+                <dd className="text-sm text-gray-200 font-medium mt-1">Response Time</dd>
               </div>
               <div className="min-w-[120px]">
                 <dt className="sr-only">Homes Restored</dt>

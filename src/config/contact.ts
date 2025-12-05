@@ -5,13 +5,13 @@
 
 export const CONTACT_INFO = {
   phone: {
-    display: '(317) XXX-XXXX', // Display format for UI
-    raw: '3175551234', // Raw number without formatting
-    href: 'tel:+13175551234', // Proper tel: link format with country code
+    display: '(317) 469-6504', // Display format for UI
+    raw: '3174696504', // Raw number without formatting
+    href: 'tel:+13174696504', // Proper tel: link format with country code
   },
   email: {
-    display: 'info@toptierrestoration.com',
-    href: 'mailto:info@toptierrestoration.com',
+    display: 'Ben@ttrindy.com',
+    href: 'mailto:Ben@ttrindy.com',
   },
   address: {
     street: '123 Main Street', // Update with actual street address

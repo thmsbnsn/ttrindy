@@ -123,20 +123,8 @@ const ConstructionGuard = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  // Debug logging
-  console.log("ConstructionGuard render:", {
-    constructionPage,
-    isActive: constructionPage?.isActive,
-    isActiveType: typeof constructionPage?.isActive,
-    isAuthenticated,
-    hasError,
-    isLoading,
-    shouldShowLoading: isLoading && !hasError,
-  });
-
-  // If loading for too long or error, show the site anyway
+  // If loading, show loading spinner
   if (isLoading && !hasError) {
-    console.log("Showing loading spinner");
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
@@ -148,19 +136,9 @@ const ConstructionGuard = ({ children }: { children: React.ReactNode }) => {
   }
 
   // If construction mode is active and user is not authenticated, show construction page
-  // Check explicitly for true (handles boolean true, string "true", etc.)
-  const isConstructionActive = constructionPage?.isActive === true || constructionPage?.isActive === "true";
-  if (constructionPage && constructionPage.isActive && isConstructionActive && !isAuthenticated) {
-    console.log("Rendering Construction component - isActive:", isConstructionActive, "constructionPage:", constructionPage);
-    // Ensure we have valid data before rendering
-    if (!constructionPage) {
-      console.warn("constructionPage is null/undefined, cannot render Construction");
-      return <>{children}</>;
-    }
+  if (constructionPage && constructionPage.isActive === true && !isAuthenticated) {
     return <Construction key="construction-page" initialData={constructionPage} />;
   }
-
-  console.log("Rendering children (normal site)");
 
   // If construction mode is active but user is authenticated, allow access
   // If construction mode is not active, allow access
