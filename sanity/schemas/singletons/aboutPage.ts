@@ -72,6 +72,13 @@ export default defineType({
       options: { collapsible: true, collapsed: true },
       fields: [
         {
+          name: 'title',
+          title: 'Section Title',
+          type: 'string',
+          initialValue: 'Our Track Record',
+          description: 'Optional title for the statistics section (not currently displayed on the page)',
+        },
+        {
           name: 'stats',
           title: 'Statistics',
           type: 'array',

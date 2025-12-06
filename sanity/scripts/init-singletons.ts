@@ -19,10 +19,10 @@ dotenv.config()
 
 const projectId = process.env.VITE_SANITY_PROJECT_ID || process.env.SANITY_STUDIO_PROJECT_ID || 'o2ba67uq'
 const dataset = process.env.VITE_SANITY_DATASET || process.env.SANITY_STUDIO_DATASET || 'production'
-const token = process.env.SANITY_API_WRITE_TOKEN || process.env.SANITY_STUDIO_API_TOKEN
+const token = process.env.SANITY_API_WRITE_TOKEN || process.env.SANITY_LOCAL_DEVELOPMENT_API || process.env.SANITY_STUDIO_API_TOKEN
 
 if (!token) {
-  console.error('❌ Error: SANITY_API_WRITE_TOKEN or SANITY_STUDIO_API_TOKEN environment variable is required')
+  console.error('❌ Error: SANITY_LOCAL_DEVELOPMENT_API, SANITY_API_WRITE_TOKEN, or SANITY_STUDIO_API_TOKEN environment variable is required')
   console.error('   Get your token from: https://www.sanity.io/manage')
   process.exit(1)
 }

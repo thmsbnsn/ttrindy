@@ -1,5 +1,6 @@
 // sanity/schemas/singletons/homePage.ts
 import { defineField, defineType } from 'sanity'
+import { ServiceSelector } from '../../components/ServiceSelector'
 
 /**
  * SINGLETON: Home Page
@@ -38,16 +39,16 @@ export default defineType({
           name: 'backgroundImage',
           title: 'Background Image',
           type: 'image',
+          description: 'Hero background image (optional - can be added later)',
           options: { hotspot: true },
           fields: [
             {
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-              validation: (Rule) => Rule.required(),
+              description: 'Describe the image for accessibility (optional)',
             },
           ],
-          validation: (Rule) => Rule.required(),
         },
         {
           name: 'primaryCta',
@@ -95,9 +96,12 @@ export default defineType({
           name: 'services',
           title: 'Service Cards',
           type: 'array',
-          description: 'Service cards to display (typically 4)',
+          description: 'Select services from the Services Page or create custom service cards (typically 4)',
           of: [{ type: 'serviceCard' }],
           validation: (Rule) => Rule.max(6),
+          components: {
+            input: ServiceSelector,
+          },
         },
         {
           name: 'ctaText',

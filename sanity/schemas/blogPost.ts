@@ -49,17 +49,16 @@ export default defineType({
       name: 'mainImage',
       title: 'Featured Image',
       type: 'image',
-      description: 'Main image for the blog post',
+      description: 'Main image for the blog post (optional - can be added later)',
       options: { hotspot: true },
       fields: [
         {
           name: 'alt',
           type: 'string',
           title: 'Alternative Text',
-          validation: (Rule) => Rule.required(),
+          description: 'Describe the image for accessibility (optional)',
         },
       ],
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'body',
@@ -116,7 +115,7 @@ export default defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-              validation: (Rule) => Rule.required(),
+              description: 'Describe the image for accessibility (optional)',
             },
             {
               name: 'caption',

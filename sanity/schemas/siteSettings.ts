@@ -1,5 +1,6 @@
 // sanity/schemas/siteSettings.ts
 import { defineField, defineType } from 'sanity'
+import { ColorInput } from '../components/ColorInput'
 
 /**
  * SINGLETON: Site Settings
@@ -25,17 +26,16 @@ export default defineType({
           name: 'logo',
           title: 'Logo',
           type: 'image',
-          description: 'Main logo (used in navbar and footer)',
+          description: 'Main logo (used in navbar and footer). Recommended for new sites.',
           options: { hotspot: true },
           fields: [
             {
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-              validation: (Rule) => Rule.required(),
+              description: 'Describe the logo for accessibility (optional)',
             },
           ],
-          validation: (Rule) => Rule.required(),
         },
         {
           name: 'siteName',
@@ -54,19 +54,25 @@ export default defineType({
         },
         {
           name: 'primaryColor',
-          title: 'Primary Color (Cyan Blue)',
+          title: 'Primary Color',
           type: 'string',
-          description: 'Main brand color - used for links, primary buttons (hex format: #00AEEF)',
+          description: 'Main brand color - used for links, primary buttons. Use the color picker or type a hex code.',
           validation: (Rule) => Rule.required().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).error('Please enter a valid hex color'),
           initialValue: '#00AEEF',
+          components: {
+            input: ColorInput,
+          },
         },
         {
           name: 'accentColor',
-          title: 'Accent Color (Orange)',
+          title: 'Accent Color',
           type: 'string',
-          description: 'Emergency/urgent action color - used for CTAs (hex format: #FF6B35)',
+          description: 'Emergency/urgent action color - used for CTAs. Use the color picker or type a hex code.',
           validation: (Rule) => Rule.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).error('Please enter a valid hex color'),
           initialValue: '#FF6B35',
+          components: {
+            input: ColorInput,
+          },
         },
       ],
     }),

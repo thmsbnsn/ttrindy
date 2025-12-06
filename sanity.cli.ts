@@ -6,6 +6,8 @@ export default defineCliConfig({
     dataset: process.env.VITE_SANITY_DATASET || 'production',
   },
   // Deployment configuration - prevents prompting for app ID on deploy
-  appId: 'kygq9jmu4dxmizo7zzfzbv3h',
+  deployment: {
+    appId: 'kygq9jmu4dxmizo7zzfzbv3h',
+  },
 })
 

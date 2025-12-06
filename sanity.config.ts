@@ -49,7 +49,7 @@ const config = defineConfig({
       alias: {
         ...config.resolve?.alias,
         // Don't resolve @/ paths - they're for the React app, not Sanity Studio
-        '@': false,
+        // Setting to false might cause build issues, so we'll just not define it
       },
     },
     optimizeDeps: {

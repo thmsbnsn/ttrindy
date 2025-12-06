@@ -79,7 +79,7 @@ export default defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-              validation: (Rule) => Rule.required(),
+              description: 'Describe the image for accessibility (optional)',
             },
             {
               name: 'caption',
@@ -94,7 +94,7 @@ export default defineType({
       name: 'images',
       title: 'Project Images',
       type: 'array',
-      description: 'All project images (first image is the main/featured image)',
+      description: 'All project images (first image is the main/featured image). At least one image is recommended for new projects.',
       of: [
         {
           type: 'image',
@@ -104,7 +104,7 @@ export default defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-              validation: (Rule) => Rule.required(),
+              description: 'Describe the image for accessibility (optional)',
             },
             {
               name: 'caption',
@@ -114,7 +114,7 @@ export default defineType({
           ],
         },
       ],
-      validation: (Rule) => Rule.required().min(1),
+      validation: (Rule) => Rule.min(1).warning('Adding at least one image is recommended for new projects'),
     }),
     defineField({
       name: 'videos',

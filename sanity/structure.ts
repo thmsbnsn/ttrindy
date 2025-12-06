@@ -138,11 +138,11 @@ export default (S: StructureBuilder) =>
             .defaultOrdering([{ field: 'title', direction: 'asc' }])
         ),
 
-      // Hide singleton documents from the default list
-      // This prevents editors from creating multiple instances
+      // Hide singleton documents and already-defined document types from the default list
+      // This prevents editors from creating multiple instances and avoids duplicates
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !['siteSettings', 'constructionPage', 'homePage', 'aboutPage', 'servicesPage'].includes(
+          !['siteSettings', 'constructionPage', 'homePage', 'aboutPage', 'servicesPage', 'project', 'blogPost', 'category'].includes(
             listItem.getId() || ''
           )
       ),
