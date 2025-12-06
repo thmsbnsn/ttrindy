@@ -74,6 +74,19 @@ const About = () => {
       });
   }, []);
 
+  // Handle hash scrolling when page loads with hash
+  useEffect(() => {
+    if (!loading && window.location.hash) {
+      const hash = window.location.hash.substring(1); // Remove the #
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    }
+  }, [loading]);
+
   const onSubmit = async (data: ContactFormData) => {
     try {
       const response = await fetch('/api/contact', {
@@ -217,7 +230,7 @@ const About = () => {
           )}
 
           {/* Contact Section */}
-          <div id="contact" className="scroll-mt-24">
+          <div id="contact-form" className="scroll-mt-24">
             <h2 className="text-3xl font-bold mb-10 text-center">
               {contactSection?.title || "Get In Touch"}
             </h2>

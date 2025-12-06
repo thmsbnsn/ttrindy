@@ -55,7 +55,7 @@ const Navbar = () => {
   // Get CTA button from CMS or fallback
   const ctaButton = siteSettings?.navigation?.ctaButton || {
     text: "Get a Free Quote",
-    url: "/about#contact",
+    url: "/about#contact-form",
   };
 
   // Get logo from CMS or fallback
@@ -243,6 +243,26 @@ const Navbar = () => {
                   <a href={ctaButton.url} target="_blank" rel="noopener noreferrer">
                     {ctaButton.text}
                   </a>
+                ) : ctaButton.url.includes("#") ? (
+                  <a
+                    href={ctaButton.url}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const [path, hash] = ctaButton.url.split("#");
+                      if (location.pathname === path) {
+                        // Already on the page, scroll to hash
+                        const element = document.getElementById(hash);
+                        if (element) {
+                          element.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }
+                      } else {
+                        // Navigate to page, then scroll
+                        window.location.href = ctaButton.url;
+                      }
+                    }}
+                  >
+                    {ctaButton.text}
+                  </a>
                 ) : (
                   <Link to={ctaButton.url}>{ctaButton.text}</Link>
                 )}
@@ -320,6 +340,29 @@ const Navbar = () => {
               <Button variant="outline" size="sm" className="btn-micro-animate w-full gap-2 font-semibold" asChild>
                 {ctaButton.url.startsWith("http") ? (
                   <a href={ctaButton.url} target="_blank" rel="noopener noreferrer" onClick={() => setMobileMenuOpen(false)}>
+                    {ctaButton.text}
+                  </a>
+                ) : ctaButton.url.includes("#") ? (
+                  <a
+                    href={ctaButton.url}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMobileMenuOpen(false);
+                      const [path, hash] = ctaButton.url.split("#");
+                      if (location.pathname === path) {
+                        // Already on the page, scroll to hash
+                        setTimeout(() => {
+                          const element = document.getElementById(hash);
+                          if (element) {
+                            element.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }
+                        }, 100);
+                      } else {
+                        // Navigate to page, then scroll
+                        window.location.href = ctaButton.url;
+                      }
+                    }}
+                  >
                     {ctaButton.text}
                   </a>
                 ) : (

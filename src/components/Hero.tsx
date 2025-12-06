@@ -63,26 +63,78 @@ const Hero = () => {
               24/7 Emergency Response Available
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight font-hero uppercase drop-shadow-2xl">
-              {headline ? (
-                headline.split(" ").map((word, i, arr) => {
-                  const isPrimary = word.toLowerCase().includes("tier");
+            <h1 className="text-white leading-tight font-hero uppercase drop-shadow-2xl">
+              {(() => {
+                const headlineText = headline || "Restore Your Home to Top Tier Condition";
+                const words = headlineText.split(" ");
+                const headlineUpper = headlineText.toUpperCase();
+
+                // Find "TOP TIER" in the headline
+                const topTierIndex = headlineUpper.indexOf("TOP TIER");
+
+                if (topTierIndex !== -1) {
+                  // Split into two lines: everything before "TO TOP TIER" and "TO TOP TIER" + rest
+                  const beforeTo = headlineUpper.substring(0, topTierIndex - 3).trim(); // -3 to remove "TO "
+                  const afterTopTier = headlineUpper.substring(topTierIndex + "TOP TIER".length).trim();
+
                   return (
-                    <span key={i}>
-                      {isPrimary ? (
-                        <span className="text-primary">{word}</span>
-                      ) : (
-                        word
-                      )}
-                      {i < arr.length - 1 && " "}
-                    </span>
+                    <>
+                      <div className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-2">
+                        {beforeTo || "RESTORE YOUR HOME"}
+                      </div>
+                      <div className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold">
+                        TO{" "}
+                        <span className="text-primary">TOP TIER</span>
+                        {afterTopTier && ` ${afterTopTier}`}
+                      </div>
+                    </>
                   );
-                })
-              ) : (
-                <>
-                  Restore Your Home to <span className="text-primary">Top Tier</span> Condition
-                </>
-              )}
+                }
+
+                // Fallback: split at "TO" if it exists, otherwise use default structure
+                const toIndex = headlineUpper.indexOf(" TO ");
+                if (toIndex !== -1) {
+                  const firstLine = headlineUpper.substring(0, toIndex).trim();
+                  const secondLine = headlineUpper.substring(toIndex + 1).trim(); // +1 to skip space
+
+                  return (
+                    <>
+                      <div className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-2">
+                        {firstLine}
+                      </div>
+                      <div className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold">
+                        {secondLine.split(" ").map((word, i, arr) => {
+                          const wordLower = word.toLowerCase();
+                          const isTop = wordLower === "top";
+                          const isTier = wordLower === "tier";
+                          return (
+                            <span key={i}>
+                              {(isTop || isTier) ? (
+                                <span className="text-primary">{word}</span>
+                              ) : (
+                                word
+                              )}
+                              {i < arr.length - 1 && " "}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </>
+                  );
+                }
+
+                // Default structure
+                return (
+                  <>
+                    <div className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-2">
+                      RESTORE YOUR HOME
+                    </div>
+                    <div className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold">
+                      TO <span className="text-primary">TOP TIER</span> CONDITION
+                    </div>
+                  </>
+                );
+              })()}
             </h1>
 
             {subheadline && (
