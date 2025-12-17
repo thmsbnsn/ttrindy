@@ -22,6 +22,7 @@ import TermsOfService from "./pages/TermsOfService";
 import Accessibility from "./pages/Accessibility";
 import NotFound from "./pages/NotFound";
 import Construction from "./pages/Construction";
+import Studio from "./pages/Studio";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -89,6 +90,7 @@ const App = () => {
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
                 <Route path="/accessibility" element={<Accessibility />} />
+                <Route path="/studio" element={<Studio />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
