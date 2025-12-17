@@ -47,73 +47,9 @@ const ScrollToTop = () => {
 };
 
 // Component to check construction mode and authentication
+// TEMPORARILY DISABLED - bypassing construction mode to fix loading issues
 const ConstructionGuard = ({ children }: { children: React.ReactNode }) => {
-  const [constructionPage, setConstructionPage] = useState<ConstructionPage | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = () => {
-      const token = localStorage.getItem("ttr_auth_token");
-      const timestamp = localStorage.getItem("ttr_auth_timestamp");
-
-      if (token && timestamp) {
-        // Check if token is still valid (24 hours)
-        const tokenAge = Date.now() - parseInt(timestamp, 10);
-        const twentyFourHours = 24 * 60 * 60 * 1000;
-
-        if (tokenAge < twentyFourHours) {
-          setIsAuthenticated(true);
-        } else {
-          // Token expired, clear it
-          localStorage.removeItem("ttr_auth_token");
-          localStorage.removeItem("ttr_auth_timestamp");
-          setIsAuthenticated(false);
-        }
-      } else {
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkAuth();
-
-    // Add timeout to prevent infinite loading
-    const timeoutId = setTimeout(() => {
-      console.warn("Construction page fetch timed out, disabling construction mode");
-      setIsLoading(false);
-    }, 5000); // 5 second timeout
-
-    // Fetch construction page settings
-    getConstructionPage()
-      .then((page) => {
-        clearTimeout(timeoutId);
-        setConstructionPage(page);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        clearTimeout(timeoutId);
-        console.error("Error fetching construction page:", error);
-        setIsLoading(false);
-      });
-    
-    return () => clearTimeout(timeoutId);
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
-  // If construction mode is active and user is not authenticated, show construction page
-  if (constructionPage?.isActive && !isAuthenticated) {
-    return <Construction />;
-  }
-
-  // If construction mode is active but user is authenticated, allow access
-  // If construction mode is not active, allow access
+  // Simply return children without any construction mode checks
   return <>{children}</>;
 };
 
