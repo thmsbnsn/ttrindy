@@ -1,4 +1,4 @@
-import { Phone, ChevronUp, ChevronDown, X } from "lucide-react";
+import { ChevronUp, ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -16,7 +16,6 @@ const MobileEmergencyBar = () => {
         aria-label={isOpen ? "Close emergency bar" : "Open emergency bar"}
         aria-expanded={isOpen ? "true" : "false"}
       >
-        <Phone className="w-5 h-5" />
         <span className="text-sm">Contact Us</span>
         {isOpen ? (
           <ChevronDown className="w-4 h-4 ml-auto" />
@@ -55,14 +54,13 @@ const MobileEmergencyBar = () => {
             </button>
           </div>
 
-          {/* Call Button */}
+          {/* Contact Button */}
           <Button
-            className="w-full btn-micro-animate gap-2 font-semibold bg-white hover:bg-white/90 text-accent shadow-lg"
+            className="w-full btn-micro-animate font-semibold bg-white hover:bg-white/90 text-accent shadow-lg"
             size="lg"
             asChild
           >
-            <Link to={CONTACT_INFO.contactFormUrl} className="flex items-center justify-center gap-2">
-              <Phone className="w-5 h-5" />
+            <Link to={CONTACT_INFO.contactFormUrl}>
               <span>Contact Us</span>
             </Link>
           </Button>

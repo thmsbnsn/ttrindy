@@ -1,4 +1,4 @@
-import { Phone, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -228,9 +228,8 @@ const Navbar = () => {
                 </Link>
               );
             })}
-            <Button variant="default" size="sm" className="btn-micro-animate gap-2 font-semibold" asChild>
+            <Button variant="default" size="sm" className="btn-micro-animate font-semibold" asChild>
               <Link to={contactFormUrl}>
-                <Phone className="w-4 h-4" />
                 <span>Contact Us</span>
               </Link>
             </Button>
@@ -307,9 +306,8 @@ const Navbar = () => {
                 </Link>
               );
             })}
-            <Button variant="default" size="sm" className="btn-micro-animate w-full gap-2 font-semibold" asChild>
+            <Button variant="default" size="sm" className="btn-micro-animate w-full font-semibold" asChild>
               <Link to={contactFormUrl}>
-                <Phone className="w-4 h-4" />
                 <span>Contact Us</span>
               </Link>
             </Button>

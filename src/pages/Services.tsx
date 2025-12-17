@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MetaTags } from "@/components/SEO/MetaTags";
-import { Phone, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CONTACT_INFO } from "@/config/contact";
 import { getServicesPage, getSiteSettings } from "@/lib/sanity";
@@ -124,9 +124,8 @@ const Services = () => {
                             ))}
                           </ul>
                         )}
-                        <Button className="btn-micro-animate w-full gap-2" asChild>
+                        <Button className="btn-micro-animate w-full" asChild>
                           <Link to={contactFormUrl}>
-                            <Phone className="w-4 h-4" />
                             Get a Free Quote
                           </Link>
                         </Button>
@@ -147,9 +146,8 @@ const Services = () => {
                 </p>
               )}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="btn-micro-animate gap-2" asChild>
+                <Button size="lg" className="btn-micro-animate" asChild>
                   <Link to={contactFormUrl}>
-                    <Phone className="w-5 h-5" />
                     {emergencyCta.primaryButtonText || "Contact Us"}
                   </Link>
                 </Button>
