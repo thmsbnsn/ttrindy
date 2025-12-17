@@ -62,7 +62,7 @@ const Hero = () => {
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight font-hero uppercase drop-shadow-2xl">
               {headline ? (
                 headline.split(" ").map((word, i, arr) => {
-                  const isPrimary = word.toLowerCase().includes("tier");
+                  const isPrimary = word.toLowerCase().includes("tier") || word.toLowerCase().includes("top");
                   return (
                     <span key={i}>
                       {isPrimary ? (
