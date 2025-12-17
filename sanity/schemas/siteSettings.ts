@@ -79,18 +79,36 @@ export default defineType({
       options: { collapsible: true, collapsed: false },
       fields: [
         {
+          name: 'enablePhoneCTA',
+          title: 'Enable Phone Call CTA',
+          type: 'boolean',
+          description: 'Toggle to show/hide phone number call-to-action buttons throughout the site',
+          initialValue: false,
+        },
+        {
           name: 'phoneNumber',
           title: 'Phone Number',
           type: 'string',
-          description: 'Primary phone number for CTAs (format: (555) 123-4567)',
+          description: 'Primary phone number for CTAs (format: (555) 123-4567). Required if Phone CTA is enabled.',
           validation: (Rule) =>
-            Rule.required()
-              .regex(/^\(\d{3}\) \d{3}-\d{4}$/, {
-                name: 'phone',
-                invert: false,
-              })
-              .error('Please use format: (555) 123-4567'),
+            Rule.custom((phoneNumber, context) => {
+              // @ts-ignore - accessing parent context
+              const enablePhoneCTA = context.parent?.enablePhoneCTA;
+              
+              // If phone CTA is enabled, phone number is required
+              if (enablePhoneCTA && !phoneNumber) {
+                return 'Phone number is required when Phone CTA is enabled';
+              }
+              
+              // If phone number is provided, validate format
+              if (phoneNumber && !/^\(\d{3}\) \d{3}-\d{4}$/.test(phoneNumber)) {
+                return 'Please use format: (555) 123-4567';
+              }
+              
+              return true;
+            }),
           placeholder: '(555) 123-4567',
+          hidden: ({ parent }) => !parent?.enablePhoneCTA,
         },
         {
           name: 'email',

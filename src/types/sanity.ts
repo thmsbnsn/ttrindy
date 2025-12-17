@@ -60,7 +60,8 @@ export interface SiteSettings {
     accentColor: { hex: string }
   }
   contact: {
-    phoneNumber: string
+    enablePhoneCTA?: boolean
+    phoneNumber?: string
     email: string
     address: {
       street?: string
