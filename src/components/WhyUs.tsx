@@ -4,11 +4,11 @@ const benefits = [
   {
     icon: Clock,
     title: "Rapid Response",
-    description: "We’re available 24/7 and arrive quickly to stop damage and begin restoration immediately."
+    description: "We arrive quickly to stop damage and begin restoration immediately."
   },
   {
     icon: Shield,
-    title: "Licensed & Insured",
+    title: "Licensed, Bonded & Insured",
     description: "Fully licensed, bonded, and insured technicians you can trust with your home."
   },
   {

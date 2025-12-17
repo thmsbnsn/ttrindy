@@ -81,8 +81,8 @@ const Index = () => {
     <div className="flex flex-col min-h-screen">
       <MetaTags
         title={homePage?.seo?.metaTitle || "Home"}
-        description={homePage?.seo?.metaDescription || "Top Tier Restoration - Professional 24/7 emergency restoration services for water damage, fire damage, and storm damage. Expert remodeling and renovation services in Indianapolis and surrounding Indiana areas."}
-        keywords={homePage?.seo?.keywords?.join(", ") || "water damage restoration, fire damage restoration, storm damage repair, home remodeling, Indianapolis restoration, emergency restoration services"}
+        description={homePage?.seo?.metaDescription || "Top Tier Restoration - Professional restoration services for water damage, fire damage, and storm damage. Expert remodeling and renovation services in Indianapolis and surrounding Indiana areas."}
+        keywords={homePage?.seo?.keywords?.join(", ") || "water damage restoration, fire damage restoration, storm damage repair, home remodeling, Indianapolis restoration, restoration services"}
       />
       <StructuredData type="LocalBusiness" />
       <Navbar />

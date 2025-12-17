@@ -4,11 +4,8 @@
  */
 
 export const CONTACT_INFO = {
-  phone: {
-    display: '(317) XXX-XXXX', // Display format for UI
-    raw: '3175551234', // Raw number without formatting
-    href: 'tel:+13175551234', // Proper tel: link format with country code
-  },
+  // Phone number removed - all contact buttons now link to contact form
+  contactFormUrl: '/about#contact', // URL to contact form section
   email: {
     display: 'info@toptierrestoration.com',
     href: 'mailto:info@toptierrestoration.com',
@@ -23,7 +20,6 @@ export const CONTACT_INFO = {
   },
   hours: {
     regular: 'Mon - Fri: 8am - 5pm',
-    emergency: '24/7 Emergency Service',
   },
   license: 'IN-12345-PLACEHOLDER', // Update with actual license number
   serviceAreas: [
@@ -38,12 +34,7 @@ export const CONTACT_INFO = {
 } as const;
 
 /**
- * Helper function to get phone number in different formats
+ * Helper function to get contact form URL
  */
-export const getPhoneNumber = {
-  display: () => CONTACT_INFO.phone.display,
-  raw: () => CONTACT_INFO.phone.raw,
-  href: () => CONTACT_INFO.phone.href,
-  tel: () => CONTACT_INFO.phone.href, // Alias for href
-};
+export const getContactFormUrl = () => CONTACT_INFO.contactFormUrl;
 

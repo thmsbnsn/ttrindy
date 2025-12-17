@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { CONTACT_INFO } from "@/config/contact";
@@ -113,7 +114,7 @@ const TermsOfService = () => {
                 <div className="mt-4 p-4 bg-muted rounded-lg">
                   <p className="mb-2"><strong>Top Tier Restoration</strong></p>
                   <p className="mb-1">Email: {CONTACT_INFO.email.display}</p>
-                  <p className="mb-1">Phone: {CONTACT_INFO.phone.display}</p>
+                  <p className="mb-1">Contact: <Link to={CONTACT_INFO.contactFormUrl} className="text-primary hover:underline">Contact Us</Link></p>
                   <p>Service Area: Greater {CONTACT_INFO.address.city} Metro Area, {CONTACT_INFO.address.state}</p>
                 </div>
               </section>

@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { CONTACT_INFO } from "@/config/contact";
 
 const PrivacyPolicy = () => {
   return (
@@ -114,7 +116,7 @@ const PrivacyPolicy = () => {
                 <div className="mt-4 p-4 bg-muted rounded-lg">
                   <p className="mb-2"><strong>Top Tier Restoration</strong></p>
                   <p className="mb-1">Email: info@toptierrestoration.com</p>
-                  <p className="mb-1">Phone: (555) 123-4567</p>
+                  <p className="mb-1">Contact: <Link to={CONTACT_INFO.contactFormUrl} className="text-primary hover:underline">Contact Us</Link></p>
                   <p>Service Area: Greater Metro Area, Indiana</p>
                 </div>
               </section>

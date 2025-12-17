@@ -29,10 +29,7 @@ const Footer = () => {
   const logoAlt = siteSettings?.branding?.logo?.alt || "Top Tier Restoration Logo";
 
   // Get contact info from CMS or fallback
-  const phoneNumber = siteSettings?.contact?.phoneNumber || CONTACT_INFO.phone.display;
-  const phoneHref = siteSettings?.contact?.phoneNumber
-    ? `tel:${siteSettings.contact.phoneNumber.replace(/\D/g, "")}`
-    : CONTACT_INFO.phone.href;
+  const contactFormUrl = CONTACT_INFO.contactFormUrl;
   const email = siteSettings?.contact?.email || CONTACT_INFO.email.display;
   const emailHref = siteSettings?.contact?.email
     ? `mailto:${siteSettings.contact.email}`
@@ -115,9 +112,9 @@ const Footer = () => {
               <div className="space-y-2 text-sm text-white/80">
                 <div className="flex items-start justify-center md:justify-start gap-2">
                   <Phone className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <a href={phoneHref} className="hover:text-white transition-colors">
-                    {phoneNumber}
-                  </a>
+                  <Link to={contactFormUrl} className="hover:text-white transition-colors">
+                    Contact Us
+                  </Link>
                 </div>
                 <div className="flex items-start justify-center md:justify-start gap-2">
                   <Mail className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
@@ -139,9 +136,6 @@ const Footer = () => {
                   <div>
                     <p className="font-medium">Hours:</p>
                     <p>{CONTACT_INFO.hours.regular}</p>
-                    <p className="text-accent font-semibold">
-                      {siteSettings?.businessInfo?.emergencyAvailability || CONTACT_INFO.hours.emergency}
-                    </p>
                   </div>
                 </div>
               </div>
@@ -197,7 +191,7 @@ const Footer = () => {
               <div className="flex flex-col items-center md:items-start gap-2 mt-2">
                 <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
                   <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                  <span className="text-sm text-white/90 font-medium">Licensed & Insured</span>
+                  <span className="text-sm text-white/90 font-medium">Licensed, Bonded & Insured</span>
                 </div>
                 {licenseNumber && (
                   <p className="text-xs text-white/60">Indiana License #: {licenseNumber}</p>

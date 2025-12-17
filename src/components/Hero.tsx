@@ -26,16 +26,13 @@ const Hero = () => {
   // Get hero data from CMS or use fallback
   const hero = homePage?.hero;
   const headline = hero?.headline || "Restore Your Home to Top Tier Condition";
-  const subheadline = hero?.subheadline || "24/7 emergency restoration for water, fire, storm, and structural damage. When disaster strikes, we bring your property back to life with fast response, licensed professionals, and proven results.";
+  const subheadline = hero?.subheadline || "Professional restoration for water, fire, storm, and structural damage. When disaster strikes, we bring your property back to life with fast response, licensed professionals, and proven results.";
   const backgroundImage = hero?.backgroundImage?.asset
     ? urlFor(hero.backgroundImage).width(1920).height(1080).url()
     : heroImage;
   const backgroundImageAlt = hero?.backgroundImage?.alt || "Home restoration transformation - from fire damage to fully restored room";
-  const primaryCta = hero?.primaryCta || { text: "Call Now for Emergency Service", url: CONTACT_INFO.phone.href };
+  const primaryCta = hero?.primaryCta || { text: "Contact Us", url: CONTACT_INFO.contactFormUrl };
   const secondaryCta = hero?.secondaryCta || { text: "Learn More", url: "/services" };
-
-  // Get phone number for emergency badge
-  const phoneNumber = hero?.primaryCta?.url?.replace("tel:", "").replace(/\D/g, "") || CONTACT_INFO.phone.raw;
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -60,7 +57,6 @@ const Hero = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
               </span>
-              24/7 Emergency Response Available
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight font-hero uppercase drop-shadow-2xl">
@@ -97,14 +93,12 @@ const Hero = () => {
                 className="btn-micro-animate gap-2 text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
                 asChild
               >
-                {primaryCta.url.startsWith("http") || primaryCta.url.startsWith("tel:") ? (
-                  <a href={primaryCta.url}>
-                    <Phone className="w-5 h-5" />
+                {primaryCta.url.startsWith("http") ? (
+                  <a href={primaryCta.url} target="_blank" rel="noopener noreferrer">
                     {primaryCta.text}
                   </a>
                 ) : (
                   <Link to={primaryCta.url}>
-                    <Phone className="w-5 h-5" />
                     {primaryCta.text}
                   </Link>
                 )}
@@ -140,7 +134,7 @@ const Hero = () => {
                 <span className="text-sm text-white/90 font-medium">5.0 Google Rating</span>
               </div>
               <span className="text-white/40">•</span>
-              <span className="text-sm text-white/90 font-medium">Licensed • Bonded • Insured</span>
+              <span className="text-sm text-white/90 font-medium">Licensed, Bonded & Insured</span>
               <span className="text-white/40">•</span>
               <span className="text-sm text-white/90 font-medium">IICRC Certified</span>
               <span className="text-white/40">•</span>
@@ -159,9 +153,6 @@ const Hero = () => {
                 <dd className="text-sm text-gray-200 font-medium mt-1">Homes Restored</dd>
               </div>
               <div className="min-w-[120px]">
-                <dt className="sr-only">Emergency Service Availability</dt>
-                <dd className="text-4xl font-bold text-primary drop-shadow-lg">24/7</dd>
-                <dd className="text-sm text-gray-200 font-medium mt-1">Emergency Service</dd>
               </div>
             </dl>
           </div>

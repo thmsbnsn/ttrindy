@@ -46,11 +46,8 @@ const Navbar = () => {
       }))
     : fallbackNavLinks;
 
-  // Get phone number from CMS or fallback
-  const phoneNumber = siteSettings?.contact?.phoneNumber || CONTACT_INFO.phone.display;
-  const phoneHref = siteSettings?.contact?.phoneNumber
-    ? `tel:${siteSettings.contact.phoneNumber.replace(/\D/g, "")}`
-    : CONTACT_INFO.phone.href;
+  // Contact button now links to contact form instead of phone
+  const contactFormUrl = CONTACT_INFO.contactFormUrl;
 
   // Get CTA button from CMS or fallback
   const ctaButton = siteSettings?.navigation?.ctaButton || {
@@ -232,10 +229,10 @@ const Navbar = () => {
               );
             })}
             <Button variant="default" size="sm" className="btn-micro-animate gap-2 font-semibold" asChild>
-              <a href={phoneHref}>
+              <Link to={contactFormUrl}>
                 <Phone className="w-4 h-4" />
-                <span>{phoneNumber} — {siteSettings?.businessInfo?.emergencyAvailability || "24/7 Emergency"}</span>
-              </a>
+                <span>Contact Us</span>
+              </Link>
             </Button>
             {ctaButton && (
               <Button variant="outline" size="sm" className="btn-micro-animate gap-2 font-semibold" asChild>
@@ -311,10 +308,10 @@ const Navbar = () => {
               );
             })}
             <Button variant="default" size="sm" className="btn-micro-animate w-full gap-2 font-semibold" asChild>
-              <a href={phoneHref}>
+              <Link to={contactFormUrl}>
                 <Phone className="w-4 h-4" />
-                <span>{phoneNumber} — {siteSettings?.businessInfo?.emergencyAvailability || "24/7 Emergency"}</span>
-              </a>
+                <span>Contact Us</span>
+              </Link>
             </Button>
             {ctaButton && (
               <Button variant="outline" size="sm" className="btn-micro-animate w-full gap-2 font-semibold" asChild>

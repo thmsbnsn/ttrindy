@@ -18,7 +18,7 @@ export const StructuredData = ({ type, data }: StructuredDataProps) => {
       name: 'Top Tier Restoration',
       image: 'https://ttrindy.com/og-image.webp',
       url: 'https://ttrindy.com',
-      telephone: CONTACT_INFO.phone.href.replace('tel:', ''),
+      // Phone removed - contact form only
       priceRange: '$$',
       address: {
         '@type': 'PostalAddress',

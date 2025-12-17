@@ -1,6 +1,7 @@
 import { Phone, ChevronUp, ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { CONTACT_INFO } from "@/config/contact";
 
 const MobileEmergencyBar = () => {
@@ -16,7 +17,7 @@ const MobileEmergencyBar = () => {
         aria-expanded={isOpen ? "true" : "false"}
       >
         <Phone className="w-5 h-5" />
-        <span className="text-sm">Emergency Service</span>
+        <span className="text-sm">Contact Us</span>
         {isOpen ? (
           <ChevronDown className="w-4 h-4 ml-auto" />
         ) : (
@@ -44,7 +45,7 @@ const MobileEmergencyBar = () => {
         <div className="container mx-auto px-4 py-4">
           {/* Close Button */}
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-lg">24/7 Emergency Service</h3>
+            <h3 className="font-bold text-lg">Contact Us</h3>
             <button
               onClick={() => setIsOpen(false)}
               className="p-1 hover:bg-accent/80 rounded-full transition-colors"
@@ -60,14 +61,11 @@ const MobileEmergencyBar = () => {
             size="lg"
             asChild
           >
-            <a href={CONTACT_INFO.phone.href} className="flex items-center justify-center gap-2">
+            <Link to={CONTACT_INFO.contactFormUrl} className="flex items-center justify-center gap-2">
               <Phone className="w-5 h-5" />
-              <span>Call Now: {CONTACT_INFO.phone.display}</span>
-            </a>
+              <span>Contact Us</span>
+            </Link>
           </Button>
-          <p className="text-center text-sm mt-3 text-accent-foreground/80">
-            Available 24/7 for immediate assistance
-          </p>
         </div>
       </div>
     </>

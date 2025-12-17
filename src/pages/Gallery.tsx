@@ -222,10 +222,10 @@ const Gallery = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="btn-micro-animate gap-2" asChild>
-                <a href={CONTACT_INFO.phone.href}>
+                <Link to={CONTACT_INFO.contactFormUrl}>
                   <Phone className="w-5 h-5" />
                   Get a Free Quote
-                </a>
+                </Link>
               </Button>
               <Button size="lg" variant="outline" className="btn-micro-animate btn-micro-animate-outline gap-2" asChild>
                 <Link to="/services">

@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Shield, Eye, MousePointer, Volume2 } from "lucide-react";
+import { CONTACT_INFO } from "@/config/contact";
 
 const Accessibility = () => {
   return (
@@ -66,7 +68,7 @@ const Accessibility = () => {
                   <li>Sufficient color contrast ratios</li>
                   <li>Resizable text (browser zoom support)</li>
                   <li>Reduced motion support for users with motion sensitivity</li>
-                  <li>Clickable phone numbers (tel: links)</li>
+                  <li>Contact form for inquiries</li>
                 </ul>
               </section>
 
@@ -94,10 +96,10 @@ const Accessibility = () => {
                     </a>
                   </p>
                   <p className="mb-1">
-                    <strong className="text-foreground">Phone:</strong>{" "}
-                    <a href="tel:5551234567" className="text-primary hover:underline">
-                      (555) 123-4567
-                    </a>
+                    <strong className="text-foreground">Contact:</strong>{" "}
+                    <Link to={CONTACT_INFO.contactFormUrl} className="text-primary hover:underline">
+                      Contact Us
+                    </Link>
                   </p>
                   <p className="mb-1">
                     <strong className="text-foreground">Service Area:</strong> Indianapolis, Greenwood, and surrounding Indiana areas

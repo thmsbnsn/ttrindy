@@ -31,7 +31,7 @@ export const MetaTags = ({
   const fullImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
 
   // Default keywords if not provided
-  const defaultKeywords = 'water damage restoration, fire damage restoration, storm damage repair, home remodeling, Indianapolis restoration, emergency restoration services';
+  const defaultKeywords = 'water damage restoration, fire damage restoration, storm damage repair, home remodeling, Indianapolis restoration, restoration services';
   const metaKeywords = keywords || defaultKeywords;
 
   return (

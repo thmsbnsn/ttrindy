@@ -54,10 +54,7 @@ const Services = () => {
   const emergencyCta = servicesPage?.emergencyCta;
 
   // Get contact info from site settings
-  const phoneNumber = siteSettings?.contact?.phoneNumber || CONTACT_INFO.phone.display;
-  const phoneHref = siteSettings?.contact?.phoneNumber
-    ? `tel:${siteSettings.contact.phoneNumber.replace(/\D/g, "")}`
-    : CONTACT_INFO.phone.href;
+  const contactFormUrl = CONTACT_INFO.contactFormUrl;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -128,10 +125,10 @@ const Services = () => {
                           </ul>
                         )}
                         <Button className="btn-micro-animate w-full gap-2" asChild>
-                          <a href={phoneHref}>
+                          <Link to={contactFormUrl}>
                             <Phone className="w-4 h-4" />
                             Get a Free Quote
-                          </a>
+                          </Link>
                         </Button>
                       </CardContent>
                     </Card>
@@ -151,10 +148,10 @@ const Services = () => {
               )}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" className="btn-micro-animate gap-2" asChild>
-                  <a href={phoneHref}>
+                  <Link to={contactFormUrl}>
                     <Phone className="w-5 h-5" />
-                    {emergencyCta.primaryButtonText || `Call Now: ${phoneNumber}`}
-                  </a>
+                    {emergencyCta.primaryButtonText || "Contact Us"}
+                  </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="btn-micro-animate btn-micro-animate-outline" asChild>
                   <Link to="/about#contact">

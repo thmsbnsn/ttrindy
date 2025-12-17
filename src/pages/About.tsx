@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -49,6 +50,7 @@ const About = () => {
   const [aboutPage, setAboutPage] = useState<AboutPage | null>(null);
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
+  const [formStartTime] = useState(Date.now()); // Track when form was loaded
   const { toast } = useToast();
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema)
@@ -81,7 +83,11 @@ const About = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          honeypot: '', // Honeypot field - bots will fill this
+          timestamp: formStartTime.toString(), // Track form load time
+        }),
       });
 
       if (!response.ok) {
@@ -110,17 +116,13 @@ const About = () => {
   const showContactForm = contactSection?.showContactForm !== false;
 
   // Get contact info from site settings
-  const phoneNumber = siteSettings?.contact?.phoneNumber || CONTACT_INFO.phone.display;
-  const phoneHref = siteSettings?.contact?.phoneNumber
-    ? `tel:${siteSettings.contact.phoneNumber.replace(/\D/g, "")}`
-    : CONTACT_INFO.phone.href;
+  const contactFormUrl = CONTACT_INFO.contactFormUrl;
   const email = siteSettings?.contact?.email || CONTACT_INFO.email.display;
   const emailHref = siteSettings?.contact?.email
     ? `mailto:${siteSettings.contact.email}`
     : CONTACT_INFO.email.href;
   const serviceArea = siteSettings?.contact?.serviceArea || `Greater ${CONTACT_INFO.address.city} Metro Area`;
   const licenseNumber = siteSettings?.businessInfo?.licenseNumber || CONTACT_INFO.license;
-  const emergencyAvailability = siteSettings?.businessInfo?.emergencyAvailability || CONTACT_INFO.hours.emergency;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -232,11 +234,10 @@ const About = () => {
                         <Phone className="w-5 h-5 text-primary" />
                       </div>
                       <div>
-                        <p className="font-medium mb-1">Phone</p>
-                        <a href={phoneHref} className="text-muted-foreground hover:text-primary transition-colors">
-                          {phoneNumber}
-                        </a>
-                        <p className="text-sm text-muted-foreground">{emergencyAvailability}</p>
+                        <p className="font-medium mb-1">Contact</p>
+                        <Link to={contactFormUrl} className="text-muted-foreground hover:text-primary transition-colors">
+                          Contact Us
+                        </Link>
                       </div>
                     </div>
 
@@ -269,23 +270,13 @@ const About = () => {
                         <div>
                           <p className="font-medium mb-1">License Information</p>
                           <p className="text-muted-foreground">Indiana License #: {licenseNumber}</p>
-                          <p className="text-muted-foreground text-sm mt-1">Fully Licensed & Insured</p>
+                          <p className="text-muted-foreground text-sm mt-1">Fully Licensed, Bonded & Insured</p>
                         </div>
                       </div>
                     )}
                   </div>
                 </div>
 
-                <Card className="bg-primary/5 border-primary/20">
-                  <CardContent className="p-6">
-                    <Users className="w-8 h-8 text-primary mb-3" />
-                    <h4 className="font-semibold mb-2">Emergency Services</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {emergencyAvailability} for water damage, fire damage, and storm emergencies.
-                      Call now for immediate assistance.
-                    </p>
-                  </CardContent>
-                </Card>
               </div>
 
               {showContactForm && (
@@ -341,13 +332,25 @@ const About = () => {
                       <Textarea
                         id="message"
                         {...register("message")}
-                        placeholder="Tell us about your project or emergency..."
+                        placeholder="Tell us about your project..."
                         rows={5}
                         className={errors.message ? "border-destructive" : ""}
                       />
                       {errors.message && (
                         <p className="text-sm text-destructive mt-1">{errors.message.message}</p>
                       )}
+                    </div>
+
+                    {/* Honeypot field - hidden from users, bots will fill it */}
+                    <div style={{ position: 'absolute', left: '-9999px', opacity: 0, pointerEvents: 'none' }}>
+                      <Label htmlFor="website">Website</Label>
+                      <Input
+                        id="website"
+                        type="text"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        {...register("honeypot" as any)}
+                      />
                     </div>
 
                     <Button type="submit" className="w-full" disabled={isSubmitting}>

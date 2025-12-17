@@ -5,8 +5,70 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Rate limiting (simple in-memory, use Redis in production for distributed systems)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
-const RATE_LIMIT = 5 // requests per hour per IP
+const RATE_LIMIT = 3 // requests per hour per IP (reduced for better spam prevention)
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour in milliseconds
+
+// Spam keyword detection
+const SPAM_KEYWORDS = [
+  'viagra', 'cialis', 'casino', 'poker', 'lottery', 'winner', 'congratulations',
+  'click here', 'buy now', 'limited time', 'act now', 'urgent', 'free money',
+  'make money', 'work from home', 'get rich', 'guaranteed', 'no risk',
+  'investment opportunity', 'bitcoin', 'crypto', 'forex', 'trading',
+  'weight loss', 'diet pill', 'lose weight', 'miracle', 'cure all',
+  'pharmacy', 'prescription', 'medication', 'drug', 'pills',
+  'seo service', 'backlink', 'website traffic', 'increase ranking',
+  'loan', 'credit', 'debt', 'refinance', 'mortgage',
+  'dating', 'singles', 'meet people', 'find love',
+  'nigerian prince', 'inheritance', 'lottery winner', 'unclaimed funds'
+]
+
+// Common spam patterns
+const SPAM_PATTERNS = [
+  /http[s]?:\/\/[^\s]+/gi, // URLs in message
+  /[A-Z]{10,}/g, // Excessive caps
+  /[!]{3,}/g, // Multiple exclamation marks
+  /(.)\1{4,}/g, // Repeated characters (aaaaa)
+]
+
+// Check if content contains spam indicators
+function containsSpam(text: string): boolean {
+  const lowerText = text.toLowerCase()
+  
+  // Check for spam keywords
+  for (const keyword of SPAM_KEYWORDS) {
+    if (lowerText.includes(keyword)) {
+      return true
+    }
+  }
+  
+  // Check for spam patterns
+  for (const pattern of SPAM_PATTERNS) {
+    if (pattern.test(text)) {
+      return true
+    }
+  }
+  
+  // Check for excessive links
+  const urlCount = (text.match(/http[s]?:\/\//gi) || []).length
+  if (urlCount > 2) {
+    return true
+  }
+  
+  // Check for suspicious email patterns
+  const suspiciousEmailPatterns = [
+    /[0-9]{10,}@/, // Numbers in email
+    /test\d*@/, // Test emails
+    /temp\d*@/, // Temporary emails
+  ]
+  
+  for (const pattern of suspiciousEmailPatterns) {
+    if (pattern.test(lowerText)) {
+      return true
+    }
+  }
+  
+  return false
+}
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now()
@@ -87,7 +149,32 @@ export default async function handler(
   }
 
   try {
-    const { name, email, phone, message } = req.body
+    const { name, email, phone, message, honeypot, timestamp } = req.body
+
+    // Honeypot check - if this field is filled, it's a bot
+    if (honeypot && honeypot.trim() !== '') {
+      console.warn('Spam detected: Honeypot field filled', { ip })
+      return res.status(400).json({ error: 'Invalid submission' })
+    }
+
+    // Timestamp validation - prevent instant submissions (likely bots)
+    // Forms should take at least 2 seconds to fill out
+    if (timestamp) {
+      const submitTime = Date.now()
+      const formTime = parseInt(timestamp, 10)
+      const timeDiff = submitTime - formTime
+      
+      if (timeDiff < 2000) { // Less than 2 seconds
+        console.warn('Spam detected: Form submitted too quickly', { ip, timeDiff })
+        return res.status(400).json({ error: 'Please take your time filling out the form' })
+      }
+      
+      // Also check if form was open for suspiciously long (more than 1 hour)
+      if (timeDiff > 3600000) { // More than 1 hour
+        console.warn('Spam detected: Form open too long', { ip, timeDiff })
+        return res.status(400).json({ error: 'Form session expired. Please refresh and try again.' })
+      }
+    }
 
     // Validation - all fields required
     if (!name || !email || !phone || !message) {
@@ -129,6 +216,30 @@ export default async function handler(
       return res.status(400).json({ error: 'Invalid phone number format' })
     }
 
+    // Spam detection - check message content
+    const fullText = `${name} ${email} ${phone} ${message}`.toLowerCase()
+    if (containsSpam(fullText)) {
+      console.warn('Spam detected: Spam keywords found', { ip, email })
+      return res.status(400).json({ error: 'Your message contains content that appears to be spam. Please revise and try again.' })
+    }
+
+    // Additional email validation - check for disposable/temporary email domains
+    const disposableEmailDomains = [
+      'tempmail', 'guerrillamail', 'mailinator', '10minutemail', 'throwaway',
+      'temp-mail', 'fakeinbox', 'mohmal', 'trashmail', 'getnada'
+    ]
+    const emailDomain = email.split('@')[1]?.toLowerCase() || ''
+    if (disposableEmailDomains.some(domain => emailDomain.includes(domain))) {
+      console.warn('Spam detected: Disposable email domain', { ip, email })
+      return res.status(400).json({ error: 'Please use a valid email address' })
+    }
+
+    // Check for suspicious patterns in name (too many numbers, special chars)
+    if (/[0-9]{3,}/.test(name) || /[^a-zA-Z\s\-'\.]/.test(name)) {
+      console.warn('Spam detected: Suspicious name pattern', { ip, name })
+      return res.status(400).json({ error: 'Please enter a valid name' })
+    }
+
     // Sanitize inputs (for email HTML content)
     const sanitizedName = sanitizeInput(name)
     const sanitizedMessage = sanitizeInput(message)
@@ -140,7 +251,7 @@ export default async function handler(
     }
 
     // Get recipient email from environment variable with fallback
-    const recipientEmail = process.env.CONTACT_EMAIL || 'thmsbnsn@bnsnsolutions.com'
+    const recipientEmail = process.env.CONTACT_EMAIL || 'Ben@ttrindy.com'
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
