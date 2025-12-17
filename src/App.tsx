@@ -77,16 +77,26 @@ const ConstructionGuard = ({ children }: { children: React.ReactNode }) => {
 
     checkAuth();
 
+    // Add timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      console.warn("Construction page fetch timed out, disabling construction mode");
+      setIsLoading(false);
+    }, 5000); // 5 second timeout
+
     // Fetch construction page settings
     getConstructionPage()
       .then((page) => {
+        clearTimeout(timeoutId);
         setConstructionPage(page);
         setIsLoading(false);
       })
       .catch((error) => {
+        clearTimeout(timeoutId);
         console.error("Error fetching construction page:", error);
         setIsLoading(false);
       });
+    
+    return () => clearTimeout(timeoutId);
   }, []);
 
   if (isLoading) {
