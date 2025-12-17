@@ -76,6 +76,20 @@ const About = () => {
       });
   }, []);
 
+  // Handle hash navigation (scroll to #contact)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && !loading) {
+      // Small delay to ensure content is rendered
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, [loading]);
+
   const onSubmit = async (data: ContactFormData) => {
     try {
       const response = await fetch('/api/contact', {

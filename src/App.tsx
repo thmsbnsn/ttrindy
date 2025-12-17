@@ -35,13 +35,24 @@ const queryClient = new QueryClient({
 
 // Component to handle scroll-to-top on route change and analytics
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (hash) {
+      // If there's a hash, scroll to that element
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    } else {
+      // No hash, scroll to top
+      window.scrollTo(0, 0);
+    }
     // Track page view for analytics
-    trackPageView(pathname);
-  }, [pathname]);
+    trackPageView(pathname + hash);
+  }, [pathname, hash]);
 
   return null;
 };
