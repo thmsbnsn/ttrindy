@@ -53,9 +53,6 @@ const Footer = () => {
     ? siteSettings.footer.copyrightText.replace("{year}", new Date().getFullYear().toString())
     : `© ${new Date().getFullYear()} Top Tier Restoration. All rights reserved.`;
 
-  // Get license number
-  const licenseNumber = siteSettings?.businessInfo?.licenseNumber || CONTACT_INFO.license;
-
   // Social media icons mapping
   const socialIcons = {
     facebook: Facebook,
@@ -191,11 +188,8 @@ const Footer = () => {
               <div className="flex flex-col items-center md:items-start gap-2 mt-2">
                 <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
                   <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                  <span className="text-sm text-white/90 font-medium">Licensed, Bonded & Insured</span>
+                  <span className="text-sm text-white/90 font-medium">Licensed | Bonded | Insured</span>
                 </div>
-                {licenseNumber && (
-                  <p className="text-xs text-white/60">Indiana License #: {licenseNumber}</p>
-                )}
               </div>
             </div>
 

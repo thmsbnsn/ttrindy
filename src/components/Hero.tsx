@@ -131,20 +131,18 @@ const Hero = () => {
                 <div className="flex items-center gap-1">
                   <span className="text-yellow-400 text-sm">⭐⭐⭐⭐⭐</span>
                 </div>
-                <span className="text-sm text-white/90 font-medium">5.0 Google Rating</span>
+                <span className="text-sm text-white/80 font-medium">5.0 Google Rating</span>
               </div>
               <span className="text-white/40">•</span>
-              <span className="text-sm text-white/90 font-medium">Licensed, Bonded & Insured</span>
+              <span className="text-sm text-white/80 font-medium">Licensed | Bonded | Insured</span>
               <span className="text-white/40">•</span>
-              <span className="text-sm text-white/90 font-medium">IICRC Certified</span>
-              <span className="text-white/40">•</span>
-              <span className="text-sm text-white/90 font-medium">Locally Owned in Indianapolis</span>
+              <span className="text-sm text-white/80 font-medium">Locally Owned in Indianapolis</span>
             </div>
 
             <dl className="flex flex-wrap gap-8 pt-8 text-white">
               <div className="min-w-[120px]">
                 <dt className="sr-only">Years of Experience</dt>
-                <dd className="text-4xl font-bold text-primary drop-shadow-lg">15+</dd>
+                <dd className="text-4xl font-bold text-primary drop-shadow-lg">20+</dd>
                 <dd className="text-sm text-gray-200 font-medium mt-1">Years Experience</dd>
               </div>
               <div className="min-w-[120px]">
