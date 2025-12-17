@@ -158,13 +158,13 @@ export default async function handler(
     }
 
     // Timestamp validation - prevent instant submissions (likely bots)
-    // Forms should take at least 2 seconds to fill out
+    // Forms should take at least 1 second to fill out (reduced for better UX)
     if (timestamp) {
       const submitTime = Date.now()
       const formTime = parseInt(timestamp, 10)
       const timeDiff = submitTime - formTime
       
-      if (timeDiff < 2000) { // Less than 2 seconds
+      if (timeDiff < 1000) { // Less than 1 second
         console.warn('Spam detected: Form submitted too quickly', { ip, timeDiff })
         return res.status(400).json({ error: 'Please take your time filling out the form' })
       }
@@ -178,6 +178,7 @@ export default async function handler(
 
     // Validation - all fields required
     if (!name || !email || !phone || !message) {
+      console.warn('Validation failed: Missing fields', { name: !!name, email: !!email, phone: !!phone, message: !!message })
       return res.status(400).json({ error: 'All fields are required' })
     }
 
