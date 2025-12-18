@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { MetaTags } from "@/components/SEO/MetaTags";
-import { Phone, Mail, MapPin, Shield, Users } from "lucide-react";
+import { Mail, MapPin, Shield, Users } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -245,24 +245,12 @@ const About = () => {
                   <div className="space-y-4">
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Phone className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium mb-1">Contact</p>
-                        <Link to={contactFormUrl} className="text-muted-foreground hover:text-primary transition-colors">
-                          Contact Us
-                        </Link>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
                         <Mail className="w-5 h-5 text-primary" />
                       </div>
                       <div>
                         <p className="font-medium mb-1">Email</p>
                         <a href={emailHref} className="text-muted-foreground hover:text-primary transition-colors">
-                          {email}
+                          Email Us Today
                         </a>
                       </div>
                     </div>
@@ -276,18 +264,15 @@ const About = () => {
                         <p className="text-muted-foreground">{serviceArea}</p>
                       </div>
                     </div>
-                    {licenseNumber && (
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <Shield className="w-5 h-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium mb-1">License Information</p>
-                          <p className="text-muted-foreground">Indiana License #: {licenseNumber}</p>
-                          <p className="text-muted-foreground text-sm mt-1">Fully Licensed, Bonded & Insured</p>
-                        </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Shield className="w-5 h-5 text-primary" />
                       </div>
-                    )}
+                      <div>
+                        <p className="font-medium">Fully Licensed, Bonded & Insured</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
