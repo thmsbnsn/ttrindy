@@ -11,8 +11,8 @@ export const CONTACT_INFO = {
   // Phone CTA controlled via Sanity - see getPhoneInfo() helper
   contactFormUrl: '/about#contact', // URL to contact form section
   email: {
-    display: 'info@toptierrestoration.com',
-    href: 'mailto:info@toptierrestoration.com',
+    display: 'Ben@ttrindy.com',
+    href: 'mailto:Ben@ttrindy.com',
   },
   address: {
     street: '123 Main Street', // Update with actual street address
