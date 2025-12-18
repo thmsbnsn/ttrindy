@@ -228,11 +228,6 @@ const Navbar = () => {
                 </Link>
               );
             })}
-            <Button variant="default" size="sm" className="btn-micro-animate font-semibold" asChild>
-              <Link to={contactFormUrl}>
-                <span>Contact Us</span>
-              </Link>
-            </Button>
             {ctaButton && (
               <Button variant="outline" size="sm" className="btn-micro-animate gap-2 font-semibold" asChild>
                 {ctaButton.url.startsWith("http") ? (
@@ -306,11 +301,6 @@ const Navbar = () => {
                 </Link>
               );
             })}
-            <Button variant="default" size="sm" className="btn-micro-animate w-full font-semibold" asChild>
-              <Link to={contactFormUrl}>
-                <span>Contact Us</span>
-              </Link>
-            </Button>
             {ctaButton && (
               <Button variant="outline" size="sm" className="btn-micro-animate w-full gap-2 font-semibold" asChild>
                 {ctaButton.url.startsWith("http") ? (

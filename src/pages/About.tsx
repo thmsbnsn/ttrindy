@@ -230,9 +230,10 @@ const About = () => {
                     <div className="lg:col-span-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
                       <div className="relative">
                         <img
-                          src={urlFor(storySection.image).width(600).height(700).url()}
+                          src={urlFor(storySection.image).width(800).url()}
                           alt={storySection.image.alt || "Our team"}
-                          className="rounded-2xl shadow-2xl w-full h-auto object-contain"
+                          className="rounded-2xl shadow-2xl w-full h-auto"
+                          style={{ maxHeight: 'none' }}
                         />
                         {/* Floating badge */}
                         <div className="absolute -bottom-4 -left-4 bg-primary text-primary-foreground px-6 py-3 rounded-xl shadow-lg">
