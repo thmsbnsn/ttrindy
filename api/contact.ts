@@ -1,12 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 // Web3Forms public access key
-// Note: Configure recipient email (Ben@ttrindy.com) in Web3Forms dashboard
+// IMPORTANT: Configure recipient email (Ben@ttrindy.com) in Web3Forms dashboard at https://web3forms.com
 const WEB3FORMS_ACCESS_KEY = '6c99a4e6-0831-4e8c-984c-ba1d8a146c7e'
 
 // Rate limiting (simple in-memory, use Redis in production for distributed systems)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
-const RATE_LIMIT = 3 // requests per hour per IP (reduced for better spam prevention)
+const RATE_LIMIT = 3 // requests per hour per IP
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour in milliseconds
 
 // Spam keyword detection
@@ -159,19 +159,17 @@ export default async function handler(
     }
 
     // Timestamp validation - prevent instant submissions (likely bots)
-    // Forms should take at least 1 second to fill out (reduced for better UX)
     if (timestamp) {
       const submitTime = Date.now()
       const formTime = parseInt(timestamp, 10)
       const timeDiff = submitTime - formTime
       
-      if (timeDiff < 1000) { // Less than 1 second
+      if (timeDiff < 1000) {
         console.warn('Spam detected: Form submitted too quickly', { ip, timeDiff })
         return res.status(400).json({ error: 'Please take your time filling out the form' })
       }
       
-      // Also check if form was open for suspiciously long (more than 1 hour)
-      if (timeDiff > 3600000) { // More than 1 hour
+      if (timeDiff > 3600000) {
         console.warn('Spam detected: Form open too long', { ip, timeDiff })
         return res.status(400).json({ error: 'Form session expired. Please refresh and try again.' })
       }
@@ -211,21 +209,21 @@ export default async function handler(
       return res.status(400).json({ error: 'Invalid email address' })
     }
 
-    // Phone validation (basic - allows digits, spaces, dashes, parentheses)
+    // Phone validation
     const phoneRegex = /^[\d\s\-\(\)]+$/
     const digitsOnly = phone.replace(/\D/g, '')
     if (!phoneRegex.test(phone) || digitsOnly.length < 10) {
       return res.status(400).json({ error: 'Invalid phone number format' })
     }
 
-    // Spam detection - check message content
+    // Spam detection
     const fullText = `${name} ${email} ${phone} ${message}`.toLowerCase()
     if (containsSpam(fullText)) {
       console.warn('Spam detected: Spam keywords found', { ip, email })
       return res.status(400).json({ error: 'Your message contains content that appears to be spam. Please revise and try again.' })
     }
 
-    // Additional email validation - check for disposable/temporary email domains
+    // Disposable email check
     const disposableEmailDomains = [
       'tempmail', 'guerrillamail', 'mailinator', '10minutemail', 'throwaway',
       'temp-mail', 'fakeinbox', 'mohmal', 'trashmail', 'getnada'
@@ -236,7 +234,7 @@ export default async function handler(
       return res.status(400).json({ error: 'Please use a valid email address' })
     }
 
-    // Check for suspicious patterns in name (too many numbers, special chars)
+    // Suspicious name pattern check
     if (/[0-9]{3,}/.test(name) || /[^a-zA-Z\s\-'\.]/.test(name)) {
       console.warn('Spam detected: Suspicious name pattern', { ip, name })
       return res.status(400).json({ error: 'Please enter a valid name' })
@@ -246,50 +244,72 @@ export default async function handler(
     const sanitizedName = sanitizeInput(name)
     const sanitizedMessage = sanitizeInput(message)
 
-    // Get recipient email from environment variable with fallback
-    const recipientEmail = process.env.CONTACT_EMAIL || 'Ben@ttrindy.com'
+    // Prepare the Web3Forms payload
+    const formData: Record<string, string> = {
+      access_key: WEB3FORMS_ACCESS_KEY,
+      name: sanitizedName,
+      email: email,
+      phone: phone,
+      message: sanitizedMessage,
+      subject: `New Contact Form Submission from ${sanitizedName}`,
+      from_name: sanitizedName,
+    }
 
-    // Prepare message content for Web3Forms
-    const messageContent = `Name: ${sanitizedName}
-Email: ${email}
-Phone: ${phone}
+    // Add hCaptcha response if provided
+    if (hCaptchaResponse) {
+      formData['h-captcha-response'] = hCaptchaResponse
+    }
 
-Message:
-${message}
-
----
-Submitted from IP: ${ip}
-Time: ${new Date().toISOString()}`
+    // Add metadata
+    formData['_meta'] = JSON.stringify({
+      ip: ip,
+      timestamp: new Date().toISOString(),
+      userAgent: req.headers['user-agent'] || 'unknown'
+    })
 
     // Send email using Web3Forms
     const web3formsResponse = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
-      body: JSON.stringify({
-        access_key: WEB3FORMS_ACCESS_KEY,
-        subject: `New Contact Form Submission from ${sanitizedName}`,
-        from_name: sanitizedName,
-        email: email,
-        message: messageContent,
-        // Additional fields
-        phone: phone,
-        // Set recipient email (if Web3Forms supports it via custom field)
-        _to: recipientEmail,
-        // Honeypot and spam protection
-        _honeypot: honeypot || '',
-        'h-captcha-response': hCaptchaResponse || '',
-        _template: 'table',
-      }),
+      body: JSON.stringify(formData),
     })
 
-    const web3formsData = await web3formsResponse.json()
+    // Get response text first to help debug
+    const responseText = await web3formsResponse.text()
+    
+    // Try to parse as JSON
+    let web3formsData
+    try {
+      web3formsData = JSON.parse(responseText)
+    } catch (parseError) {
+      console.error('Web3Forms response parsing error:', {
+        status: web3formsResponse.status,
+        statusText: web3formsResponse.statusText,
+        responseText: responseText.substring(0, 500), // Log first 500 chars
+        headers: Object.fromEntries(web3formsResponse.headers.entries())
+      })
+      return res.status(500).json({ 
+        error: 'Failed to send email. Please try again later.',
+        debug: process.env.NODE_ENV === 'development' ? responseText.substring(0, 200) : undefined
+      })
+    }
 
     if (!web3formsResponse.ok || !web3formsData.success) {
-      console.error('Web3Forms error:', web3formsData)
+      console.error('Web3Forms error:', {
+        status: web3formsResponse.status,
+        data: web3formsData
+      })
       return res.status(500).json({ error: 'Failed to send email' })
     }
+
+    console.log('Contact form submitted successfully:', {
+      name: sanitizedName,
+      email: email,
+      ip: ip
+    })
 
     return res.status(200).json({ success: true, data: web3formsData })
   } catch (error) {
