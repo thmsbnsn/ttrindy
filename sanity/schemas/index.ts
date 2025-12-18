@@ -22,7 +22,6 @@ import siteSettings from './siteSettings'
 import homePage from './singletons/homePage'
 import aboutPage from './singletons/aboutPage'
 import servicesPage from './singletons/servicesPage'
-import constructionPage from './singletons/constructionPage'
 
 /**
  * Schema types array
@@ -46,5 +45,4 @@ export const schemaTypes = [
   homePage,
   aboutPage,
   servicesPage,
-  constructionPage,
 ]

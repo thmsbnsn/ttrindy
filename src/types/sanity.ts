@@ -245,11 +245,3 @@ export interface Category {
   icon?: string
 }
 
-// ==================== CONSTRUCTION PAGE ====================
-export interface ConstructionPage {
-  _id: string
-  isActive: boolean
-  heading: string
-  password: string
-  subheading?: string
-}

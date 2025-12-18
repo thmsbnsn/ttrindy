@@ -8,8 +8,6 @@ import CookieConsent from "@/components/CookieConsent";
 import MobileEmergencyBar from "@/components/MobileEmergencyBar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { initGoogleAnalytics, trackPageView } from "@/lib/analytics";
-import { getConstructionPage } from "@/lib/sanity";
-import type { ConstructionPage } from "@/types/sanity";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
 import Gallery from "./pages/Gallery";
@@ -21,7 +19,6 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Accessibility from "./pages/Accessibility";
 import NotFound from "./pages/NotFound";
-import Construction from "./pages/Construction";
 import Studio from "./pages/Studio";
 
 const queryClient = new QueryClient({

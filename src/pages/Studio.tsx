@@ -3,7 +3,11 @@ import config from '../../sanity.config'
 import '../../sanity/styles/studio.css'
 
 const StudioPage = () => {
-  return <Studio config={config} />
+  return (
+    <div style={{ height: '100vh', width: '100%', overflow: 'hidden' }}>
+      <Studio config={config} />
+    </div>
+  )
 }
 
 export default StudioPage

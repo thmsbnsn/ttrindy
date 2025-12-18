@@ -31,6 +31,10 @@ const iconMap: Record<string, any> = {
   Target: LucideIcons.Target,
   CheckCircle2: LucideIcons.CheckCircle2,
   Star: LucideIcons.Star,
+  Paintbrush: LucideIcons.Paintbrush,
+  PaintRoller: LucideIcons.PaintRoller,
+  Home: LucideIcons.Home,
+  Saw: LucideIcons.Saw,
 };
 
 const getIcon = (iconName: string) => {

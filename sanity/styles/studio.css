@@ -20,3 +20,14 @@
   /* Logo container styles */
 }
 
+/* Fix white space at bottom of Studio */
+[data-ui="Pane"] {
+  min-height: 100vh;
+}
+
+/* Ensure Studio takes full height */
+[data-ui="StudioLayout"] {
+  height: 100vh;
+  overflow: hidden;
+}
+

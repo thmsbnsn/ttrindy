@@ -1,6 +1,6 @@
 // sanity/structure.ts
 import { StructureBuilder } from 'sanity/structure'
-import { Cog, Home, FileText, Wrench, FolderOpen, Tag, BookOpen, Hammer } from 'lucide-react'
+import { Cog, Home, FileText, Wrench, FolderOpen, BookOpen } from 'lucide-react'
 
 /**
  * Custom desk structure for Sanity Studio
@@ -22,19 +22,6 @@ export default (S: StructureBuilder) =>
             .title('Site Settings')
         ),
 
-      // ==================== CONSTRUCTION PAGE (Singleton) ====================
-      S.listItem()
-        .title('Site Under Construction')
-        .icon(Hammer)
-        .id('constructionPage')
-        .child(
-          S.document()
-            .schemaType('constructionPage')
-            .documentId('constructionPage')
-            .title('Site Under Construction')
-        ),
-
-      S.divider(),
 
       // ==================== PAGE MANAGEMENT ====================
       S.listItem()
@@ -127,22 +114,11 @@ export default (S: StructureBuilder) =>
 
       S.divider(),
 
-      // ==================== CATEGORIES ====================
-      S.listItem()
-        .title('Categories')
-        .icon(Tag)
-        .schemaType('category')
-        .child(
-          S.documentTypeList('category')
-            .title('Categories')
-            .defaultOrdering([{ field: 'title', direction: 'asc' }])
-        ),
-
       // Hide singleton documents from the default list
       // This prevents editors from creating multiple instances
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !['siteSettings', 'constructionPage', 'homePage', 'aboutPage', 'servicesPage'].includes(
+          !['siteSettings', 'homePage', 'aboutPage', 'servicesPage'].includes(
             listItem.getId() || ''
           )
       ),
