@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 // Web3Forms public access key
+// Note: Configure recipient email (Ben@ttrindy.com) in Web3Forms dashboard
 const WEB3FORMS_ACCESS_KEY = '6c99a4e6-0831-4e8c-984c-ba1d8a146c7e'
 
 // Rate limiting (simple in-memory, use Redis in production for distributed systems)
