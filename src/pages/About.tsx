@@ -312,7 +312,7 @@ const About = () => {
                     </div>
                     <div>
                       <p className="font-semibold text-lg group-hover:text-primary transition-colors">Email Us Today</p>
-                      <p className="text-sm text-muted-foreground">We'll respond within 24 hours</p>
+                      <p className="text-sm text-muted-foreground">We'll respond as soon as possible</p>
                     </div>
                   </a>
 
