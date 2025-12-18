@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
+import { Mail, MapPin, Clock, Facebook, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
 import { useState, useEffect } from "react";
 import topTierIcon from "@/assets/brand/toptiericon.png";
 import { CONTACT_INFO } from "@/config/contact";
@@ -108,15 +108,9 @@ const Footer = () => {
               {/* NAP Information */}
               <div className="space-y-2 text-sm text-white/80">
                 <div className="flex items-start justify-center md:justify-start gap-2">
-                  <Phone className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                  <Link to={contactFormUrl} className="hover:text-white transition-colors">
-                    Contact Us
-                  </Link>
-                </div>
-                <div className="flex items-start justify-center md:justify-start gap-2">
                   <Mail className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                   <a href={emailHref} className="hover:text-white transition-colors">
-                    {email}
+                    Email Us Today
                   </a>
                 </div>
                 {siteSettings?.contact?.address && (

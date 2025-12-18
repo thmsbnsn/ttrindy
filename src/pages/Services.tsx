@@ -137,28 +137,6 @@ const Services = () => {
             </div>
           )}
 
-          {emergencyCta && (
-            <div className="mt-16 bg-primary/5 rounded-lg p-8 md:p-12 text-center animate-fade-in">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">{emergencyCta.title}</h2>
-              {emergencyCta.description && (
-                <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                  {emergencyCta.description}
-                </p>
-              )}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="btn-micro-animate" asChild>
-                  <Link to={contactFormUrl}>
-                    {emergencyCta.primaryButtonText || "Contact Us"}
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" className="btn-micro-animate btn-micro-animate-outline" asChild>
-                  <Link to="/about#contact">
-                    {emergencyCta.secondaryButtonText || "Contact Us"}
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          )}
         </div>
       </section>
 

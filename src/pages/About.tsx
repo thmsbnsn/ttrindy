@@ -232,7 +232,7 @@ const About = () => {
                         <img
                           src={urlFor(storySection.image).width(600).height(700).url()}
                           alt={storySection.image.alt || "Our team"}
-                          className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                          className="rounded-2xl shadow-2xl w-full h-auto object-contain"
                         />
                         {/* Floating badge */}
                         <div className="absolute -bottom-4 -left-4 bg-primary text-primary-foreground px-6 py-3 rounded-xl shadow-lg">

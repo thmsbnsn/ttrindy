@@ -6,7 +6,7 @@ import heroImage from "@/assets/pagesImages/index/hero.webp";
 import { CONTACT_INFO } from "@/config/contact";
 import { getHomePage } from "@/lib/sanity";
 import { urlFor } from "../../sanity/lib/image";
-import type { HomePage } from "@/types/sanity";
+import type { HomePage, StatCard } from "@/types/sanity";
 
 const Hero = () => {
   const [homePage, setHomePage] = useState<HomePage | null>(null);
@@ -33,6 +33,12 @@ const Hero = () => {
   const backgroundImageAlt = hero?.backgroundImage?.alt || "Home restoration transformation - from fire damage to fully restored room";
   const primaryCta = hero?.primaryCta || { text: "Contact Us", url: CONTACT_INFO.contactFormUrl };
   const secondaryCta = hero?.secondaryCta || { text: "Learn More", url: "/services" };
+  
+  // Get stats - use fallback for now (HomePage doesn't have statsSection yet)
+  const stats: StatCard[] = [
+    { number: "20+", label: "Years Experience" },
+    { number: "1000+", label: "Homes Restored" },
+  ];
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -125,34 +131,40 @@ const Hero = () => {
               )}
             </div>
 
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center gap-4 pt-6 border-t border-white/20">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <span className="text-yellow-400 text-sm">⭐⭐⭐⭐⭐</span>
+            {/* Trust Indicators - Improved Styling */}
+            <div className="pt-6 border-t border-white/20">
+              <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-6">
+                <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <div className="flex items-center gap-0.5">
+                    <span className="text-yellow-400 text-xs">⭐⭐⭐⭐⭐</span>
+                  </div>
+                  <span className="text-xs text-white font-semibold">5.0 Google Rating</span>
                 </div>
-                <span className="text-sm text-white/80 font-medium">5.0 Google Rating</span>
+                <div className="h-4 w-px bg-white/30"></div>
+                <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <span className="text-xs text-white font-semibold">Licensed • Bonded • Insured</span>
+                </div>
+                <div className="h-4 w-px bg-white/30"></div>
+                <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <span className="text-xs text-white font-semibold">Locally Owned in Indianapolis</span>
+                </div>
               </div>
-              <span className="text-white/40">•</span>
-              <span className="text-sm text-white/80 font-medium">Licensed | Bonded | Insured</span>
-              <span className="text-white/40">•</span>
-              <span className="text-sm text-white/80 font-medium">Locally Owned in Indianapolis</span>
-            </div>
 
-            <dl className="flex flex-wrap gap-8 pt-8 text-white">
-              <div className="min-w-[120px]">
-                <dt className="sr-only">Years of Experience</dt>
-                <dd className="text-4xl font-bold text-primary drop-shadow-lg">20+</dd>
-                <dd className="text-sm text-gray-200 font-medium mt-1">Years Experience</dd>
-              </div>
-              <div className="min-w-[120px]">
-                <dt className="sr-only">Homes Restored</dt>
-                <dd className="text-4xl font-bold text-primary drop-shadow-lg">1000+</dd>
-                <dd className="text-sm text-gray-200 font-medium mt-1">Homes Restored</dd>
-              </div>
-              <div className="min-w-[120px]">
-              </div>
-            </dl>
+              {/* Stats Grid */}
+              <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                {stats.map((stat, index) => (
+                  <div key={index} className="text-center">
+                    <dt className="sr-only">{stat.label}</dt>
+                    <dd className="text-3xl md:text-4xl font-bold text-primary drop-shadow-lg mb-1">
+                      {stat.number}
+                    </dd>
+                    <dd className="text-xs md:text-sm text-gray-200 font-medium">
+                      {stat.label}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </div>
         </div>
       </div>
