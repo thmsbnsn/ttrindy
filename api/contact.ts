@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Web3Forms public access key
+const WEB3FORMS_ACCESS_KEY = '6c99a4e6-0831-4e8c-984c-ba1d8a146c7e'
 
 // Rate limiting (simple in-memory, use Redis in production for distributed systems)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
@@ -241,60 +241,56 @@ export default async function handler(
       return res.status(400).json({ error: 'Please enter a valid name' })
     }
 
-    // Sanitize inputs (for email HTML content)
+    // Sanitize inputs
     const sanitizedName = sanitizeInput(name)
     const sanitizedMessage = sanitizeInput(message)
-
-    // Check for Resend API key
-    if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY not configured')
-      return res.status(500).json({ error: 'Email service not configured' })
-    }
 
     // Get recipient email from environment variable with fallback
     const recipientEmail = process.env.CONTACT_EMAIL || 'Ben@ttrindy.com'
 
-    // Send email using Resend
-    const { data, error } = await resend.emails.send({
-      from: 'Top Tier Restoration <noreply@ttrindy.com>',
-      to: recipientEmail,
-      reply_to: email, // Allow replies directly to sender
-      subject: `New Contact Form Submission from ${sanitizedName}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${sanitizedName}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Message:</strong></p>
-        <p>${sanitizedMessage.replace(/\n/g, '<br>')}</p>
-        <hr>
-        <p style="color: #666; font-size: 12px;">
-          Submitted from IP: ${ip}<br>
-          Time: ${new Date().toISOString()}
-        </p>
-      `,
-      text: `
-        New Contact Form Submission
+    // Prepare message content for Web3Forms
+    const messageContent = `Name: ${sanitizedName}
+Email: ${email}
+Phone: ${phone}
 
-        Name: ${sanitizedName}
-        Email: ${email}
-        Phone: ${phone}
+Message:
+${message}
 
-        Message:
-        ${message}
+---
+Submitted from IP: ${ip}
+Time: ${new Date().toISOString()}`
 
-        ---
-        IP: ${ip}
-        Time: ${new Date().toISOString()}
-      `,
+    // Send email using Web3Forms
+    const web3formsResponse = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: `New Contact Form Submission from ${sanitizedName}`,
+        from_name: sanitizedName,
+        email: email,
+        message: messageContent,
+        // Additional fields
+        phone: phone,
+        // Set recipient email (if Web3Forms supports it via custom field)
+        _to: recipientEmail,
+        // Honeypot and spam protection
+        _honeypot: honeypot || '',
+        _template: 'table',
+        _captcha: false, // We handle spam prevention ourselves
+      }),
     })
 
-    if (error) {
-      console.error('Resend error:', error)
+    const web3formsData = await web3formsResponse.json()
+
+    if (!web3formsResponse.ok || !web3formsData.success) {
+      console.error('Web3Forms error:', web3formsData)
       return res.status(500).json({ error: 'Failed to send email' })
     }
 
-    return res.status(200).json({ success: true, data })
+    return res.status(200).json({ success: true, data: web3formsData })
   } catch (error) {
     console.error('Contact form error:', error)
     return res.status(500).json({ error: 'Internal server error' })
