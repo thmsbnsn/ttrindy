@@ -44,9 +44,14 @@ const Footer = () => {
     { title: "Services", url: "/services", openInNewTab: false },
     { title: "Gallery", url: "/gallery", openInNewTab: false },
     { title: "Blog", url: "/blog", openInNewTab: false },
-    { title: "About Us", url: "/about", openInNewTab: false },
-    { title: "Contact", url: "/about#contact", openInNewTab: false },
+    { title: "About", url: "/about", openInNewTab: false },
   ];
+  
+  // Filter out "Contact" link if it exists (since it goes to same page as About)
+  const filteredQuickLinks = quickLinks.filter(link => 
+    link.title.toLowerCase() !== "contact" && 
+    link.url !== "/about#contact"
+  );
 
   // Get copyright text
   const copyrightText = siteSettings?.footer?.copyrightText
@@ -191,7 +196,9 @@ const Footer = () => {
             <div className="flex flex-col gap-4 text-center md:text-left">
               <h3 className="font-bold text-white text-lg">Quick Links</h3>
               <nav className="flex flex-col gap-2 text-sm">
-                {quickLinks.map((link, index) => {
+                {filteredQuickLinks.map((link, index) => {
+                  // Normalize "About Us" to "About"
+                  const displayTitle = link.title === "About Us" ? "About" : link.title;
                   if (link.url.startsWith("http")) {
                     return (
                       <a
@@ -201,7 +208,7 @@ const Footer = () => {
                         rel={link.openInNewTab ? "noopener noreferrer" : undefined}
                         className="text-white/80 hover:text-white transition-colors"
                       >
-                        {link.title}
+                        {displayTitle}
                       </a>
                     );
                   }
@@ -211,7 +218,7 @@ const Footer = () => {
                       to={link.url}
                       className="text-white/80 hover:text-white transition-colors"
                     >
-                      {link.title}
+                      {displayTitle}
                     </Link>
                   );
                 })}
