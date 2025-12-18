@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { CONTACT_INFO } from "@/config/contact";
 import { getAboutPage, getSiteSettings } from "@/lib/sanity";
 import { urlFor } from "../../sanity/lib/image";
@@ -55,6 +56,8 @@ const About = () => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [formStartTime] = useState(Date.now()); // Track when form was loaded
+  const [hCaptchaToken, setHCaptchaToken] = useState<string | null>(null);
+  const hCaptchaRef = useRef<HCaptcha>(null);
   const { toast } = useToast();
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema)
@@ -94,7 +97,21 @@ const About = () => {
     }
   }, [loading]);
 
+  const onHCaptchaChange = (token: string | null) => {
+    setHCaptchaToken(token);
+  };
+
   const onSubmit = async (data: ContactFormData) => {
+    // Check if hCaptcha is verified
+    if (!hCaptchaToken) {
+      toast({
+        title: "Verification Required",
+        description: "Please complete the hCaptcha verification.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -103,6 +120,7 @@ const About = () => {
         },
         body: JSON.stringify({
           ...data,
+          'h-captcha-response': hCaptchaToken,
           honeypot: '', // Honeypot field - bots will fill this
           timestamp: formStartTime.toString(), // Track form load time
         }),
@@ -117,6 +135,9 @@ const About = () => {
         description: "We'll get back to you as soon as possible.",
       });
       reset();
+      // Reset hCaptcha
+      setHCaptchaToken(null);
+      hCaptchaRef.current?.resetCaptcha();
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
@@ -419,7 +440,17 @@ const About = () => {
                       />
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    {/* hCaptcha */}
+                    <div className="flex justify-center">
+                      <HCaptcha
+                        ref={hCaptchaRef}
+                        sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+                        onVerify={onHCaptchaChange}
+                        reCaptchaCompat={false}
+                      />
+                    </div>
+
+                    <Button type="submit" className="w-full" disabled={isSubmitting || !hCaptchaToken}>
                       {isSubmitting ? "Sending..." : "Send Message"}
                     </Button>
                   </form>

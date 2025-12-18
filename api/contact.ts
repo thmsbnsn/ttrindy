@@ -150,7 +150,7 @@ export default async function handler(
   }
 
   try {
-    const { name, email, phone, message, honeypot, timestamp } = req.body
+    const { name, email, phone, message, honeypot, timestamp, 'h-captcha-response': hCaptchaResponse } = req.body
 
     // Honeypot check - if this field is filled, it's a bot
     if (honeypot && honeypot.trim() !== '') {
@@ -279,8 +279,8 @@ Time: ${new Date().toISOString()}`
         _to: recipientEmail,
         // Honeypot and spam protection
         _honeypot: honeypot || '',
+        'h-captcha-response': hCaptchaResponse || '',
         _template: 'table',
-        _captcha: false, // We handle spam prevention ourselves
       }),
     })
 
