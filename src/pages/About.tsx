@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { MetaTags } from "@/components/SEO/MetaTags";
-import { Mail, MapPin, Shield, Users } from "lucide-react";
+import { Mail, MapPin, Shield, CheckCircle, Award, Wrench } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -160,26 +160,86 @@ const About = () => {
             )}
           </div>
 
-          {/* Story Section */}
+          {/* Story Section - Redesigned */}
           {storySection && (
-            <div className="grid md:grid-cols-2 gap-12 mb-20 items-center">
-              <div className="animate-fade-in">
-                <h2 className="text-3xl font-bold mb-6">{storySection.title}</h2>
-                {storySection.content && (
-                  <div className="prose prose-slate max-w-none text-muted-foreground">
-                    <PortableText value={storySection.content} components={portableTextComponents} />
+            <div className="mb-20">
+              {/* Main Story Content */}
+              <div className="relative">
+                {/* Background accent */}
+                <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-primary/50 to-transparent rounded-full hidden md:block" />
+                
+                <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
+                  {/* Text Content - Takes 3 columns */}
+                  <div className="lg:col-span-3 animate-fade-in">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground">
+                      {storySection.title}
+                    </h2>
+                    {storySection.content && (
+                      <div className="prose prose-slate max-w-none text-muted-foreground mb-8">
+                        <PortableText value={storySection.content} components={portableTextComponents} />
+                      </div>
+                    )}
+                    
+                    {/* Feature Grid - Replaces bullet list */}
+                    <div className="grid sm:grid-cols-2 gap-4 mt-8">
+                      <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Award className="w-5 h-5 text-primary" />
+                        </div>
+                        <span className="font-medium text-sm">Decades of Combined Experience</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Shield className="w-5 h-5 text-primary" />
+                        </div>
+                        <span className="font-medium text-sm">Licensed, Bonded & Insured</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <MapPin className="w-5 h-5 text-primary" />
+                        </div>
+                        <span className="font-medium text-sm">Locally Owned & Operated</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-5 h-5 text-primary" />
+                        </div>
+                        <span className="font-medium text-sm">Quality Work, Honest Service</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Wrench className="w-5 h-5 text-primary" />
+                        </div>
+                        <span className="font-medium text-sm">Full-Service Restoration</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-5 h-5 text-primary" />
+                        </div>
+                        <span className="font-medium text-sm">Trusted Across Indianapolis</span>
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
-              {storySection.image?.asset && (
-                <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
-                  <img
-                    src={urlFor(storySection.image).width(800).height(600).url()}
-                    alt={storySection.image.alt || "Our team"}
-                    className="rounded-lg shadow-xl w-full h-auto"
-                  />
+                  
+                  {/* Image - Takes 2 columns */}
+                  {storySection.image?.asset && (
+                    <div className="lg:col-span-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+                      <div className="relative">
+                        <img
+                          src={urlFor(storySection.image).width(600).height(700).url()}
+                          alt={storySection.image.alt || "Our team"}
+                          className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                        />
+                        {/* Floating badge */}
+                        <div className="absolute -bottom-4 -left-4 bg-primary text-primary-foreground px-6 py-3 rounded-xl shadow-lg">
+                          <p className="text-2xl font-bold">20+</p>
+                          <p className="text-xs opacity-90">Years Experience</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           )}
 
@@ -239,43 +299,45 @@ const About = () => {
             </h2>
 
             <div className="grid md:grid-cols-2 gap-12 mb-12">
+              {/* Contact Info Cards */}
               <div className="space-y-6">
-                <div>
-                  <h3 className="text-xl font-semibold mb-6">Contact Information</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Mail className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium mb-1">Email</p>
-                        <a href={emailHref} className="text-muted-foreground hover:text-primary transition-colors">
-                          Email Us Today
-                        </a>
-                      </div>
+                <div className="grid gap-4">
+                  {/* Email Card */}
+                  <a 
+                    href={emailHref}
+                    className="group flex items-center gap-4 p-5 rounded-xl bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/10 hover:border-primary/30 hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="w-14 h-14 bg-primary/20 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-primary/30 transition-colors">
+                      <Mail className="w-7 h-7 text-primary" />
                     </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <MapPin className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium mb-1">Service Area</p>
-                        <p className="text-muted-foreground">{serviceArea}</p>
-                      </div>
+                    <div>
+                      <p className="font-semibold text-lg group-hover:text-primary transition-colors">Email Us Today</p>
+                      <p className="text-sm text-muted-foreground">We'll respond within 24 hours</p>
                     </div>
+                  </a>
 
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Shield className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Fully Licensed, Bonded & Insured</p>
-                      </div>
+                  {/* Service Area Card */}
+                  <div className="flex items-center gap-4 p-5 rounded-xl bg-muted/50 border border-border">
+                    <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-7 h-7 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-lg">Service Area</p>
+                      <p className="text-sm text-muted-foreground">{serviceArea}</p>
+                    </div>
+                  </div>
+
+                  {/* License Badge */}
+                  <div className="flex items-center gap-4 p-5 rounded-xl bg-gradient-to-r from-green-500/5 to-green-500/10 border border-green-500/20">
+                    <div className="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Shield className="w-7 h-7 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-lg text-green-700 dark:text-green-400">Fully Licensed, Bonded & Insured</p>
+                      <p className="text-sm text-muted-foreground">Your protection is our priority</p>
                     </div>
                   </div>
                 </div>
-
               </div>
 
               {showContactForm && (
